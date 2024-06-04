@@ -1,4 +1,4 @@
-const host = "http://192.168.1.128:8000"
+const host = ""
 
 
 const message = document.getElementById("message")
