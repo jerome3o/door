@@ -1,16 +1,72 @@
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+}
+
 .maincontainer {
   display: flex;
   flex-direction: column;
-  gap: 5px;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
 }
 
-.buttoncontainer {
+.header {
   display: flex;
-  flex-direction: column;
-  gap: 5px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
 }
 
-button {
+.header i {
+  font-size: 24px;
+  color: #333;
+}
+
+.header h1 {
+  font-size: 28px;
+  color: #333;
+  margin: 0;
+}
+
+.button-container {
+  display: flex;
+  gap: 20px;
+}
+
+.primary-button {
   min-height: 20vh;
   min-width: 40vw;
+  font-size: 18px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
+
+.primary-button:hover {
+  background-color: #0056b3;
+}
+
+.secondary-button-container {
+  display: flex;
+  gap: 10px;
+}
+
+.secondary-button {
+  min-height: 10vh;
+  min-width: 20vw;
+  font-size: 16px;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.secondary-button:hover {
+  background-color: #5a6268;
+}
+</style>

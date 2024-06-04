@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Frog Door Control</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .maincontainer {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 20px;
+      padding: 20px;
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      width: 90%;
+      max-width: 400px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px;
+      margin-left: -10px;
+    }
+
+    .header i {
+      font-size: 36px;
+      color: #4caf50;
+      transform: rotate(-10deg);
+    }
+
+    .header h1 {
+      font-size: 28px;
+      color: #333;
+      margin: 0;
+      transform: skew(-5deg);
+    }
+
+    .button-container {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      width: 100%;
+      margin-left: 20px;
+    }
+
+    .primary-button {
+      min-height: 60px;
+      font-size: 24px;
+      background-color: #4caf50;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s ease;
+      transform: rotate(3deg);
+    }
+
+    .primary-button:hover {
+      background-color: #45a049;
+    }
+
+    .secondary-button-container {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      margin-top: 10px;
+      margin-left: -10px;
+    }
+
+    .secondary-button {
+      min-height: 40px;
+      font-size: 18px;
+      background-color: #e0e0e0;
+      color: #333;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: background-color 0.3s ease;
+      width: 45%;
+      transform: skew(5deg);
+    }
+
+    .secondary-button:hover {
+      background-color: #d0d0d0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-frog"></i>
+      <h1><s>Frog</s>HUMAN Door Control</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">Unlock</button>
+      <button id="lockbutton" class="primary-button">Lock</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">E-Stop</button>
+      <button id="safebutton" class="secondary-button">Safe</button>
+    </div>
+  </div>
+
+  <script type="module" src="./index.js"></script>
+</body>
+
+</html>

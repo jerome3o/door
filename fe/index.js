@@ -1,5 +1,8 @@
 const host = "http://192.168.1.128:8000"
 
+
+const message = document.getElementById("message")
+
 function command(command) {
   return () => {
     fetch(
@@ -11,7 +14,9 @@ function command(command) {
           'Content-Type': 'application/json'
         }
       }
-    )
+    ).then(resp => resp.json()).then(json => {
+      message.innerText = json.message
+    })
   }
 }
 

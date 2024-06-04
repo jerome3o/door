@@ -5,16 +5,30 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <link rel="stylesheet" href="./index.css">
-  <title>Hello</title>
+  <title>Door Control</title>
 </head>
 
 <body>
   <div class="maincontainer">
-    <button id="unlockbutton">Unlock</button>
-    <button id="lockbutton">Lock</button>
-    <button id="stopbutton">E-Stop</button>
-    <button id="safebutton">Safe Actuators</button>
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>Door Control</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">Unlock</button>
+      <button id="lockbutton" class="primary-button">Lock</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">E-Stop</button>
+      <button id="safebutton" class="secondary-button">Safe Actuators</button>
+    </div>
+    <a href="frog.html">Frog mode</a>
+    <a href="misalignedfrog.html">Misaligned frog mode</a>
+    <a href="kindacursed.html">Kinda cursed mode</a>
+    <a href="cursed.html">Cursed mode</a>
   </div>
 
   <script type="module" src="./index.js"></script>
