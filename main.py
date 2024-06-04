@@ -49,7 +49,7 @@ class DoorController:
 
     async def _extend_both_after_delay(self):
         await asyncio.sleep(self._delay)
-        self.safe()
+        await self.safe()
 
     async def safe(self):
         await self._cancel_task()
