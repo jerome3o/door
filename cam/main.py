@@ -8,7 +8,7 @@ import threading
 from starlette.responses import RedirectResponse
 
 if os.environ.get("ENVIRONMENT") == "development":
-    import mock_picamera as picamera
+    import cam.mock_picamera as picamera
 else:
     import picamera  # type: ignore
 
@@ -56,9 +56,9 @@ async def index():
     <head>
     <title>Raspberry Pi - Surveillance Camera</title>
     </head>
-    <body>
-    <center><h1>Raspberry Pi - Surveillance Camera</h1></center>
-    <center><img src="/stream.mjpg" width="640" height="480"></center>
+    <body style="margin:0">
+    <img src="/stream.mjpg" style="max-height: 100%; width: 100vw;">
+    </center>
     </body>
     </html>
     """
