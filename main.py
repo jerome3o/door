@@ -92,8 +92,8 @@ app = FastAPI()
 gpio.cleanup()
 
 door_controller = DoorController(
-    open_actuator=ActuatorController(17, 22),
-    close_actuator=ActuatorController(23, 24),
+    open_actuator=ActuatorController(23, 24),
+    close_actuator=ActuatorController(17, 22),
 )
 
 origins = ["*"]
