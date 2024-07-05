@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <clipPath id="rounded-corners">
+      <rect x="0" y="0" width="100" height="100" rx="15" ry="15" />
+    </clipPath>
+  </defs>
+  
+  <g clip-path="url(#rounded-corners)">
+    <rect x="0" y="0" width="100" height="100" fill="#e8d8b7" />
+    <!-- Main tower body -->
+    <rect x="30" y="20" width="40" height="70" fill="#b25d30" />
+    <!-- Tower roof -->
+    <polygon points="30,20 50,5 70,20" fill="#5a3a22" />
+    <!-- Windows -->
+    <rect x="38" y="30" width="10" height="15" fill="#f0e6d2" rx="2" ry="2" />
+    <rect x="52" y="30" width="10" height="15" fill="#f0e6d2" rx="2" ry="2" />
+    <rect x="38" y="55" width="10" height="15" fill="#f0e6d2" rx="2" ry="2" />
+    <rect x="52" y="55" width="10" height="15" fill="#f0e6d2" rx="2" ry="2" />
+    <!-- Door -->
+    <rect x="45" y="75" width="10" height="15" fill="#5a3a22" rx="2" ry="2" />
+    <!-- Decorative elements -->
+    <rect x="28" y="17" width="44" height="3" fill="#5a3a22" />
+    <rect x="28" y="90" width="44" height="3" fill="#5a3a22" />
+    <!-- Victorian gas lamp -->
+    <line x1="15" y1="85" x2="15" y2="60" stroke="#333" stroke-width="2" />
+    <polygon points="10,60 20,60 15,50" fill="#333" />
+    <circle cx="15" cy="48" r="3" fill="#ffff00" opacity="0.7" />
+    <!-- Jack the Chipper reference -->
+    <path d="M85,85 L90,80 L95,85 L90,90 Z" fill="#f4a460" /> <!-- Chip -->
+    <path d="M80,92 Q85,85 90,92" fill="none" stroke="#333" stroke-width="1" /> <!-- Top hat outline -->
+  </g>
+</svg>

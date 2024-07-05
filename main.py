@@ -1,11 +1,12 @@
 import asyncio
 import logging
 import random
+import os
 
 import RPi.GPIO as gpio
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse
+from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 
 DEFAULT_DELAY = 17
@@ -150,6 +151,12 @@ def index():
 
     with open(f"./fe/{random_frontend}") as f:
         return f.read()
+
+
+@app.get("/favicon.ico")
+async def favicon():
+    file_path = os.path.join(os.path.dirname(__file__), "fe", "favicon.svg")
+    return FileResponse(file_path, media_type="image/svg+xml")
 
 
 app.mount("/", StaticFiles(directory="fe"), name="fe")
