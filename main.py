@@ -1,5 +1,6 @@
 import asyncio
 import logging
+import random
 
 import RPi.GPIO as gpio
 from fastapi import FastAPI
@@ -130,9 +131,24 @@ async def stop():
     return {"message": "Stopping actuators"}
 
 
+_FE_OPTIONS = [
+    "cursed.html",
+    "hannah.html",
+    "index.html",
+    "kindacursed.html",
+    "spinning.html",
+    "frog.html",
+    "misalignedfrog.html",
+    "windows.html",
+]
+
+
 @app.get("/", response_class=HTMLResponse)
 def index():
-    with open("./fe/index.html") as f:
+
+    random_frontend = random.choice(_FE_OPTIONS)
+
+    with open(f"./fe/{random_frontend}") as f:
         return f.read()
 
 
