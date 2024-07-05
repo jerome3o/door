@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hannah Montana Emoji Extravaganza</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Pacifico&display=swap');
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #ffd1dc;
+      color: #000;
+      margin: 0;
+      padding: 20px;
+      background-image: url('https://via.placeholder.com/1920x1080/ffd1dc/000000?text=Hannah+Montana+Background');
+      background-size: cover;
+      background-attachment: fixed;
+      overflow: hidden;
+    }
+
+    .container {
+      background-color: rgba(255, 255, 255, 0.8);
+      border: 3px solid #ff69b4;
+      border-radius: 15px;
+      padding: 20px;
+      width: 300px;
+      margin: 0 auto;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .title {
+      font-family: 'Pacifico', cursive;
+      color: #ff69b4;
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 20px;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .button {
+      font-family: 'Arial', sans-serif;
+      background-color: #ff69b4;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin: 5px;
+      cursor: pointer;
+      border-radius: 25px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .button:hover {
+      background-color: #ff1493;
+      transform: scale(1.05);
+    }
+
+    .button:hover::after {
+      content: '🎉';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 24px;
+      opacity: 0;
+      animation: explode 0.5s forwards;
+    }
+
+    @keyframes explode {
+      0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translate(-50%, -50%) scale(2);
+        opacity: 0;
+      }
+    }
+
+    #message {
+      background-color: #fff;
+      border: 2px solid #ff69b4;
+      border-radius: 10px;
+      padding: 10px;
+      margin-bottom: 15px;
+      min-height: 20px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .emoji-rain {
+      position: fixed;
+      top: -50px;
+      font-size: 24px;
+      animation: fall linear infinite;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(calc(100vh + 50px));
+      }
+    }
+
+    .emoji-bounce {
+      position: absolute;
+      animation: bounce 1s infinite alternate;
+    }
+
+    @keyframes bounce {
+      from {
+        transform: translateY(0);
+      }
+
+      to {
+        transform: translateY(-20px);
+      }
+    }
+
+    .emoji-spin {
+      display: inline-block;
+      animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .emoji-pulse {
+      animation: pulse 0.5s infinite alternate;
+    }
+
+    @keyframes pulse {
+      to {
+        transform: scale(1.1);
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <div class="emoji-bounce" style="top: -40px; left: 10px; font-size: 40px;">👱‍♀️</div>
+    <div class="emoji-bounce" style="top: -30px; right: 10px; font-size: 30px;">🎤</div>
+    <div class="title">
+      <span class="emoji-spin">🎸</span> Hannah Montana Door Control <span class="emoji-spin">🎵</span>
+    </div>
+    <div id="message"></div>
+    <button id="unlockbutton" class="button">Unlock 🔓</button>
+    <button id="lockbutton" class="button">Lock 🔒</button>
+    <button id="stopbutton" class="button">E-Stop 🛑</button>
+    <button id="safebutton" class="button">Safe Actuators 🛡️</button>
+    <div class="emoji-pulse" style="position: absolute; bottom: -20px; right: -10px; font-size: 40px;">☕</div>
+  </div>
+  <script type="module" src="./index.js"></script>
+  <script>
+    const emojis = ['🎤', '🎶', '🌟', '🎸', '👢', '🎭', '🎼', '🎹', '🎷', '🎺', '🥁', '🎻', '👗', '👛', '💄', '👠', '🎀'];
+
+    function createEmojiRain() {
+      const emoji = document.createElement('div');
+      emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      emoji.style.left = Math.random() * window.innerWidth + 'px';
+      emoji.style.animationDuration = Math.random() * 3 + 2 + 's';
+      emoji.classList.add('emoji-rain');
+      document.body.appendChild(emoji);
+
+      setTimeout(() => {
+        document.body.removeChild(emoji);
+      }, 5000);
+    }
+
+    setInterval(createEmojiRain, 200);
+
+    document.querySelectorAll('.button').forEach(button => {
+      button.addEventListener('mouseover', () => {
+        const emoji = document.createElement('div');
+        emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        emoji.style.position = 'absolute';
+        emoji.style.left = Math.random() * button.offsetWidth + 'px';
+        emoji.style.top = Math.random() * button.offsetHeight + 'px';
+        emoji.style.fontSize = '20px';
+        emoji.style.pointerEvents = 'none';
+        button.appendChild(emoji);
+
+        setTimeout(() => {
+          button.removeChild(emoji);
+        }, 500);
+      });
+    });
+  </script>
+</body>
+
+</html>

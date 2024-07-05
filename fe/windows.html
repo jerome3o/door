@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Door Control</title>
+  <style>
+    body {
+      font-family: 'MS Sans Serif', Arial, sans-serif;
+      background-color: #008080;
+      color: #000;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .window {
+      background-color: #c0c0c0;
+      border: 2px outset #fff;
+      box-shadow: 2px 2px 0 #000;
+      padding: 2px;
+      width: 300px;
+      margin: 0 auto;
+    }
+
+    .title-bar {
+      background: linear-gradient(90deg, #000080, #1084d0);
+      color: #fff;
+      padding: 2px 4px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+    }
+
+    .title-bar-icon {
+      width: 16px;
+      height: 16px;
+      background-color: #c0c0c0;
+      margin-right: 4px;
+    }
+
+    .content {
+      padding: 10px;
+    }
+
+    .button {
+      font-family: 'MS Sans Serif', Arial, sans-serif;
+      background-color: #c0c0c0;
+      border: 2px outset #fff;
+      padding: 4px 8px;
+      margin: 4px;
+      cursor: pointer;
+    }
+
+    .button:active {
+      border-style: inset;
+    }
+
+    #message {
+      background-color: #fff;
+      border: 1px inset #000;
+      padding: 4px;
+      margin-bottom: 10px;
+      min-height: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="window">
+    <div class="title-bar">
+      <div class="title-bar-icon"></div>
+      Door Control
+    </div>
+    <div class="content">
+      <div id="message"></div>
+      <button id="unlockbutton" class="button">Unlock</button>
+      <button id="lockbutton" class="button">Lock</button>
+      <button id="stopbutton" class="button">E-Stop</button>
+      <button id="safebutton" class="button">Safe Actuators</button>
+    </div>
+  </div>
+  <script type="module" src="./index.js"></script>
+</body>
+
+</html>
