@@ -275,12 +275,12 @@ def index():
 def list_themes():
     # load all files in the ./fe/themes/ directory
     _FE_OPTIONS = [
-        f"/themes/{p}" for p in Path("./fe/themes").rglob("*") if p.is_file()
+        f"/themes/{p.name}" for p in Path("./fe/themes").rglob("*") if p.is_file()
     ]
 
     # load all files in the ./fe/generated/ directory
     _FE_OPTIONS += [
-        f"/generated/{p}" for p in Path("./fe/generated").rglob("*") if p.is_file()
+        f"/generated/{p.name}" for p in Path("./fe/generated").rglob("*") if p.is_file()
     ]
 
     return HTMLResponse(
