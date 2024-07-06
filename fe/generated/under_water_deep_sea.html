@@ -1,0 +1,125 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Deep Sea Door Control 🐟</title>
+  <style>
+    body {
+      background-color: #001f3f;
+      color: #00ffff;
+      font-family: 'Arial', sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+    .maincontainer {
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: rgba(0, 0, 0, 0.5);
+      border-radius: 15px;
+      box-shadow: 0 0 20px #00ffff;
+      position: relative;
+      z-index: 1;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 48px;
+      margin-bottom: 10px;
+      animation: pulse 2s infinite;
+    }
+    h1 {
+      margin: 0;
+      font-size: 36px;
+      text-shadow: 0 0 10px #00ffff;
+    }
+    #message {
+      text-align: center;
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 18px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .primary-button {
+      background-color: #00ffff;
+      color: #001f3f;
+    }
+    .secondary-button {
+      background-color: #ff4136;
+      color: white;
+    }
+    button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 15px #00ffff;
+    }
+    .fish {
+      position: fixed;
+      font-size: 24px;
+      animation: swim 20s linear infinite;
+      opacity: 0.7;
+    }
+    @keyframes swim {
+      0% { transform: translateX(100vw) translateY(0); }
+      100% { transform: translateX(-100vw) translateY(100vh); }
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>Deep Sea Door Control 🌊</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">Unlock 🔓</button>
+      <button id="lockbutton" class="primary-button">Lock 🔒</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">E-Stop 🛑</button>
+      <button id="safebutton" class="secondary-button">Safe Actuators 🔧</button>
+    </div>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    const fishEmojis = ['🐟', '🐠', '🐡', '🦈', '🐙', '🦑', '🦐', '🦀', '🐳', '🐋', '🐬'];
+    for (let i = 0; i < 50; i++) {
+      const fish = document.createElement('div');
+      fish.className = 'fish';
+      fish.style.left = `${Math.random() * 100}vw`;
+      fish.style.top = `${Math.random() * 100}vh`;
+      fish.style.animationDuration = `${15 + Math.random() * 20}s`;
+      fish.style.animationDelay = `${Math.random() * -20}s`;
+      fish.innerText = fishEmojis[Math.floor(Math.random() * fishEmojis.length)];
+      document.body.appendChild(fish);
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,163 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Door Control 🌪️</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #e6f7ff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    .maincontainer {
+      background-color: #ffffff;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .header {
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 48px;
+      color: #4a90e2;
+      animation: spin 10s linear infinite;
+    }
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
+    }
+    h1 {
+      color: #4a90e2;
+      margin-top: 10px;
+    }
+    #message {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+    .primary-button, .secondary-button {
+      padding: 12px 24px;
+      font-size: 16px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .primary-button {
+      background-color: #4a90e2;
+      color: white;
+    }
+    .secondary-button {
+      background-color: #f0f0f0;
+      color: #333;
+    }
+    .primary-button:hover, .secondary-button:hover {
+      transform: scale(1.05);
+    }
+    .theme-name {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      font-size: 12px;
+      color: #999;
+    }
+    .fan-animation {
+      position: absolute;
+      font-size: 24px;
+      opacity: 0.2;
+      animation: float 10s infinite linear;
+    }
+    @keyframes float {
+      0% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-100px) rotate(180deg); }
+      100% { transform: translateY(0) rotate(360deg); }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-fan"></i>
+      <h1>Door Control 🚪🌪️</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">Unlock 🔓</button>
+      <button id="lockbutton" class="primary-button">Lock 🔒</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">E-Stop 🛑</button>
+      <button id="safebutton" class="secondary-button">Safe Actuators 🛡️</button>
+    </div>
+    <div class="theme-name">Theme: Tower Fans are better than normal Fans 🌪️ > 🌀</div>
+    <span class="fan-animation" style="top: 10%; left: 10%;">🌪️</span>
+    <span class="fan-animation" style="top: 30%; right: 15%;">💨</span>
+    <span class="fan-animation" style="bottom: 20%; left: 20%;">❄️</span>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    // Fun messages about tower fans
+    const fanMessages = [
+      "Tower fans: Cooling you down without taking up all your space! 🌪️",
+      "Why settle for a boring old fan when you can have a tower of cool? 😎",
+      "Normal fans are so last century. Tower fans are the future! 🚀",
+      "Tower fans: Because who wants their hair to look like they've been in a wind tunnel? 💁‍♀️",
+      "Regular fans: 0, Tower fans: 1. Game over! 🏆",
+      "Tower fans: Sleek, efficient, and won't trip you in the dark! 🌙",
+    ];
+
+    // Display a random fan message
+    function displayRandomMessage() {
+      const messageElement = document.getElementById('message');
+      const randomIndex = Math.floor(Math.random() * fanMessages.length);
+      messageElement.textContent = fanMessages[randomIndex];
+    }
+
+    // Change message every 10 seconds
+    displayRandomMessage();
+    setInterval(displayRandomMessage, 10000);
+
+    // Add more floating emojis dynamically
+    function addFloatingEmoji() {
+      const emoji = document.createElement('span');
+      emoji.className = 'fan-animation';
+      emoji.textContent = ['🌪️', '💨', '❄️', '🍃'][Math.floor(Math.random() * 4)];
+      emoji.style.left = Math.random() * 100 + '%';
+      emoji.style.top = Math.random() * 100 + '%';
+      document.querySelector('.maincontainer').appendChild(emoji);
+    }
+
+    // Add a new emoji every 3 seconds, up to 10 total
+    const maxEmojis = 10;
+    const addEmojiInterval = setInterval(() => {
+      if (document.querySelectorAll('.fan-animation').length < maxEmojis) {
+        addFloatingEmoji();
+      } else {
+        clearInterval(addEmojiInterval);
+      }
+    }, 3000);
+  </script>
+</body>
+
+</html>

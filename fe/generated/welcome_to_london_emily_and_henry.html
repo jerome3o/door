@@ -1,0 +1,139 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Welcome to London, Emily and Henry! 🎉🇬🇧</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #FF9A8B 0%, #FF6A88 100%);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: #333;
+    }
+    .maincontainer {
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      max-width: 90%;
+      width: 400px;
+    }
+    .header {
+      margin-bottom: 20px;
+      animation: bounce 2s infinite;
+    }
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+      40% {transform: translateY(-20px);}
+      60% {transform: translateY(-10px);}
+    }
+    h1 {
+      font-size: 2.5em;
+      margin: 10px 0;
+      color: #FF6A88;
+    }
+    .fas {
+      font-size: 3em;
+      color: #FF6A88;
+    }
+    #message {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 15px 30px;
+      font-size: 1.2em;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .primary-button {
+      background-color: #FF6A88;
+      color: white;
+    }
+    .primary-button:hover {
+      background-color: #FF9A8B;
+      transform: scale(1.05);
+    }
+    .secondary-button {
+      background-color: #FFD3B6;
+      color: #333;
+    }
+    .secondary-button:hover {
+      background-color: #FFAAA7;
+      transform: scale(1.05);
+    }
+    .theme-name {
+      font-size: 0.8em;
+      margin-top: 20px;
+      color: #666;
+    }
+    .emoji-rain {
+      position: fixed;
+      top: -50px;
+      font-size: 20px;
+      animation: fall linear infinite;
+      z-index: -1;
+    }
+    @keyframes fall {
+      0% {transform: translateY(-50px);}
+      100% {transform: translateY(100vh);}
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>Welcome Home! 🏠</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">Unlock 🔓</button>
+      <button id="lockbutton" class="primary-button">Lock 🔒</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">E-Stop 🛑</button>
+      <button id="safebutton" class="secondary-button">Safe 🛡️</button>
+    </div>
+    <p class="theme-name">Theme: Welcome to London, Emily and Henry! 🎉🇬🇧</p>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    // Emoji rain effect
+    const emojis = ['🎉', '🇬🇧', '🏠', '☕', '🚌', '🌂', '👑'];
+    function createEmoji() {
+      const emoji = document.createElement('div');
+      emoji.classList.add('emoji-rain');
+      emoji.style.left = Math.random() * window.innerWidth + 'px';
+      emoji.style.animationDuration = Math.random() * 3 + 2 + 's';
+      emoji.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+      document.body.appendChild(emoji);
+      setTimeout(() => {
+        emoji.remove();
+      }, 5000);
+    }
+    setInterval(createEmoji, 300);
+  </script>
+</body>
+
+</html>

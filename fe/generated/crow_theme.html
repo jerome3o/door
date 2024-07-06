@@ -1,0 +1,149 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Crow's Nest Door Control 🐦</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #2c3e50;
+      color: #ecf0f1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+    .maincontainer {
+      background-color: #34495e;
+      border-radius: 15px;
+      padding: 2em;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .header {
+      margin-bottom: 1em;
+    }
+    .header i {
+      font-size: 2em;
+      margin-right: 0.5em;
+    }
+    h1 {
+      display: inline;
+      vertical-align: middle;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin: 1em 0;
+    }
+    button {
+      padding: 0.8em 1.5em;
+      border: none;
+      border-radius: 5px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .primary-button {
+      background-color: #3498db;
+      color: white;
+    }
+    .secondary-button {
+      background-color: #e74c3c;
+      color: white;
+    }
+    button:hover {
+      transform: scale(1.05);
+    }
+    #message {
+      font-style: italic;
+      margin: 1em 0;
+    }
+    .crow {
+      position: absolute;
+      font-size: 2em;
+      animation: fly 10s infinite linear;
+    }
+    @keyframes fly {
+      0% { top: -50px; left: -50px; }
+      25% { top: 50%; left: 100%; }
+      50% { top: 100%; left: 50%; }
+      75% { top: 50%; left: -50px; }
+      100% { top: -50px; left: -50px; }
+    }
+    .trinket {
+      position: absolute;
+      font-size: 1.5em;
+      opacity: 0;
+      animation: fall 5s infinite;
+    }
+    @keyframes fall {
+      0% { top: -50px; opacity: 1; }
+      90% { top: 100%; opacity: 1; }
+      100% { top: 110%; opacity: 0; }
+    }
+    .panic {
+      position: fixed;
+      bottom: 10px;
+      left: 0;
+      width: 100%;
+      text-align: center;
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #e74c3c;
+      animation: shake 0.5s infinite;
+    }
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      75% { transform: translateX(-5px); }
+      100% { transform: translateX(5px); }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-crow"></i>
+      <h1>Crow's Nest Door Control</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">Unlock 🔓</button>
+      <button id="lockbutton" class="primary-button">Lock 🔒</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">E-Stop 🛑</button>
+      <button id="safebutton" class="secondary-button">Safe Actuators 🛡️</button>
+    </div>
+    <p>The crows might bring you trinkets! 🎁💍💎</p>
+  </div>
+
+  <div class="crow">🐦</div>
+  <div class="trinket" style="left: 20%;">💍</div>
+  <div class="trinket" style="left: 50%;">💎</div>
+  <div class="trinket" style="left: 80%;">🎁</div>
+
+  <div class="panic">AAAHHH THEY'RE IN THE HOUSE! 🐦🐦🐦</div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    setInterval(() => {
+      const crow = document.querySelector('.crow');
+      crow.textContent = Math.random() > 0.5 ? '🐦' : '🦅';
+    }, 1000);
+  </script>
+</body>
+
+</html>
