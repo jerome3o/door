@@ -271,7 +271,7 @@ def index():
         return f.read()
 
 
-@app.get("list_themes")
+@app.get("/list")
 def list_themes():
     # load all files in the ./fe/themes/ directory
     _FE_OPTIONS = [
