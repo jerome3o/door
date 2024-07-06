@@ -271,6 +271,25 @@ def index():
         return f.read()
 
 
+@app.get("list_themes")
+def list_themes():
+    # load all files in the ./fe/themes/ directory
+    _FE_OPTIONS = [
+        f"/themes/{p}" for p in Path("./fe/themes").rglob("*") if p.is_file()
+    ]
+
+    # load all files in the ./fe/generated/ directory
+    _FE_OPTIONS += [
+        f"/generated/{p}" for p in Path("./fe/generated").rglob("*") if p.is_file()
+    ]
+
+    return HTMLResponse(
+        content="<br>".join(
+            f'<a href="/{p}">{p}</a>' for p in _FE_OPTIONS if p.endswith(".html")
+        )
+    )
+
+
 @app.get("/favicon.ico")
 async def favicon():
     file_path = os.path.join(os.path.dirname(__file__), "fe", "favicon.svg")
