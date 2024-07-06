@@ -264,7 +264,7 @@ def index():
 
     random_frontend = random.choice(_FE_OPTIONS)
 
-    with open(f"./fe/{random_frontend}") as f:
+    with open(random_frontend) as f:
         return f.read()
 
 
