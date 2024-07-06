@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -17,6 +18,7 @@
       margin: 0;
       overflow: hidden;
     }
+
     .maincontainer {
       background-color: rgba(0, 0, 0, 0.7);
       border: 2px solid #0f0;
@@ -25,10 +27,13 @@
       position: relative;
       z-index: 1;
     }
+
     .header {
       margin-bottom: 20px;
     }
-    .primary-button, .secondary-button {
+
+    .primary-button,
+    .secondary-button {
       margin: 5px;
       padding: 10px 20px;
       font-size: 16px;
@@ -37,21 +42,33 @@
       color: #0f0;
       border: 2px solid #0f0;
     }
-    .primary-button:hover, .secondary-button:hover {
+
+    .primary-button:hover,
+    .secondary-button:hover {
       background-color: #0f0;
       color: #000;
     }
+
     .alien {
       position: absolute;
       font-size: 24px;
       animation: move 10s linear infinite;
     }
+
     @keyframes move {
-      0% { left: -50px; top: 50%; }
-      100% { left: 100%; top: 50%; }
+      0% {
+        left: -50px;
+        top: 50%;
+      }
+
+      100% {
+        left: 100%;
+        top: 50%;
+      }
     }
   </style>
 </head>
+
 <body>
   <div class="maincontainer">
     <div class="header">
@@ -70,6 +87,7 @@
   <div class="alien">👾</div>
   <div class="alien" style="animation-delay: -5s; top: 25%;">👾</div>
   <div class="alien" style="animation-delay: -2s; top: 75%;">👾</div>
-  <script type="module" src="./index.js"></script>
+  <script type="module" src="/index.js"></script>
 </body>
+
 </html>
