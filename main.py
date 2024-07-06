@@ -39,6 +39,7 @@ When generating the html claude should:
 * Ensure the websites are mobile friendly
 * Ensure that any existing id's and scripts loaded are still functional
 * Make sure to add the theme name to the door controller website so the user knows what the theme is
+* Try and incorporate the theme in the text on the buttons and title
 """
 
 _MESSAGE_TEMPLATE = """\
