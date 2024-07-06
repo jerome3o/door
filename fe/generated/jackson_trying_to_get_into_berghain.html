@@ -1,0 +1,145 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Door Control 🚪</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #111;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    .maincontainer {
+      background-color: #222;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+      max-width: 90%;
+      width: 300px;
+    }
+    .header {
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 48px;
+      color: #0f0;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+    h1 {
+      font-size: 24px;
+      margin: 10px 0;
+    }
+    #message {
+      font-style: italic;
+      margin-bottom: 20px;
+      min-height: 20px;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .primary-button {
+      background-color: #0f0;
+      color: #000;
+    }
+    .secondary-button {
+      background-color: #f00;
+      color: #fff;
+    }
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+    button:active {
+      transform: scale(0.95);
+    }
+    #theme {
+      font-size: 12px;
+      margin-top: 20px;
+      color: #888;
+    }
+    #bouncer {
+      font-size: 48px;
+      position: absolute;
+      right: -60px;
+      top: 50%;
+      transform: translateY(-50%);
+      transition: right 0.5s ease;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>Berghain Door Control 🎧</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">Unlock 🔓</button>
+      <button id="lockbutton" class="primary-button">Lock 🔒</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">E-Stop 🛑</button>
+      <button id="safebutton" class="secondary-button">Safe Actuators 🔧</button>
+    </div>
+    <div id="theme">Theme: Jackson trying to get into Berghain (and getting rejected LOL xD)</div>
+  </div>
+  <div id="bouncer">🧔</div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    const unlockButton = document.getElementById('unlockbutton');
+    const lockButton = document.getElementById('lockbutton');
+    const message = document.getElementById('message');
+    const bouncer = document.getElementById('bouncer');
+
+    unlockButton.addEventListener('click', () => {
+      message.textContent = "Nice try, Jackson! 😂 Not today!";
+      bouncer.style.right = '20px';
+      setTimeout(() => {
+        bouncer.style.right = '-60px';
+        message.textContent = "";
+      }, 2000);
+    });
+
+    lockButton.addEventListener('click', () => {
+      message.textContent = "The door is already locked for you, buddy! 🚫";
+      bouncer.style.right = '20px';
+      setTimeout(() => {
+        bouncer.style.right = '-60px';
+        message.textContent = "";
+      }, 2000);
+    });
+  </script>
+</body>
+
+</html>

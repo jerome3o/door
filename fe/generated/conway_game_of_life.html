@@ -1,0 +1,196 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Door Control 🚪</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      height: 100%;
+      overflow: hidden;
+    }
+    #gameCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+    .maincontainer {
+      position: relative;
+      z-index: 1;
+      background-color: rgba(255, 255, 255, 0.8);
+      border-radius: 20px;
+      padding: 20px;
+      max-width: 400px;
+      margin: 20px auto;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+    }
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+      color: #4CAF50;
+    }
+    h1 {
+      margin: 0;
+      color: #333;
+    }
+    #message {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+      min-height: 1.5em;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    .primary-button {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .secondary-button {
+      background-color: #f44336;
+      color: white;
+    }
+    #theme-name {
+      font-size: 0.8em;
+      color: #666;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="gameCanvas"></canvas>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>Door Control 🚪</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">🔓 Unlock</button>
+      <button id="lockbutton" class="primary-button">🔒 Lock</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">🛑 E-Stop</button>
+      <button id="safebutton" class="secondary-button">🛡️ Safe Actuators</button>
+    </div>
+    <div id="theme-name">Theme: Conway's Game of Life 🦠</div>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+
+    const CELL_SIZE = 10;
+    let width, height, cols, rows;
+    let grid;
+
+    function setup() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+      cols = Math.floor(width / CELL_SIZE);
+      rows = Math.floor(height / CELL_SIZE);
+
+      grid = new Array(cols).fill(null)
+        .map(() => new Array(rows).fill(null)
+          .map(() => Math.random() > 0.7));
+    }
+
+    function draw() {
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+      ctx.fillRect(0, 0, width, height);
+
+      for (let i = 0; i < cols; i++) {
+        for (let j = 0; j < rows; j++) {
+          const x = i * CELL_SIZE;
+          const y = j * CELL_SIZE;
+
+          if (grid[i][j]) {
+            ctx.fillStyle = 'rgba(76, 175, 80, 0.5)';
+            ctx.fillRect(x, y, CELL_SIZE - 1, CELL_SIZE - 1);
+          }
+        }
+      }
+    }
+
+    function countNeighbors(grid, x, y) {
+      let sum = 0;
+      for (let i = -1; i < 2; i++) {
+        for (let j = -1; j < 2; j++) {
+          let col = (x + i + cols) % cols;
+          let row = (y + j + rows) % rows;
+          sum += grid[col][row];
+        }
+      }
+      sum -= grid[x][y];
+      return sum;
+    }
+
+    function update() {
+      let next = grid.map(arr => [...arr]);
+
+      for (let i = 0; i < cols; i++) {
+        for (let j = 0; j < rows; j++) {
+          let state = grid[i][j];
+          let neighbors = countNeighbors(grid, i, j);
+
+          if (state == 0 && neighbors == 3) {
+            next[i][j] = 1;
+          } else if (state == 1 && (neighbors < 2 || neighbors > 3)) {
+            next[i][j] = 0;
+          } else {
+            next[i][j] = state;
+          }
+        }
+      }
+
+      grid = next;
+    }
+
+    function animate() {
+      draw();
+      update();
+      requestAnimationFrame(animate);
+    }
+
+    setup();
+    animate();
+
+    window.addEventListener('resize', setup);
+  </script>
+</body>
+
+</html>

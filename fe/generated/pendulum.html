@@ -1,0 +1,171 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Door Control 🚪🔐</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .maincontainer {
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+      color: #4a4a4a;
+    }
+
+    h1 {
+      color: #4a4a4a;
+      margin: 0;
+    }
+
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .primary-button, .secondary-button {
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .primary-button {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    .primary-button:hover {
+      background-color: #45a049;
+    }
+
+    .secondary-button {
+      background-color: #f44336;
+      color: white;
+    }
+
+    .secondary-button:hover {
+      background-color: #da190b;
+    }
+
+    #message {
+      height: 20px;
+      margin: 10px 0;
+      color: #4a4a4a;
+    }
+
+    .pendulum {
+      position: absolute;
+      width: 2px;
+      height: 100px;
+      background-color: #333;
+      transform-origin: top center;
+    }
+
+    .pendulum::after {
+      content: "🔨";
+      position: absolute;
+      bottom: -20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 20px;
+    }
+
+    .theme-name {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 0.8em;
+      color: #888;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="theme-name">Theme: Pendulum 🏋️‍♂️</div>
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>Door Control</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">Unlock 🔓</button>
+      <button id="lockbutton" class="primary-button">Lock 🔒</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">E-Stop 🛑</button>
+      <button id="safebutton" class="secondary-button">Safe Actuators 🛡️</button>
+    </div>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    function createPendulum(x, length, angle) {
+      const pendulum = document.createElement('div');
+      pendulum.className = 'pendulum';
+      pendulum.style.left = `${x}px`;
+      pendulum.style.height = `${length}px`;
+      document.body.appendChild(pendulum);
+
+      let currentAngle = angle;
+      let angularVelocity = 0;
+      const gravity = 0.1;
+      const damping = 0.995;
+
+      function animate() {
+        const acceleration = -gravity * Math.sin(currentAngle);
+        angularVelocity += acceleration;
+        angularVelocity *= damping;
+        currentAngle += angularVelocity;
+
+        pendulum.style.transform = `rotate(${currentAngle}rad)`;
+        requestAnimationFrame(animate);
+      }
+
+      animate();
+    }
+
+    // Create multiple pendulums
+    createPendulum(100, 100, Math.PI / 4);
+    createPendulum(200, 150, -Math.PI / 6);
+    createPendulum(300, 120, Math.PI / 3);
+  </script>
+</body>
+
+</html>

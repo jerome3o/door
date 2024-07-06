@@ -1,0 +1,140 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Door Control 🐾💕</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #ffc0cb;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    .maincontainer {
+      background-color: #fff;
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 90%;
+      width: 350px;
+    }
+    .header {
+      margin-bottom: 1rem;
+    }
+    .header i {
+      font-size: 3rem;
+      color: #ff69b4;
+      animation: heartbeat 1s infinite;
+    }
+    @keyframes heartbeat {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+    h1 {
+      color: #ff69b4;
+      margin: 0.5rem 0;
+    }
+    .theme {
+      font-size: 0.8rem;
+      color: #ff69b4;
+      margin-bottom: 1rem;
+    }
+    #message {
+      margin: 1rem 0;
+      font-weight: bold;
+      color: #ff69b4;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin: 1rem 0;
+    }
+    .primary-button, .secondary-button {
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 50px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .primary-button {
+      background-color: #ff69b4;
+      color: white;
+    }
+    .primary-button:hover {
+      background-color: #ff1493;
+      transform: scale(1.05);
+    }
+    .secondary-button {
+      background-color: #ffc0cb;
+      color: #ff69b4;
+    }
+    .secondary-button:hover {
+      background-color: #ffb6c1;
+      transform: scale(1.05);
+    }
+    .animals {
+      position: absolute;
+      font-size: 2rem;
+      opacity: 0.5;
+    }
+    #animal1 { top: 10%; left: 10%; animation: float 3s infinite; }
+    #animal2 { top: 20%; right: 10%; animation: float 4s infinite; }
+    #animal3 { bottom: 10%; left: 15%; animation: float 5s infinite; }
+    #animal4 { bottom: 20%; right: 15%; animation: float 3.5s infinite; }
+    @keyframes float {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0); }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="animals" id="animal1">🐰</div>
+  <div class="animals" id="animal2">🦊</div>
+  <div class="animals" id="animal3">🐼</div>
+  <div class="animals" id="animal4">🐯</div>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-heart"></i>
+      <h1>Door Control</h1>
+    </div>
+    <div class="theme">Theme: Animals mating 🐾💕</div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">Unlock 🔓</button>
+      <button id="lockbutton" class="primary-button">Lock 🔒</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">E-Stop 🛑</button>
+      <button id="safebutton" class="secondary-button">Safe Actuators 🛡️</button>
+    </div>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    document.querySelectorAll('.primary-button, .secondary-button').forEach(button => {
+      button.addEventListener('mouseenter', () => {
+        button.innerHTML += ' 💕';
+      });
+      button.addEventListener('mouseleave', () => {
+        button.innerHTML = button.innerHTML.replace(' 💕', '');
+      });
+    });
+  </script>
+</body>
+
+</html>

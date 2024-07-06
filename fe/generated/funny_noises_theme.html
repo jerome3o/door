@@ -1,0 +1,146 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Door Control 🚪🔊</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive;
+      background-color: #FFD700;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      transition: background-color 0.5s;
+    }
+    .maincontainer {
+      background-color: #FF69B4;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      text-align: center;
+      max-width: 90%;
+      width: 300px;
+    }
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+      animation: spin 2s linear infinite;
+    }
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
+    }
+    h1 {
+      font-size: 2em;
+      color: #4B0082;
+      margin: 0;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    button {
+      font-family: 'Comic Sans MS', cursive;
+      font-size: 1.2em;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+    }
+    .primary-button {
+      background-color: #00CED1;
+      color: #FFFFFF;
+    }
+    .secondary-button {
+      background-color: #FF6347;
+      color: #FFFFFF;
+    }
+    #message {
+      font-size: 1.2em;
+      margin: 20px 0;
+      color: #4B0082;
+    }
+    .theme-name {
+      font-size: 0.8em;
+      color: #4B0082;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>Door Control 🚪</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">Unlock 🔓</button>
+      <button id="lockbutton" class="primary-button">Lock 🔒</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">E-Stop 🛑</button>
+      <button id="safebutton" class="secondary-button">Safe Actuators 🛡️</button>
+    </div>
+    <p class="theme-name">Theme: Funny Noises 🎵🤪</p>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    
+    function playSound(freq, type, duration) {
+      const oscillator = audioContext.createOscillator();
+      oscillator.type = type;
+      oscillator.frequency.setValueAtTime(freq, audioContext.currentTime);
+      oscillator.connect(audioContext.destination);
+      oscillator.start();
+      oscillator.stop(audioContext.currentTime + duration);
+    }
+
+    document.getElementById('unlockbutton').addEventListener('click', () => {
+      playSound(440, 'sine', 0.2);
+      setTimeout(() => playSound(880, 'sine', 0.2), 200);
+    });
+
+    document.getElementById('lockbutton').addEventListener('click', () => {
+      playSound(880, 'sine', 0.2);
+      setTimeout(() => playSound(440, 'sine', 0.2), 200);
+    });
+
+    document.getElementById('stopbutton').addEventListener('click', () => {
+      playSound(220, 'square', 0.5);
+    });
+
+    document.getElementById('safebutton').addEventListener('click', () => {
+      playSound(660, 'sawtooth', 0.3);
+    });
+
+    // Change background color randomly every 5 seconds
+    setInterval(() => {
+      document.body.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 80%)`;
+    }, 5000);
+  </script>
+</body>
+
+</html>

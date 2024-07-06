@@ -1,0 +1,125 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🚪🎮</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .maincontainer {
+      background-color: #ffffff;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 300px;
+      width: 100%;
+    }
+    .header {
+      font-size: 3em;
+      margin-bottom: 20px;
+      animation: bounce 2s infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    button {
+      font-size: 2em;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    button:hover {
+      transform: scale(1.1);
+    }
+    .primary-button {
+      background-color: #4CAF50;
+    }
+    .secondary-button {
+      background-color: #f44336;
+    }
+    #message {
+      font-size: 2em;
+      margin: 20px 0;
+      min-height: 1.5em;
+    }
+    .theme-name {
+      font-size: 0.8em;
+      margin-top: 20px;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      🔒
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">🔓</button>
+      <button id="lockbutton" class="primary-button">🔐</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">🛑</button>
+      <button id="safebutton" class="secondary-button">🛡️</button>
+    </div>
+    <div class="theme-name">🎨: 😀👨‍🦰👩‍🦱👴👵</div>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    const messageEl = document.getElementById('message');
+    const buttons = document.querySelectorAll('button');
+    
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+        let message = '';
+        switch(button.id) {
+          case 'unlockbutton':
+            message = '🚪➡️';
+            break;
+          case 'lockbutton':
+            message = '🚪⬅️';
+            break;
+          case 'stopbutton':
+            message = '🆘';
+            break;
+          case 'safebutton':
+            message = '✅';
+            break;
+        }
+        messageEl.textContent = message;
+        
+        // Animate the clicked button
+        button.style.transform = 'scale(0.9)';
+        setTimeout(() => {
+          button.style.transform = 'scale(1)';
+        }, 100);
+      });
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,150 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Door Control</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #ff3333;
+      color: #ffffff;
+      animation: pulsate 2s infinite;
+    }
+
+    @keyframes pulsate {
+      0% { background-color: #ff3333; }
+      50% { background-color: #cc0000; }
+      100% { background-color: #ff3333; }
+    }
+
+    .maincontainer {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .header i {
+      font-size: 48px;
+      margin-right: 10px;
+      animation: shake 0.5s infinite;
+    }
+
+    @keyframes shake {
+      0% { transform: rotate(0deg); }
+      25% { transform: rotate(5deg); }
+      75% { transform: rotate(-5deg); }
+      100% { transform: rotate(0deg); }
+    }
+
+    h1 {
+      font-size: 36px;
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+
+    #message {
+      font-size: 18px;
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 15px 30px;
+      font-size: 18px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+
+    button:active {
+      transform: scale(0.95);
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .primary-button {
+      background-color: #ff9900;
+      color: #000000;
+    }
+
+    .secondary-button {
+      background-color: #cc0000;
+      color: #ffffff;
+    }
+
+    #theme-name {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      font-size: 14px;
+      opacity: 0.7;
+    }
+
+    /* Emojis */
+    .emoji {
+      font-size: 24px;
+      margin: 0 5px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>Door Control</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">Unlock 😠</button>
+      <button id="lockbutton" class="primary-button">Lock 🤬</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">E-Stop 💢</button>
+      <button id="safebutton" class="secondary-button">Safe Actuators 👿</button>
+    </div>
+  </div>
+
+  <div id="theme-name">Theme: Angry 😡</div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    document.querySelectorAll('button').forEach(button => {
+      button.addEventListener('mouseenter', () => {
+        button.style.transform = 'scale(1.1) rotate(2deg)';
+      });
+      button.addEventListener('mouseleave', () => {
+        button.style.transform = 'scale(1) rotate(0)';
+      });
+    });
+
+    setInterval(() => {
+      document.querySelector('.header i').style.color = `rgb(${Math.random()*255},0,0)`;
+    }, 500);
+  </script>
+</body>
+
+</html>

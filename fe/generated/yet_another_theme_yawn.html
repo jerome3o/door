@@ -1,0 +1,115 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Door Control (Yawn Edition)</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive;
+      background-color: #f0f0f0;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+    .maincontainer {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 90%;
+      width: 300px;
+    }
+    .header {
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 3em;
+      color: #888;
+    }
+    h1 {
+      font-size: 1.5em;
+      margin: 10px 0;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    button:hover {
+      transform: scale(1.05);
+    }
+    .primary-button {
+      background-color: #ddd;
+      color: #333;
+    }
+    .secondary-button {
+      background-color: #eee;
+      color: #666;
+    }
+    #message {
+      font-style: italic;
+      color: #666;
+    }
+    .yawn {
+      position: absolute;
+      font-size: 2em;
+      opacity: 0;
+      animation: float 5s infinite ease-in-out;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); opacity: 0; }
+      50% { transform: translateY(-50px); opacity: 1; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>Door Control (Yawn Edition) 🥱</h1>
+    </div>
+    <p id="message">Oh great, another theme... How exciting... 😴</p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">Unleash Boredom 🔓</button>
+      <button id="lockbutton" class="primary-button">Secure Monotony 🔒</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">Pause Tedium ⏹️</button>
+      <button id="safebutton" class="secondary-button">Safeguard Dullness 🛡️</button>
+    </div>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    function addYawn() {
+      const yawn = document.createElement('div');
+      yawn.textContent = '💤';
+      yawn.className = 'yawn';
+      yawn.style.left = Math.random() * window.innerWidth + 'px';
+      document.body.appendChild(yawn);
+      setTimeout(() => yawn.remove(), 5000);
+    }
+    setInterval(addYawn, 2000);
+  </script>
+</body>
+
+</html>

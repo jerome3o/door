@@ -1,0 +1,143 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>JACKSON SMELLS 🦨</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive;
+      background-color: #a3e635;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      animation: stinkWave 5s infinite;
+    }
+    
+    @keyframes stinkWave {
+      0% { background-color: #a3e635; }
+      50% { background-color: #84cc16; }
+      100% { background-color: #a3e635; }
+    }
+
+    .maincontainer {
+      background-color: #fef3c7;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+    }
+
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .header i {
+      font-size: 36px;
+      margin-right: 10px;
+      color: #4d7c0f;
+    }
+
+    h1 {
+      font-size: 28px;
+      color: #4d7c0f;
+      margin: 0;
+    }
+
+    #message {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #4d7c0f;
+    }
+
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+
+    .primary-button, .secondary-button {
+      font-family: 'Comic Sans MS', cursive;
+      font-size: 18px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .primary-button {
+      background-color: #4d7c0f;
+      color: white;
+    }
+
+    .secondary-button {
+      background-color: #fcd34d;
+      color: #4d7c0f;
+    }
+
+    .primary-button:hover, .secondary-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .theme-name {
+      font-size: 14px;
+      color: #4d7c0f;
+      margin-top: 20px;
+    }
+
+    #stinky-jackson {
+      font-size: 48px;
+      animation: rotate 3s linear infinite;
+    }
+
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>JACKSON SMELLS 🦨</h1>
+    </div>
+    <p id="message"></p>
+    <div id="stinky-jackson">💨</div>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">Unlock 🔓</button>
+      <button id="lockbutton" class="primary-button">Lock 🔒</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">E-Stop 🛑</button>
+      <button id="safebutton" class="secondary-button">Safe Actuators 🛡️</button>
+    </div>
+    <p class="theme-name">Theme: Smelly Jackson 🦨💨</p>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    const stinkyEmojis = ['🦨', '💨', '🧄', '🧅', '🧦'];
+    const stinkyJackson = document.getElementById('stinky-jackson');
+    setInterval(() => {
+      stinkyJackson.textContent = stinkyEmojis[Math.floor(Math.random() * stinkyEmojis.length)];
+    }, 1000);
+  </script>
+</body>
+
+</html>

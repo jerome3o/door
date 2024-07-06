@@ -1,0 +1,156 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Door Control 🐪 Turkish Desert Theme</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4d03f;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-image: linear-gradient(45deg, #f4d03f 25%, transparent 25%), linear-gradient(-45deg, #f4d03f 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #f4d03f 75%), linear-gradient(-45deg, transparent 75%, #f4d03f 75%);
+      background-size: 20px 20px;
+      background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+      animation: sandstorm 10s linear infinite;
+    }
+
+    @keyframes sandstorm {
+      0% {
+        background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+      }
+      100% {
+        background-position: 20px 20px, 20px 30px, 30px 10px, 10px 20px;
+      }
+    }
+
+    .maincontainer {
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      max-width: 90%;
+      width: 400px;
+    }
+
+    .header {
+      margin-bottom: 2rem;
+    }
+
+    .header i {
+      font-size: 3rem;
+      color: #c0392b;
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      color: #c0392b;
+      margin: 0;
+      font-size: 2.5rem;
+    }
+
+    #message {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      min-height: 1.5em;
+    }
+
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 1rem;
+    }
+
+    button {
+      font-size: 1.2rem;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .primary-button {
+      background-color: #e67e22;
+      color: white;
+    }
+
+    .primary-button:hover {
+      background-color: #d35400;
+      transform: scale(1.05);
+    }
+
+    .secondary-button {
+      background-color: #95a5a6;
+      color: white;
+    }
+
+    .secondary-button:hover {
+      background-color: #7f8c8d;
+      transform: scale(1.05);
+    }
+
+    @media (max-width: 480px) {
+      .maincontainer {
+        padding: 1rem;
+      }
+
+      h1 {
+        font-size: 2rem;
+      }
+
+      button {
+        font-size: 1rem;
+        padding: 0.6rem 1.2rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>Door Control 🐫</h1>
+    </div>
+    <p id="message">🏜️ Welcome to the Turkish Desert! 🏜️</p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">Unlock 🔓</button>
+      <button id="lockbutton" class="primary-button">Lock 🔒</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">E-Stop 🛑</button>
+      <button id="safebutton" class="secondary-button">Safe Actuators 🛡️</button>
+    </div>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    document.querySelectorAll('button').forEach(button => {
+      button.addEventListener('click', () => {
+        button.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+          button.style.transform = 'scale(1)';
+        }, 100);
+      });
+    });
+
+    const desertEmojis = ['🐪', '🌵', '🏜️', '☀️', '🐍', '🦂'];
+    setInterval(() => {
+      const randomEmoji = desertEmojis[Math.floor(Math.random() * desertEmojis.length)];
+      document.getElementById('message').textContent += ' ' + randomEmoji;
+    }, 3000);
+  </script>
+</body>
+
+</html>

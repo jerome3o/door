@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Door Control 🚪🐛</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #3d3d3d;
+      color: #8a8a8a;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    .maincontainer {
+      background-color: #2a2a2a;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      max-width: 90%;
+      width: 300px;
+      position: relative;
+      overflow: hidden;
+    }
+    .maincontainer::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: 
+        radial-gradient(circle at 10% 20%, #4a3f3f 1px, transparent 1px),
+        radial-gradient(circle at 90% 80%, #4a3f3f 1px, transparent 1px);
+      background-size: 20px 20px;
+      opacity: 0.1;
+      animation: mold 10s linear infinite;
+    }
+    @keyframes mold {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+      color: #8a8a8a;
+    }
+    h1 {
+      font-size: 1.5em;
+      margin: 0;
+      color: #8a8a8a;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    .primary-button, .secondary-button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .primary-button {
+      background-color: #5a5a5a;
+      color: #8a8a8a;
+    }
+    .secondary-button {
+      background-color: #3a3a3a;
+      color: #8a8a8a;
+    }
+    .primary-button:hover, .secondary-button:hover {
+      transform: scale(1.05);
+      filter: brightness(1.2);
+    }
+    #message {
+      text-align: center;
+      margin: 10px 0;
+      font-style: italic;
+      color: #6a6a6a;
+    }
+    .theme-name {
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+      font-size: 0.8em;
+      color: #5a5a5a;
+    }
+    @media (max-width: 480px) {
+      .maincontainer {
+        width: 90%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>Door Control 🚪🔐</h1>
+    </div>
+    <p id="message">🦠 Welcome to the moldy side! 🍄</p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">Unlock 🔓</button>
+      <button id="lockbutton" class="primary-button">Lock 🔒</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">E-Stop 🛑</button>
+      <button id="safebutton" class="secondary-button">Safe Actuators 🛡️</button>
+    </div>
+    <div class="theme-name">Theme: Rotting food 🍖🦠</div>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    function addFloatingEmoji() {
+      const emojis = ['🍄', '🦠', '🐛', '🍖', '🧀'];
+      const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+      const floatingEmoji = document.createElement('div');
+      floatingEmoji.textContent = emoji;
+      floatingEmoji.style.position = 'fixed';
+      floatingEmoji.style.left = Math.random() * 100 + 'vw';
+      floatingEmoji.style.top = '-20px';
+      floatingEmoji.style.fontSize = Math.random() * 20 + 10 + 'px';
+      floatingEmoji.style.opacity = '0.7';
+      floatingEmoji.style.animation = `fall ${Math.random() * 5 + 5}s linear`;
+      document.body.appendChild(floatingEmoji);
+      setTimeout(() => {
+        document.body.removeChild(floatingEmoji);
+      }, 10000);
+    }
+
+    setInterval(addFloatingEmoji, 2000);
+
+    @keyframes fall {
+      to {
+        transform: translateY(100vh) rotate(720deg);
+      }
+    }
+  </script>
+</body>
+
+</html>

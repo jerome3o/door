@@ -1,0 +1,161 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🚪 Fractal Door Control 🎨</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #000;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    .maincontainer {
+      position: relative;
+      z-index: 1;
+      background-color: rgba(0, 0, 0, 0.7);
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+      text-align: center;
+      max-width: 90%;
+      width: 350px;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+    .header i {
+      font-size: 2rem;
+      margin-right: 0.5rem;
+      color: #00ff00;
+    }
+    h1 {
+      font-size: 2rem;
+      margin: 0;
+      background: linear-gradient(45deg, #00ff00, #00ffff, #ff00ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    #message {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      min-height: 1.5em;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 1rem;
+    }
+    .primary-button, .secondary-button {
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      background: linear-gradient(45deg, #00ff00, #00ffff);
+      color: #000;
+      text-transform: uppercase;
+      font-weight: bold;
+      box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    }
+    .primary-button:hover, .secondary-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+    }
+    .secondary-button {
+      background: linear-gradient(45deg, #ff00ff, #ff0000);
+    }
+    #fractal-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+    .theme-name {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      font-size: 0.8rem;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="fractal-canvas"></canvas>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>Door Control</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">🔓 Unlock</button>
+      <button id="lockbutton" class="primary-button">🔒 Lock</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">🛑 E-Stop</button>
+      <button id="safebutton" class="secondary-button">🛡️ Safe</button>
+    </div>
+    <div class="theme-name">🎨 Fractal Theme</div>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    const canvas = document.getElementById('fractal-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    function drawFractal(x, y, size, depth) {
+      if (depth === 0) return;
+
+      ctx.beginPath();
+      ctx.arc(x, y, size, 0, Math.PI * 2);
+      ctx.fillStyle = `hsl(${Math.random() * 360}, 100%, 50%)`;
+      ctx.fill();
+
+      for (let i = 0; i < 6; i++) {
+        const angle = (Math.PI * 2 * i) / 6;
+        const newX = x + Math.cos(angle) * size * 1.5;
+        const newY = y + Math.sin(angle) * size * 1.5;
+        drawFractal(newX, newY, size / 2, depth - 1);
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      const size = Math.min(canvas.width, canvas.height) / 4;
+      drawFractal(centerX, centerY, size, 5);
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
+
+</html>
