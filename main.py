@@ -285,7 +285,7 @@ def list_themes():
 
     return HTMLResponse(
         content="<br>".join(
-            f'<a href="/{p}">{p}</a>' for p in _FE_OPTIONS if p.endswith(".html")
+            f'<a href="{p}">{p}</a>' for p in _FE_OPTIONS if p.endswith(".html")
         )
     )
 
