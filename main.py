@@ -2,18 +2,97 @@ import asyncio
 import logging
 import random
 import os
+import re
 
 from pathlib import Path
+from pydantic import BaseModel
 
 import RPi.GPIO as gpio
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse, FileResponse
+from fastapi.responses import HTMLResponse, FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
+from anthropic import Anthropic
 
 DEFAULT_DELAY = 17
 
 _logger = logging.getLogger(__name__)
+
+with open("example_html.html") as f:
+    EXAMPLE_HTML = f.read()
+
+
+_SYSTEM_PROMPT = """\
+This is a conversation between a human and Claude, a helpful AI assistant. The human is making a \
+website to control a mechanism that locks and unlocks their apartment door, and would like help \
+styling the website. The human will request a theme and some html for the website, and Claude will \
+then respond with an update html file with the styles inlined.
+
+When generating the html claude should:
+* Use a lot of emojis
+* Not include any images
+* Respond with only the html content, enclosed in triple backticks
+* Use animations and javascript where appropriate to make the website interesting
+* Ensure the websites are mobile friendly
+* Ensure that any existing id's and scripts loaded are still functional
+"""
+
+_MESSAGE_TEMPLATE = """\
+Please generate html for this website:
+```
+{html}
+```
+
+With the following theme: {theme}
+"""
+
+_ADDITIONAL_INFO_TEMPLATE = """
+Additional information:
+{additional_information}
+"""
+
+
+class Theme(BaseModel):
+    theme: str
+    additional_information: str
+
+
+client = Anthropic()
+
+
+def generate_theme(theme_spec: Theme) -> str:
+    theme = theme_spec.theme
+    additional_information = theme_spec.additional_information
+
+    content = _MESSAGE_TEMPLATE.format(html=EXAMPLE_HTML, theme=theme)
+
+    if additional_information != "":
+        content += _ADDITIONAL_INFO_TEMPLATE.format(
+            additional_information=additional_information
+        )
+
+    response = client.messages.create(
+        max_tokens=10000,
+        system=_SYSTEM_PROMPT,
+        messages=[{"role": "human", "content": content}],
+    )
+
+    if "```" not in response.content.text:
+        raise ValueError("Response does not contain html content")
+
+    # get content of ```
+    content = response.content.text.split("```")[1]
+
+    # make theme file name safe
+    theme_fn = theme.replace(" ", "_").lower()
+    theme_fn = re.sub(r"[^a-zA-Z0-9_]", "", theme_fn)
+    theme_path = f"fe/generated/{theme_fn}.html"
+
+    # save to fe/generated
+    with open(theme_path, "w") as f:
+        f.write(content)
+
+    return RedirectResponse(url=f"/{theme_path}")
 
 
 class ActuatorController:
@@ -134,10 +213,19 @@ async def stop():
     return {"message": "Stopping actuators"}
 
 
+@app.post("/api/generate_theme")
+async def generate_theme():
+    theme = random.choice(["dark", "light"])
+    return {"theme": theme}
+
+
 @app.get("/", response_class=HTMLResponse)
 def index():
     # load all files in the ./fe/themes/ directory
     _FE_OPTIONS = [str(p) for p in Path("./fe/themes").rglob("*") if p.is_file()]
+
+    # load all files in the ./fe/generated/ directory
+    _FE_OPTIONS += [str(p) for p in Path("./fe/generated").rglob("*") if p.is_file()]
 
     random_frontend = random.choice(_FE_OPTIONS)
 
