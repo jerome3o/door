@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Door Control - Noir Theme</title>
+  <style>
+    body {
+      font-family: 'Georgia', serif;
+      background-color: #000;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .maincontainer {
+      background-color: #111;
+      border: 2px solid #fff;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(255,255,255,0.2);
+    }
+    .header {
+      margin-bottom: 20px;
+    }
+    .primary-button, .secondary-button {
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #000;
+      color: #fff;
+      border: 2px solid #fff;
+      transition: all 0.3s ease;
+    }
+    .primary-button:hover, .secondary-button:hover {
+      background-color: #fff;
+      color: #000;
+    }
+    #message {
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <h1>🕵️ Door Control 🚬</h1>
+    </div>
+    <p id="message">The night was dark, the door mysterious...</p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">🔓 Unlock</button>
+      <button id="lockbutton" class="primary-button">🔒 Lock</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">🚨 E-Stop</button>
+      <button id="safebutton" class="secondary-button">🕴️ Safe Actuators</button>
+    </div>
+  </div>
+  <script type="module" src="./index.js"></script>
+</body>
+</html>

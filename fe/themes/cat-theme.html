@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Door Control - Cat Theme</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive;
+      background-color: #ffd699;
+      color: #4a2c00;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .maincontainer {
+      background-color: #ffe6b3;
+      border: 4px solid #4a2c00;
+      border-radius: 20px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(74,44,0,0.2);
+    }
+    .header {
+      margin-bottom: 20px;
+    }
+    .primary-button, .secondary-button {
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #4a2c00;
+      color: #ffe6b3;
+      border: none;
+      border-radius: 50px;
+      transition: all 0.3s ease;
+    }
+    .primary-button:hover, .secondary-button:hover {
+      background-color: #ffe6b3;
+      color: #4a2c00;
+      box-shadow: 0 0 10px rgba(74,44,0,0.5);
+    }
+    .paw-print {
+      font-size: 24px;
+      position: absolute;
+      opacity: 0.5;
+    }
+  </style>
+</head>
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <h1>🐱 Meow-velous Door Control 🐾</h1>
+    </div>
+    <p id="message">Purrfect! What would you like to do?</p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">🐟 Un-lock</button>
+      <button id="lockbutton" class="primary-button">🙀 Lock</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">😾 E-Stop</button>
+      <button id="safebutton" class="secondary-button">😺 Safe Actuators</button>
+    </div>
+  </div>
+  <span class="paw-print" style="top: 10%; left: 10%;">🐾</span>
+  <span class="paw-print" style="top: 80%; left: 80%;">🐾</span>
+  <span class="paw-print" style="top: 40%; left: 60%;">🐾</span>
+  <script type="module" src="./index.js"></script>
+</body>
+</html>

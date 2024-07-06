@@ -3,6 +3,8 @@ import logging
 import random
 import os
 
+from pathlib import Path
+
 import RPi.GPIO as gpio
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -132,20 +134,10 @@ async def stop():
     return {"message": "Stopping actuators"}
 
 
-_FE_OPTIONS = [
-    "cursed.html",
-    "hannah.html",
-    "index.html",
-    "kindacursed.html",
-    "spinning.html",
-    "frog.html",
-    "misalignedfrog.html",
-    "windows.html",
-]
-
-
 @app.get("/", response_class=HTMLResponse)
 def index():
+    # load all files in the ./fe/themes/ directory
+    _FE_OPTIONS = [str(p) for p in Path("./fe/themes").rglob("*") if p.is_file()]
 
     random_frontend = random.choice(_FE_OPTIONS)
 

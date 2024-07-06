@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Door Control - Space Invaders Theme</title>
+  <style>
+    body {
+      font-family: 'Courier New', monospace;
+      background-color: #000;
+      color: #0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+    .maincontainer {
+      background-color: rgba(0, 0, 0, 0.7);
+      border: 2px solid #0f0;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    .header {
+      margin-bottom: 20px;
+    }
+    .primary-button, .secondary-button {
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #000;
+      color: #0f0;
+      border: 2px solid #0f0;
+    }
+    .primary-button:hover, .secondary-button:hover {
+      background-color: #0f0;
+      color: #000;
+    }
+    .alien {
+      position: absolute;
+      font-size: 24px;
+      animation: move 10s linear infinite;
+    }
+    @keyframes move {
+      0% { left: -50px; top: 50%; }
+      100% { left: 100%; top: 50%; }
+    }
+  </style>
+</head>
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <h1>👾 Door Control 👾</h1>
+    </div>
+    <p id="message">Defend your door from aliens!</p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">🚀 Unlock</button>
+      <button id="lockbutton" class="primary-button">🛡️ Lock</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">💥 E-Stop</button>
+      <button id="safebutton" class="secondary-button">🛸 Safe Actuators</button>
+    </div>
+  </div>
+  <div class="alien">👾</div>
+  <div class="alien" style="animation-delay: -5s; top: 25%;">👾</div>
+  <div class="alien" style="animation-delay: -2s; top: 75%;">👾</div>
+  <script type="module" src="./index.js"></script>
+</body>
+</html>

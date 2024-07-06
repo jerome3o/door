@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Door Control - CAPTCHA Theme</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .maincontainer {
+      background-color: white;
+      border: 2px solid #ccc;
+      border-radius: 5px;
+      padding: 20px;
+      text-align: center;
+      max-width: 300px;
+    }
+    .header {
+      margin-bottom: 20px;
+    }
+    .captcha-box {
+      background-color: #f9f9f9;
+      border: 1px solid #d3d3d3;
+      padding: 10px;
+      margin-bottom: 10px;
+      font-size: 18px;
+      font-weight: bold;
+      letter-spacing: 2px;
+    }
+    .primary-button, .secondary-button {
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #4285f4;
+      color: white;
+      border: none;
+      border-radius: 3px;
+    }
+    .secondary-button {
+      background-color: #f44336;
+    }
+  </style>
+</head>
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <h1>🤖 Door Control Verification 🔒</h1>
+    </div>
+    <p id="message">Prove you're not a robot to access door controls</p>
+    <div class="captcha-box">
+      I'm not a 🤖
+    </div>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">✅ Verify & Unlock</button>
+      <button id="lockbutton" class="primary-button">🔒 Lock Door</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">🛑 E-Stop</button>
+      <button id="safebutton" class="secondary-button">🛡️ Safe Actuators</button>
+    </div>
+  </div>
+  <script type="module" src="./index.js"></script>
+</body>
+</html>

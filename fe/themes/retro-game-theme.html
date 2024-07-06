@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Door Control - Retro Game Theme</title>
+  <style>
+    body {
+      font-family: 'Courier New', monospace;
+      background-color: #000;
+      color: #0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .maincontainer {
+      background-color: #000;
+      border: 2px solid #0f0;
+      padding: 20px;
+      text-align: center;
+    }
+    .header {
+      margin-bottom: 20px;
+    }
+    .primary-button, .secondary-button {
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: #000;
+      color: #0f0;
+      border: 2px solid #0f0;
+    }
+    .primary-button:hover, .secondary-button:hover {
+      background-color: #0f0;
+      color: #000;
+    }
+  </style>
+</head>
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <h1>🕹️ DOOR CONTROL 🕹️</h1>
+    </div>
+    <p id="message">PRESS START TO PLAY</p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">🔓 UNLOCK</button>
+      <button id="lockbutton" class="primary-button">🔒 LOCK</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">🛑 E-STOP</button>
+      <button id="safebutton" class="secondary-button">🛡️ SAFE</button>
+    </div>
+  </div>
+  <script type="module" src="./index.js"></script>
+</body>
+</html>

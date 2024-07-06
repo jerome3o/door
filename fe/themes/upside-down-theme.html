@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Door Control - Upside Down Theme</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      transform: rotate(180deg);
+    }
+    .maincontainer {
+      background-color: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .header {
+      margin-bottom: 20px;
+    }
+    .primary-button, .secondary-button {
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .primary-button {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+    }
+    .secondary-button {
+      background-color: #f44336;
+      color: white;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <h1>🔓 Door Control 🔒</h1>
+    </div>
+    <p id="message">Turn your phone upside down! 🙃</p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">🔓 Unlock</button>
+      <button id="lockbutton" class="primary-button">🔒 Lock</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">🛑 E-Stop</button>
+      <button id="safebutton" class="secondary-button">🛡️ Safe Actuators</button>
+    </div>
+  </div>
+  <script type="module" src="./index.js"></script>
+</body>
+</html>
