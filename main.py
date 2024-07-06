@@ -75,6 +75,8 @@ def generate_theme(theme_spec: Theme) -> str:
             additional_information=additional_information
         )
 
+    print(content)
+
     response = client.messages.create(
         max_tokens=4096,
         system=_SYSTEM_PROMPT,
