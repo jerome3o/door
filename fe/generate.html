@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Theme Generator</title>
+  <style>
+    :root {
+      --primary-color: #4a90e2;
+      --secondary-color: #f5a623;
+      --background-color: #f0f4f8;
+      --text-color: #333;
+      --border-color: #ddd;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      line-height: 1.6;
+      color: var(--text-color);
+      background-color: var(--background-color);
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      color: var(--primary-color);
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+      font-size: 16px;
+    }
+
+    textarea {
+      resize: vertical;
+    }
+
+    button {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: background-color 0.3s;
+    }
+
+    button:hover {
+      background-color: #3a7bc8;
+    }
+
+    button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+
+    #restart {
+      background-color: var(--secondary-color);
+    }
+
+    #restart:hover {
+      background-color: #e69516;
+    }
+
+    #loading {
+      text-align: center;
+      margin-top: 20px;
+      font-style: italic;
+    }
+
+    #preview {
+      margin-top: 30px;
+    }
+
+    iframe {
+      width: 100%;
+      height: 500px;
+      border: 1px solid var(--border-color);
+      border-radius: 4px;
+    }
+
+    .button-group {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Theme Generator</h1>
+    <div class="input-group">
+      <label for="theme">Theme:</label>
+      <input type="text" id="theme" required placeholder="Enter your theme idea">
+    </div>
+    <div class="input-group">
+      <label for="additional-info">Additional Information:</label>
+      <textarea id="additional-info" rows="4" placeholder="Provide any additional details or preferences"></textarea>
+    </div>
+    <div class="button-group">
+      <button id="generate">Generate</button>
+      <button id="regenerate">Re-generate</button>
+      <button id="restart" style="display:none;">Restart</button>
+    </div>
+    <div id="loading" style="display:none;">Generating theme...</div>
+    <div id="preview" style="display:none;">
+      <h2>Preview</h2>
+      <iframe id="preview-frame"></iframe>
+      <div class="button-group">
+        <button id="accept">Add to Themes</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const generateBtn = document.getElementById('generate');
+    const regenerateBtn = document.getElementById('regenerate');
+    const restartBtn = document.getElementById('restart');
+    const acceptBtn = document.getElementById('accept');
+    const loading = document.getElementById('loading');
+    const preview = document.getElementById('preview');
+    const previewFrame = document.getElementById('preview-frame');
+    const themeInput = document.getElementById('theme');
+    const additionalInfoInput = document.getElementById('additional-info');
+
+    let currentThemePath = '';
+
+    generateBtn.addEventListener('click', generateTheme);
+    regenerateBtn.addEventListener('click', generateTheme);
+    restartBtn.addEventListener('click', restartProcess);
+    acceptBtn.addEventListener('click', acceptTheme);
+
+    async function generateTheme() {
+      const theme = themeInput.value;
+      const additionalInfo = additionalInfoInput.value;
+
+      if (!theme) {
+        alert('Please enter a theme');
+        return;
+      }
+
+      loading.style.display = 'block';
+      preview.style.display = 'none';
+      generateBtn.disabled = true;
+      regenerateBtn.disabled = true;
+
+      try {
+        const response = await fetch('/api/generate_theme', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ theme, additional_information: additionalInfo }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          // make it staging/{theme_path}
+          currentThemePath = data.theme_path;
+          previewFrame.src = `/staging/${currentThemePath}`;
+          preview.style.display = 'block';
+          restartBtn.style.display = 'inline-block';
+          generateBtn.style.display = 'none';
+          regenerateBtn.style.display = 'inline-block';
+        } else {
+          throw new Error(data.message || 'Failed to generate theme');
+        }
+      } catch (error) {
+        alert('Error: ' + error.message);
+      } finally {
+        loading.style.display = 'none';
+        generateBtn.disabled = false;
+        regenerateBtn.disabled = false;
+      }
+    }
+
+    async function acceptTheme() {
+      try {
+        const response = await fetch('/api/accept_theme', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ theme_path: currentThemePath }),
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          alert('Theme accepted and added to generated themes!');
+          restartProcess();
+        } else {
+          throw new Error(data.message || 'Failed to accept theme');
+        }
+      } catch (error) {
+        alert('Error: ' + error.message);
+      }
+    }
+
+    function restartProcess() {
+      themeInput.value = '';
+      additionalInfoInput.value = '';
+      preview.style.display = 'none';
+      restartBtn.style.display = 'none';
+      generateBtn.style.display = 'inline-block';
+      regenerateBtn.style.display = 'none';
+      currentThemePath = '';
+    }
+  </script>
+</body>
+
+</html>

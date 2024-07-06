@@ -7,10 +7,13 @@ import re
 from pathlib import Path
 from pydantic import BaseModel
 
-import RPi.GPIO as gpio
+if os.getenv("ENVIRONMENT") == "development":
+    from mockgpio import gpio
+else:
+    import RPi.GPIO as gpio
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse, FileResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, FileResponse
 from fastapi.staticfiles import StaticFiles
 from anthropic import Anthropic
 
@@ -23,9 +26,9 @@ with open("example_html.html") as f:
 
 
 _SYSTEM_PROMPT = """\
-This is a conversation between a human and Claude, a helpful AI assistant. The human is making a \
+This is a conversation between a user and Claude, a helpful AI assistant. The user is making a \
 website to control a mechanism that locks and unlocks their apartment door, and would like help \
-styling the website. The human will request a theme and some html for the website, and Claude will \
+styling the website. The user will request a theme and some html for the website, and Claude will \
 then respond with an update html file with the styles inlined.
 
 When generating the html claude should:
@@ -35,6 +38,7 @@ When generating the html claude should:
 * Use animations and javascript where appropriate to make the website interesting
 * Ensure the websites are mobile friendly
 * Ensure that any existing id's and scripts loaded are still functional
+* Make sure to add the theme name to the door controller website so the user knows what the theme is
 """
 
 _MESSAGE_TEMPLATE = """\
@@ -72,27 +76,34 @@ def generate_theme(theme_spec: Theme) -> str:
         )
 
     response = client.messages.create(
-        max_tokens=10000,
+        max_tokens=4096,
         system=_SYSTEM_PROMPT,
-        messages=[{"role": "human", "content": content}],
+        model="claude-3-5-sonnet-20240620",
+        messages=[{"role": "user", "content": content}],
     )
 
-    if "```" not in response.content.text:
+    content = response.content[0].text
+
+    # replace all ```html with just ```
+    content = content.replace("```html", "```")
+
+    if "```" not in content:
         raise ValueError("Response does not contain html content")
 
     # get content of ```
-    content = response.content.text.split("```")[1]
+    content = content.split("```")[1]
 
     # make theme file name safe
     theme_fn = theme.replace(" ", "_").lower()
     theme_fn = re.sub(r"[^a-zA-Z0-9_]", "", theme_fn)
-    theme_path = f"fe/generated/{theme_fn}.html"
+    theme_fn += ".html"
+    theme_path = f"fe/staging/{theme_fn}"
 
     # save to fe/generated
     with open(theme_path, "w") as f:
         f.write(content)
 
-    return RedirectResponse(url=f"/{theme_path}")
+    return theme_fn
 
 
 class ActuatorController:
@@ -214,9 +225,33 @@ async def stop():
 
 
 @app.post("/api/generate_theme")
-async def generate_theme():
-    theme = random.choice(["dark", "light"])
-    return {"theme": theme}
+async def generate_theme_endpoint(theme: Theme):
+    theme_path = generate_theme(theme)
+    return {"message": "Theme generated", "theme_path": theme_path}
+
+
+class AcceptThemeParams(BaseModel):
+    theme_path: str
+
+
+@app.post("/api/accept_theme")
+async def accept_theme(accept_theme: AcceptThemeParams):
+    theme_path = accept_theme.theme_path
+    # move from ./fe/staging/{theme_path} to ./fe/generated/{theme_path}
+    old_path = Path(f"./fe/staging/{theme_path}")
+    new_path = Path(f"./fe/generated/{theme_path}")
+
+    if not old_path.exists():
+        return {"message": "Theme not found"}
+
+    i = 0
+    while new_path.exists():
+        i + 1
+        new_path = new_path.with_name(f"{new_path.stem}_{i}{new_path.suffix}")
+
+    old_path.rename(new_path)
+
+    return {"message": "Theme accepted"}
 
 
 @app.get("/", response_class=HTMLResponse)

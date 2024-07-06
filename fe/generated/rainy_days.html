@@ -1,0 +1,137 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Door Control - Rainy Days Theme</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #3498db, #2c3e50);
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      color: #fff;
+      overflow: hidden;
+    }
+    .maincontainer {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      position: relative;
+      z-index: 1;
+    }
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+    }
+    h1 {
+      font-size: 2em;
+      margin: 0;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .primary-button {
+      background-color: #3498db;
+      color: white;
+    }
+    .secondary-button {
+      background-color: #95a5a6;
+      color: white;
+    }
+    button:hover {
+      transform: scale(1.05);
+    }
+    #message {
+      font-style: italic;
+      margin: 20px 0;
+    }
+    .raindrop {
+      position: absolute;
+      top: -20px;
+      font-size: 20px;
+      animation: fall linear infinite;
+    }
+    @keyframes fall {
+      to {
+        transform: translateY(calc(100vh + 20px));
+      }
+    }
+    .theme-name {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      font-size: 0.8em;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>Door Control</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">Unlock 🔓</button>
+      <button id="lockbutton" class="primary-button">Lock 🔒</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">E-Stop 🛑</button>
+      <button id="safebutton" class="secondary-button">Safe Actuators 🛡️</button>
+    </div>
+  </div>
+
+  <div class="theme-name">Theme: Rainy Days 🌧️</div>
+
+  <script type="module" src="./index.js"></script>
+  <script>
+    const emojis = ['🌧️', '☔', '⛈️', '🌂', '💧', '😢', '😭', '🌊'];
+    
+    function createRaindrop() {
+      const raindrop = document.createElement('div');
+      raindrop.className = 'raindrop';
+      raindrop.style.left = `${Math.random() * 100}vw`;
+      raindrop.style.animationDuration = `${Math.random() * 2 + 3}s`;
+      raindrop.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+      document.body.appendChild(raindrop);
+
+      raindrop.addEventListener('animationend', () => {
+        raindrop.remove();
+      });
+    }
+
+    setInterval(createRaindrop, 300);
+  </script>
+</body>
+
+</html>

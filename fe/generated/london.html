@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>London Door Control 🇬🇧</title>
+  <style>
+    body {
+      font-family: 'Georgia', serif;
+      background-color: #f3f3f3;
+      color: #1a1a1a;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-image: linear-gradient(rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.8)),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100' viewBox='0 0 100 100'%3E%3Ctext x='50' y='50' font-size='70' text-anchor='middle' dominant-baseline='central'%3E🇬🇧%3C/text%3E%3C/svg%3E");
+    }
+
+    .maincontainer {
+      background-color: #ffffff;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .header {
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .header::before {
+      content: '🏰';
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 2em;
+    }
+
+    .header::after {
+      content: '👑';
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 2em;
+    }
+
+    h1 {
+      color: #c8102e;
+      font-size: 2.5em;
+      margin: 0;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .fas.fa-lock {
+      font-size: 2em;
+      color: #1d1160;
+      margin-bottom: 10px;
+    }
+
+    #message {
+      font-style: italic;
+      margin-bottom: 20px;
+    }
+
+    .button-container,
+    .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+
+    .primary-button,
+    .secondary-button {
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .primary-button {
+      background-color: #c8102e;
+      color: white;
+    }
+
+    .primary-button:hover {
+      background-color: #9e0c24;
+      transform: scale(1.05);
+    }
+
+    .secondary-button {
+      background-color: #1d1160;
+      color: white;
+    }
+
+    .secondary-button:hover {
+      background-color: #150c46;
+      transform: scale(1.05);
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0px);
+      }
+
+      50% {
+        transform: translateY(-10px);
+      }
+
+      100% {
+        transform: translateY(0px);
+      }
+    }
+
+    .floating-emoji {
+      position: absolute;
+      font-size: 2em;
+      animation: float 3s ease-in-out infinite;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>Door Control</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">Unlock 🔓</button>
+      <button id="lockbutton" class="primary-button">Lock 🔒</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">E-Stop 🛑</button>
+      <button id="safebutton" class="secondary-button">Safe Actuators 🛡️</button>
+    </div>
+  </div>
+
+  <script type="module" src="./index.js"></script>
+  <script>
+    const emojis = ['🇬🇧', '☂️', '🚌', '🚇', '☕', '🎡', '🎭', '🏛️'];
+    const mainContainer = document.querySelector('.maincontainer');
+
+    for (let i = 0; i < 10; i++) {
+      const emoji = document.createElement('div');
+      emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      emoji.classList.add('floating-emoji');
+      emoji.style.left = `${Math.random() * 100}%`;
+      emoji.style.top = `${Math.random() * 100}%`;
+      emoji.style.animationDelay = `${Math.random() * 2}s`;
+      mainContainer.appendChild(emoji);
+    }
+  </script>
+</body>
+
+</html>
