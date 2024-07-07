@@ -17,7 +17,7 @@ else:
 from datetime import datetime, timedelta
 
 from anthropic import Anthropic
-from fastapi import Depends, FastAPI, HTTPException, Request, Response
+from fastapi import Depends, FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse
 from fastapi.security import APIKeyHeader, APIKeyQuery
@@ -68,7 +68,13 @@ def get_api_key(
 # Authentication middleware
 class AuthMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
-        api_key = await get_api_key(
+        # List of paths that don't require authentication
+        open_paths = ["/login", "/auth", "/favicon.ico"]
+
+        if request.url.path in open_paths:
+            return await call_next(request)
+
+        api_key = get_api_key(
             api_key_header=request.headers.get("X-API-Key"),
             api_key_query=request.query_params.get("key"),
         )
@@ -259,11 +265,16 @@ app.add_middleware(AuthMiddleware)
 
 # Login page route
 @app.get("/login", response_class=HTMLResponse)
-async def login_page():
-    return """
+async def login_page(error: str = None):
+    error_message = ""
+    if error == "invalid_key":
+        error_message = "<p style='color: red;'>Invalid key. Please try again.</p>"
+
+    return f"""
     <html>
         <body>
             <h1>Enter your key</h1>
+            {error_message}
             <form action="/auth" method="post">
                 <input type="text" name="key" placeholder="Enter your key">
                 <input type="submit" value="Submit">
@@ -289,7 +300,7 @@ async def auth(key: str, response: Response):
             samesite="Lax",  # Provides some CSRF protection
         )
         return response
-    return {"error": "Invalid key"}
+    return RedirectResponse(url="/login?error=invalid_key")
 
 
 gpio.cleanup()
@@ -320,6 +331,7 @@ async def unlock_door(request: Request):
 async def lock_door(request: Request):
     await door_controller.lock()
     logging.info(f"{request.state.user} called lock")
+    print("hello?")
     return {"message": "Locking door"}
 
 
