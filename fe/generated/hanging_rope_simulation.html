@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,7 +8,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
   <title>🪢 Rope Door Control 🪢</title>
   <style>
-    body, html {
+    body,
+    html {
       margin: 0;
       padding: 0;
       height: 100%;
@@ -17,36 +17,45 @@
       overflow: hidden;
       background-color: #f0f0f0;
     }
+
     .maincontainer {
       display: flex;
       flex-direction: column;
       height: 100vh;
     }
+
     .header {
       text-align: center;
       padding: 10px;
       background-color: #4a4a4a;
       color: #fff;
     }
+
     .header h1 {
       margin: 0;
       font-size: 24px;
     }
+
     #message {
       text-align: center;
       padding: 10px;
       font-weight: bold;
     }
+
     #ropeCanvas {
       flex-grow: 1;
     }
-    .button-container, .secondary-button-container {
+
+    .button-container,
+    .secondary-button-container {
       display: flex;
       justify-content: space-around;
       padding: 10px;
       background-color: #4a4a4a;
     }
-    .primary-button, .secondary-button {
+
+    .primary-button,
+    .secondary-button {
       padding: 10px 20px;
       font-size: 16px;
       border: none;
@@ -54,17 +63,22 @@
       cursor: pointer;
       transition: transform 0.1s;
     }
+
     .primary-button {
       background-color: #f1c40f;
       color: #2c3e50;
     }
+
     .secondary-button {
       background-color: #e74c3c;
       color: #fff;
     }
-    .primary-button:active, .secondary-button:active {
+
+    .primary-button:active,
+    .secondary-button:active {
       transform: scale(0.95);
     }
+
     #theme {
       text-align: center;
       font-style: italic;
@@ -80,18 +94,20 @@
     <div class="header">
       <i class="fas fa-lock"></i>
       <h1>🪢 Rope Door Control 🪢</h1>
+
+      <div class="button-container">
+        <button id="unlockbutton" class="primary-button">🔓 Unravel</button>
+        <button id="lockbutton" class="primary-button">🔒 Tighten</button>
+      </div>
+      <div class="secondary-button-container">
+        <button id="stopbutton" class="secondary-button">🛑 Cut Rope</button>
+        <button id="safebutton" class="secondary-button">🔐 Secure Knots</button>
+      </div>
     </div>
     <p id="message"></p>
     <canvas id="ropeCanvas"></canvas>
     <div id="theme">Theme: Hanging Rope Simulation 🧵</div>
-    <div class="button-container">
-      <button id="unlockbutton" class="primary-button">🔓 Unravel</button>
-      <button id="lockbutton" class="primary-button">🔒 Tighten</button>
-    </div>
-    <div class="secondary-button-container">
-      <button id="stopbutton" class="secondary-button">🛑 Cut Rope</button>
-      <button id="safebutton" class="secondary-button">🔐 Secure Knots</button>
-    </div>
+
   </div>
 
   <script type="module" src="/index.js"></script>
@@ -139,23 +155,23 @@
           let segment = rope[i];
           let vx = segment.x - segment.oldX;
           let vy = segment.y - segment.oldY;
-          
+
           segment.oldX = segment.x;
           segment.oldY = segment.y;
-          
+
           segment.x += vx;
           segment.y += vy;
           segment.y += 0.5; // gravity
         }
-        
+
         for (let i = 0; i < 5; i++) { // constraint iterations
           rope[0].x = rope[0].oldX;
           rope[0].y = 0; // fix first point to top
-          
+
           for (let j = 0; j < rope.length - 1; j++) {
             let segment = rope[j];
             let nextSegment = rope[j + 1];
-            
+
             let dx = nextSegment.x - segment.x;
             let dy = nextSegment.y - segment.y;
             let distance = Math.sqrt(dx * dx + dy * dy);
@@ -163,7 +179,7 @@
             let percent = difference / distance / 2;
             let offsetX = dx * percent;
             let offsetY = dy * percent;
-            
+
             if (j > 0) {
               segment.x -= offsetX;
               segment.y -= offsetY;
@@ -179,7 +195,7 @@
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.strokeStyle = '#8b4513';
       ctx.lineWidth = 2;
-      
+
       ropes.forEach(rope => {
         ctx.beginPath();
         ctx.moveTo(rope[0].x, rope[0].y);
@@ -210,7 +226,7 @@
         const rect = canvas.getBoundingClientRect();
         const x = touch.clientX - rect.left;
         const y = touch.clientY - rect.top;
-        
+
         ropes.forEach(rope => {
           rope.forEach(segment => {
             let dx = segment.x - x;
