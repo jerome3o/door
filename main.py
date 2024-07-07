@@ -6,9 +6,10 @@ import random
 import re
 from pathlib import Path
 from typing import Dict, Optional
+from urllib.parse import urlencode
 
 from fastapi import Cookie, Depends, FastAPI, Form, Request
-from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse, FileResponse
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, RedirectResponse
 from pydantic import BaseModel
 
 if os.getenv("ENVIRONMENT") == "development":
@@ -152,8 +153,6 @@ def generate_theme(theme_spec: Theme) -> str:
             additional_information=additional_information
         )
 
-    print(content)
-
     response = client.messages.create(
         max_tokens=4096,
         system=_SYSTEM_PROMPT,
@@ -241,7 +240,7 @@ class DoorController:
             try:
                 await self._current_task
             except asyncio.CancelledError:
-                _logger.info("Cancelled task")
+                pass
 
     async def unlock(self):
         await self._cancel_task()
@@ -318,33 +317,35 @@ app.add_middleware(
 @app.post("/api/unlock")
 async def unlock_door(request: Request):
     await door_controller.unlock()
-    print(f"{request.state.user} called unlock")
+    _logger.info(f"{request.state.user} called unlock")
     return {"message": "Unlocking door"}
 
 
 @app.post("/api/lock")
 async def lock_door(request: Request):
     await door_controller.lock()
-    print(f"{request.state.user} called lock")
+    _logger.info(f"{request.state.user} called lock")
     return {"message": "Locking door"}
 
 
 @app.post("/api/safe")
 async def safe(request: Request):
     await door_controller.safe()
-    print(f"{request.state.user} called safe")
+    _logger.info(f"{request.state.user} called safe")
     return {"message": "Safing Actuators"}
 
 
 @app.post("/api/stop")
 async def stop(request: Request):
     await door_controller.stop()
-    print(f"{request.state.user} called stop")
+    _logger.info(f"{request.state.user} called stop")
     return {"message": "Stopping actuators"}
 
 
 @app.post("/api/generate_theme")
-async def generate_theme_endpoint(theme: Theme):
+async def generate_theme_endpoint(theme: Theme, request: Request):
+
+    _logger.info(f"{request.state.user} requested theme: {theme.theme}")
     theme_path = generate_theme(theme)
     return {"message": "Theme generated", "theme_path": theme_path}
 
@@ -354,7 +355,8 @@ class AcceptThemeParams(BaseModel):
 
 
 @app.post("/api/accept_theme")
-async def accept_theme(accept_theme: AcceptThemeParams):
+async def accept_theme(accept_theme: AcceptThemeParams, request: Request):
+    _logger.info(f"{request.state.user} accepted theme: {accept_theme.theme_path}")
     theme_path = accept_theme.theme_path
     # move from ./fe/staging/{theme_path} to ./fe/generated/{theme_path}
     old_path = Path(f"./fe/staging/{theme_path}")
@@ -375,12 +377,13 @@ async def accept_theme(accept_theme: AcceptThemeParams):
 
 @app.get("/")
 async def index(request: Request, key: Optional[str] = None):
+    response = None
     if key:
         user = next((name for name, k in KEYS.items() if k == key), None)
         if user:
             # Set cookie to expire in 10 years
             expiration = datetime.utcnow() + timedelta(days=365 * 10)
-            response = HTMLResponse(content=get_random_frontend())
+            response = RedirectResponse(url="/", status_code=303)  # 303 See Other
             response.set_cookie(
                 key="api_key",
                 value=key,
@@ -388,7 +391,18 @@ async def index(request: Request, key: Optional[str] = None):
                 httponly=True,
                 samesite="Lax",
             )
+
+            # Preserve other query parameters if any
+            query_params = dict(request.query_params)
+            query_params.pop("key", None)
+            if query_params:
+                response = RedirectResponse(
+                    url=f"/?{urlencode(query_params)}", status_code=303
+                )
+
             return response
+
+    # If no key or invalid key, just return the random frontend
     return HTMLResponse(content=get_random_frontend())
 
 
