@@ -439,4 +439,11 @@ async def favicon():
     return FileResponse(file_path, media_type="image/svg+xml")
 
 
+@app.get("/logs")
+def logs(request: Request):
+    _logger.info(f"{request.state.user} requested logs")
+    with open("door_access.log") as f:
+        return HTMLResponse(content=f"<pre>{f.read()}</pre>")
+
+
 app.mount("/", StaticFiles(directory="fe"), name="fe")
