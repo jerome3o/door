@@ -291,6 +291,7 @@ async def auth(key: str = Form(...)):
             httponly=True,  # Makes the cookie inaccessible to JavaScript
             samesite="Lax",  # Provides some CSRF protection
         )
+        _logger.info(f"{user} logged in via /auth")
         return response
     return RedirectResponse(
         url="/login?error=invalid_key", status_code=303
@@ -400,6 +401,7 @@ async def index(request: Request, key: Optional[str] = None):
                     url=f"/?{urlencode(query_params)}", status_code=303
                 )
 
+            _logger.info(f"{user} logged in via key in URL")
             return response
 
     # If no key or invalid key, just return the random frontend
