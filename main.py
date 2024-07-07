@@ -4,6 +4,7 @@ import logging
 import os
 import random
 import re
+import requests
 from pathlib import Path
 from typing import Dict, Optional
 from urllib.parse import urlencode
@@ -23,6 +24,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import APIKeyHeader, APIKeyQuery
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.base import BaseHTTPMiddleware
+
+_NTFY_TOPIC = os.getenv("NTFY_TOPIC")
 
 DEFAULT_DELAY = 17
 
@@ -291,7 +294,7 @@ async def auth(key: str = Form(...)):
             httponly=True,  # Makes the cookie inaccessible to JavaScript
             samesite="Lax",  # Provides some CSRF protection
         )
-        _logger.info(f"{user} logged in via /auth")
+        _send_message(f"{user} logged in via /auth")
         return response
     return RedirectResponse(
         url="/login?error=invalid_key", status_code=303
@@ -315,31 +318,43 @@ app.add_middleware(
 )
 
 
+def _send_message(msg: str):
+    _logger.info(msg)
+    try:
+        requests.post(
+            f"https://ntfy.sh/{_NTFY_TOPIC}",
+            data=msg,
+        )
+    except Exception as e:
+        _logger.error(f"Failed to send ntfy message: {e}")
+
+
 @app.post("/api/unlock")
 async def unlock_door(request: Request):
     await door_controller.unlock()
-    _logger.info(f"{request.state.user} called unlock")
+    _send_message(f"{request.state.user} called unlock")
+
     return {"message": "Unlocking door"}
 
 
 @app.post("/api/lock")
 async def lock_door(request: Request):
     await door_controller.lock()
-    _logger.info(f"{request.state.user} called lock")
+    _send_message(f"{request.state.user} called lock")
     return {"message": "Locking door"}
 
 
 @app.post("/api/safe")
 async def safe(request: Request):
     await door_controller.safe()
-    _logger.info(f"{request.state.user} called safe")
+    _send_message(f"{request.state.user} called safe")
     return {"message": "Safing Actuators"}
 
 
 @app.post("/api/stop")
 async def stop(request: Request):
     await door_controller.stop()
-    _logger.info(f"{request.state.user} called stop")
+    _send_message(f"{request.state.user} called stop")
     return {"message": "Stopping actuators"}
 
 
@@ -401,7 +416,7 @@ async def index(request: Request, key: Optional[str] = None):
                     url=f"/?{urlencode(query_params)}", status_code=303
                 )
 
-            _logger.info(f"{user} logged in via key in URL")
+            _send_message(f"{user} logged in via key in URL")
             return response
 
     # If no key or invalid key, just return the random frontend
