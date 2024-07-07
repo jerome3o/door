@@ -5,7 +5,7 @@ import os
 from urllib.parse import urlparse
 
 # List of names
-names = ["henry", "emily", "olivia", "jackson", "rosie", "matt", "jerome", "niamh"]
+names = ["ADD NAMES HERE"]
 
 
 # Function to generate a random key
