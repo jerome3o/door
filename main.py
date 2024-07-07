@@ -1,25 +1,28 @@
 import asyncio
+import json
 import logging
-import random
 import os
+import random
 import re
 import time
-import json
 from pathlib import Path
-from pydantic import BaseModel
 from typing import Dict, List
+
+from pydantic import BaseModel
 
 if os.getenv("ENVIRONMENT") == "development":
     from mockgpio import gpio
 else:
     import RPi.GPIO as gpio
-from fastapi import FastAPI, Request, Depends, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
-from starlette.middleware.base import BaseHTTPMiddleware
-from fastapi.responses import HTMLResponse, FileResponse, RedirectResponse
-from fastapi.staticfiles import StaticFiles
-from fastapi.security import APIKeyHeader, APIKeyQuery
+from datetime import datetime, timedelta
+
 from anthropic import Anthropic
+from fastapi import Depends, FastAPI, HTTPException, Request, Response
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse
+from fastapi.security import APIKeyHeader, APIKeyQuery
+from fastapi.staticfiles import StaticFiles
+from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import JSONResponse
 
 DEFAULT_DELAY = 17
@@ -272,11 +275,19 @@ async def login_page():
 
 # Authentication route
 @app.post("/auth")
-async def auth(key: str):
+async def auth(key: str, response: Response):
     user = next((name for name, k in KEYS.items() if k == key), None)
     if user:
+        # Set cookie to expire in 10 years
+        expiration = datetime.utcnow() + timedelta(days=365 * 10)
         response = RedirectResponse(url="/")
-        response.set_cookie(key="api_key", value=key)
+        response.set_cookie(
+            key="api_key",
+            value=key,
+            expires=expiration.strftime("%a, %d %b %Y %H:%M:%S GMT"),
+            httponly=True,  # Makes the cookie inaccessible to JavaScript
+            samesite="Lax",  # Provides some CSRF protection
+        )
         return response
     return {"error": "Invalid key"}
 
@@ -361,8 +372,15 @@ async def index(request: Request, key: str = None):
     if key:
         user = next((name for name, k in KEYS.items() if k == key), None)
         if user:
+            expiration = datetime.utcnow() + timedelta(days=365)
             response = HTMLResponse(content=get_random_frontend())
-            response.set_cookie(key="api_key", value=key)
+            response.set_cookie(
+                key="api_key",
+                value=key,
+                expires=expiration.strftime("%a, %d %b %Y %H:%M:%S GMT"),
+                httponly=True,
+                samesite="Lax",
+            )
             return response
     return get_random_frontend()
 
