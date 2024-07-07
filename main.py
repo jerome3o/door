@@ -6,8 +6,10 @@ import random
 import re
 import time
 from pathlib import Path
-from typing import Dict, List
+from typing import Dict, List, Optional
 
+from fastapi import Cookie, Depends, FastAPI, Request, Response
+from fastapi.responses import JSONResponse, RedirectResponse
 from pydantic import BaseModel
 
 if os.getenv("ENVIRONMENT") == "development":
@@ -54,15 +56,12 @@ api_key_query = APIKeyQuery(name="key", auto_error=False)
 
 
 # Authentication function
-def get_api_key(
+async def get_api_key(
     api_key_header: str = Depends(api_key_header),
     api_key_query: str = Depends(api_key_query),
+    api_key_cookie: Optional[str] = Cookie(None, alias="api_key"),
 ) -> str:
-    if api_key_header:
-        return api_key_header
-    if api_key_query:
-        return api_key_query
-    return None
+    return api_key_header or api_key_query or api_key_cookie
 
 
 # Authentication middleware
@@ -74,17 +73,26 @@ class AuthMiddleware(BaseHTTPMiddleware):
         if request.url.path in open_paths:
             return await call_next(request)
 
-        api_key = get_api_key(
+        api_key = await get_api_key(
             api_key_header=request.headers.get("X-API-Key"),
             api_key_query=request.query_params.get("key"),
+            api_key_cookie=request.cookies.get("api_key"),
         )
 
         if api_key is None:
+            if request.method == "POST":
+                return JSONResponse(
+                    status_code=401, content={"detail": "Authentication required"}
+                )
             return RedirectResponse(url="/login")
 
         user = next((name for name, key in KEYS.items() if key == api_key), None)
         if user is None:
-            return JSONResponse(status_code=403, content={"detail": "Invalid API Key"})
+            if request.method == "POST":
+                return JSONResponse(
+                    status_code=403, content={"detail": "Invalid API Key"}
+                )
+            return RedirectResponse(url="/login")
 
         request.state.user = user
         response = await call_next(request)
@@ -286,12 +294,12 @@ async def login_page(error: str = None):
 
 # Authentication route
 @app.post("/auth")
-async def auth(key: str, response: Response):
+async def auth(key: str):
     user = next((name for name, k in KEYS.items() if k == key), None)
     if user:
         # Set cookie to expire in 10 years
         expiration = datetime.utcnow() + timedelta(days=365 * 10)
-        response = RedirectResponse(url="/")
+        response = RedirectResponse(url="/", status_code=303)  # 303 See Other
         response.set_cookie(
             key="api_key",
             value=key,
@@ -300,7 +308,9 @@ async def auth(key: str, response: Response):
             samesite="Lax",  # Provides some CSRF protection
         )
         return response
-    return RedirectResponse(url="/login?error=invalid_key")
+    return RedirectResponse(
+        url="/login?error=invalid_key", status_code=303
+    )  # 303 See Other
 
 
 gpio.cleanup()
@@ -323,29 +333,28 @@ app.add_middleware(
 @app.post("/api/unlock")
 async def unlock_door(request: Request):
     await door_controller.unlock()
-    logging.info(f"{request.state.user} called unlock")
+    print(f"{request.state.user} called unlock")
     return {"message": "Unlocking door"}
 
 
 @app.post("/api/lock")
 async def lock_door(request: Request):
     await door_controller.lock()
-    logging.info(f"{request.state.user} called lock")
-    print("hello?")
+    print(f"{request.state.user} called lock")
     return {"message": "Locking door"}
 
 
 @app.post("/api/safe")
 async def safe(request: Request):
     await door_controller.safe()
-    logging.info(f"{request.state.user} called safe")
+    print(f"{request.state.user} called safe")
     return {"message": "Safing Actuators"}
 
 
 @app.post("/api/stop")
 async def stop(request: Request):
     await door_controller.stop()
-    logging.info(f"{request.state.user} called stop")
+    print(f"{request.state.user} called stop")
     return {"message": "Stopping actuators"}
 
 
@@ -379,12 +388,13 @@ async def accept_theme(accept_theme: AcceptThemeParams):
     return {"message": "Theme accepted"}
 
 
-@app.get("/", response_class=HTMLResponse)
-async def index(request: Request, key: str = None):
+@app.get("/")
+async def index(request: Request, key: Optional[str] = None):
     if key:
         user = next((name for name, k in KEYS.items() if k == key), None)
         if user:
-            expiration = datetime.utcnow() + timedelta(days=365)
+            # Set cookie to expire in 10 years
+            expiration = datetime.utcnow() + timedelta(days=365 * 10)
             response = HTMLResponse(content=get_random_frontend())
             response.set_cookie(
                 key="api_key",
@@ -394,7 +404,7 @@ async def index(request: Request, key: str = None):
                 samesite="Lax",
             )
             return response
-    return get_random_frontend()
+    return HTMLResponse(content=get_random_frontend())
 
 
 def get_random_frontend():
