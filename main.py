@@ -4,12 +4,11 @@ import logging
 import os
 import random
 import re
-import time
 from pathlib import Path
-from typing import Dict, List, Optional
+from typing import Dict, Optional
 
-from fastapi import Cookie, Depends, FastAPI, Request, Response
-from fastapi.responses import JSONResponse, RedirectResponse
+from fastapi import Cookie, Depends, FastAPI, Form, Request
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse, FileResponse
 from pydantic import BaseModel
 
 if os.getenv("ENVIRONMENT") == "development":
@@ -19,13 +18,10 @@ else:
 from datetime import datetime, timedelta
 
 from anthropic import Anthropic
-from fastapi import Depends, FastAPI, Request, Response
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, HTMLResponse, RedirectResponse
 from fastapi.security import APIKeyHeader, APIKeyQuery
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.base import BaseHTTPMiddleware
-from starlette.responses import JSONResponse
 
 DEFAULT_DELAY = 17
 
@@ -294,7 +290,7 @@ async def login_page(error: str = None):
 
 # Authentication route
 @app.post("/auth")
-async def auth(key: str):
+async def auth(key: str = Form(...)):
     user = next((name for name, k in KEYS.items() if k == key), None)
     if user:
         # Set cookie to expire in 10 years
