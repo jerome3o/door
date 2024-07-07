@@ -3,21 +3,84 @@ import logging
 import random
 import os
 import re
-
+import time
+import json
 from pathlib import Path
 from pydantic import BaseModel
+from typing import Dict, List
 
 if os.getenv("ENVIRONMENT") == "development":
     from mockgpio import gpio
 else:
     import RPi.GPIO as gpio
-from fastapi import FastAPI
+from fastapi import FastAPI, Request, Depends, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import HTMLResponse, FileResponse
+from starlette.middleware.base import BaseHTTPMiddleware
+from fastapi.responses import HTMLResponse, FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
+from fastapi.security import APIKeyHeader, APIKeyQuery
 from anthropic import Anthropic
+from starlette.responses import JSONResponse
 
 DEFAULT_DELAY = 17
+
+# Key management
+KEY_FILE = ".keys.json"
+
+
+def load_keys() -> Dict[str, str]:
+    if os.path.exists(KEY_FILE):
+        with open(KEY_FILE, "r") as f:
+            return json.load(f)
+    return {}
+
+
+KEYS = load_keys()
+
+# Logging setup
+logging.basicConfig(
+    filename="door_access.log",
+    level=logging.INFO,
+    format="%(asctime)s - %(message)s",
+    datefmt="%d-%b-%y %H:%M:%S",
+)
+
+# Security key header
+api_key_header = APIKeyHeader(name="X-API-Key", auto_error=False)
+api_key_query = APIKeyQuery(name="key", auto_error=False)
+
+
+# Authentication function
+def get_api_key(
+    api_key_header: str = Depends(api_key_header),
+    api_key_query: str = Depends(api_key_query),
+) -> str:
+    if api_key_header:
+        return api_key_header
+    if api_key_query:
+        return api_key_query
+    return None
+
+
+# Authentication middleware
+class AuthMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        api_key = await get_api_key(
+            api_key_header=request.headers.get("X-API-Key"),
+            api_key_query=request.query_params.get("key"),
+        )
+
+        if api_key is None:
+            return RedirectResponse(url="/login")
+
+        user = next((name for name, key in KEYS.items() if key == api_key), None)
+        if user is None:
+            return JSONResponse(status_code=403, content={"detail": "Invalid API Key"})
+
+        request.state.user = user
+        response = await call_next(request)
+        return response
+
 
 _logger = logging.getLogger(__name__)
 
@@ -186,6 +249,38 @@ class DoorController:
 
 app = FastAPI()
 
+
+# Add the middleware to the app
+app.add_middleware(AuthMiddleware)
+
+
+# Login page route
+@app.get("/login", response_class=HTMLResponse)
+async def login_page():
+    return """
+    <html>
+        <body>
+            <h1>Enter your key</h1>
+            <form action="/auth" method="post">
+                <input type="text" name="key" placeholder="Enter your key">
+                <input type="submit" value="Submit">
+            </form>
+        </body>
+    </html>
+    """
+
+
+# Authentication route
+@app.post("/auth")
+async def auth(key: str):
+    user = next((name for name, k in KEYS.items() if k == key), None)
+    if user:
+        response = RedirectResponse(url="/")
+        response.set_cookie(key="api_key", value=key)
+        return response
+    return {"error": "Invalid key"}
+
+
 gpio.cleanup()
 
 door_controller = DoorController(
@@ -204,26 +299,30 @@ app.add_middleware(
 
 
 @app.post("/api/unlock")
-async def unlock_door():
+async def unlock_door(request: Request):
     await door_controller.unlock()
+    logging.info(f"{request.state.user} called unlock")
     return {"message": "Unlocking door"}
 
 
 @app.post("/api/lock")
-async def lock_door():
+async def lock_door(request: Request):
     await door_controller.lock()
+    logging.info(f"{request.state.user} called lock")
     return {"message": "Locking door"}
 
 
 @app.post("/api/safe")
-async def safe():
+async def safe(request: Request):
     await door_controller.safe()
+    logging.info(f"{request.state.user} called safe")
     return {"message": "Safing Actuators"}
 
 
 @app.post("/api/stop")
-async def stop():
+async def stop(request: Request):
     await door_controller.stop()
+    logging.info(f"{request.state.user} called stop")
     return {"message": "Stopping actuators"}
 
 
@@ -258,15 +357,20 @@ async def accept_theme(accept_theme: AcceptThemeParams):
 
 
 @app.get("/", response_class=HTMLResponse)
-def index():
-    # load all files in the ./fe/themes/ directory
+async def index(request: Request, key: str = None):
+    if key:
+        user = next((name for name, k in KEYS.items() if k == key), None)
+        if user:
+            response = HTMLResponse(content=get_random_frontend())
+            response.set_cookie(key="api_key", value=key)
+            return response
+    return get_random_frontend()
+
+
+def get_random_frontend():
     _FE_OPTIONS = [str(p) for p in Path("./fe/themes").rglob("*") if p.is_file()]
-
-    # load all files in the ./fe/generated/ directory
     _FE_OPTIONS += [str(p) for p in Path("./fe/generated").rglob("*") if p.is_file()]
-
     random_frontend = random.choice(_FE_OPTIONS)
-
     with open(random_frontend) as f:
         return f.read()
 
