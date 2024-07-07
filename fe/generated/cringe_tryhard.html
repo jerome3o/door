@@ -1,0 +1,124 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🔥 Lit AF Door Control 🔥</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive;
+      background: linear-gradient(45deg, #ff00ff, #00ffff);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: #ffffff;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+    .maincontainer {
+      background-color: rgba(0,0,0,0.6);
+      border-radius: 20px;
+      padding: 20px;
+      text-align: center;
+      max-width: 90%;
+      width: 300px;
+      box-shadow: 0 0 20px rgba(255,255,255,0.5);
+    }
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+      animation: spin 2s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    h1 {
+      font-size: 1.5em;
+      margin: 0;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    .primary-button, .secondary-button {
+      font-family: 'Comic Sans MS', cursive;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 50px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
+    .primary-button {
+      background: linear-gradient(45deg, #ff00ff, #ff8c00);
+      color: white;
+    }
+    .secondary-button {
+      background: linear-gradient(45deg, #00ffff, #00ff00);
+      color: black;
+    }
+    .primary-button:hover, .secondary-button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 10px rgba(255,255,255,0.8);
+    }
+    #message {
+      font-size: 1.2em;
+      margin: 20px 0;
+      font-weight: bold;
+    }
+    .theme-name {
+      font-size: 0.8em;
+      margin-top: 20px;
+      font-style: italic;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>🔥 Swaggiest Door Control 🔥</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">🔓 Yeet It Open 🚀</button>
+      <button id="lockbutton" class="primary-button">🔒 Lock It Down Fam 💯</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">🛑 No Cap Stop 🧢</button>
+      <button id="safebutton" class="secondary-button">🔰 Safety First Bruh 🤙</button>
+    </div>
+    <p class="theme-name">Theme: Cringe Tryhard 😎</p>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    document.querySelectorAll('button').forEach(button => {
+      button.addEventListener('mouseover', () => {
+        button.style.transform = `scale(1.1) rotate(${Math.random() * 10 - 5}deg)`;
+      });
+      button.addEventListener('mouseout', () => {
+        button.style.transform = 'scale(1) rotate(0deg)';
+      });
+    });
+  </script>
+</body>
+
+</html>

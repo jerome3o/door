@@ -1,0 +1,154 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Whakahaere Kūaha 🗝️</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #2C3E50;
+      color: #ECF0F1;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-image: 
+        repeating-linear-gradient(45deg, rgba(255,255,255,.1) 0, rgba(255,255,255,.1) 10px, transparent 10px, transparent 20px),
+        repeating-linear-gradient(-45deg, rgba(255,255,255,.1) 0, rgba(255,255,255,.1) 10px, transparent 10px, transparent 20px);
+    }
+    .maincontainer {
+      background-color: #34495E;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      max-width: 90%;
+      width: 400px;
+      position: relative;
+      overflow: hidden;
+    }
+    .maincontainer::before {
+      content: "🌿";
+      position: absolute;
+      top: -20px;
+      left: -20px;
+      font-size: 100px;
+      opacity: 0.1;
+      transform: rotate(-45deg);
+    }
+    .maincontainer::after {
+      content: "🐚";
+      position: absolute;
+      bottom: -20px;
+      right: -20px;
+      font-size: 100px;
+      opacity: 0.1;
+      transform: rotate(45deg);
+    }
+    .header {
+      margin-bottom: 1.5rem;
+    }
+    .header i {
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+      color: #F1C40F;
+    }
+    h1 {
+      margin: 0;
+      font-size: 1.8rem;
+      color: #F1C40F;
+    }
+    .theme-name {
+      font-size: 0.9rem;
+      color: #BDC3C7;
+      margin-top: 0.5rem;
+    }
+    #message {
+      margin-bottom: 1.5rem;
+      font-weight: bold;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 1rem;
+    }
+    button {
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .primary-button {
+      background-color: #E74C3C;
+      color: white;
+    }
+    .primary-button:hover {
+      background-color: #C0392B;
+      transform: scale(1.05);
+    }
+    .secondary-button {
+      background-color: #3498DB;
+      color: white;
+    }
+    .secondary-button:hover {
+      background-color: #2980B9;
+      transform: scale(1.05);
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    @media (max-width: 480px) {
+      .maincontainer {
+        padding: 1.5rem;
+      }
+      button {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>Whakahaere Kūaha 🗝️</h1>
+      <div class="theme-name">Kaupapa: Māori 🇳🇿</div>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">Wetewete 🔓</button>
+      <button id="lockbutton" class="primary-button">Maukati 🔒</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">Tūporo 🛑</button>
+      <button id="safebutton" class="secondary-button">Haumaru 🛡️</button>
+    </div>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    document.querySelectorAll('button').forEach(button => {
+      button.addEventListener('mouseover', () => {
+        button.style.animation = 'pulse 0.5s infinite';
+      });
+      button.addEventListener('mouseout', () => {
+        button.style.animation = 'none';
+      });
+    });
+  </script>
+</body>
+
+</html>

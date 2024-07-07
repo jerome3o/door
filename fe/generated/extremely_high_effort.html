@@ -1,0 +1,201 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🚪🔐 Ultra-Secure Door Control Center 🔓🚪</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(45deg, #1a1a1a, #2c2c2c);
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    .maincontainer {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      max-width: 90%;
+      width: 400px;
+      position: relative;
+      overflow: hidden;
+    }
+    .maincontainer::before {
+      content: "";
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: conic-gradient(
+        from 0deg,
+        transparent,
+        rgba(255, 255, 255, 0.1),
+        transparent 360deg
+      );
+      animation: rotate 10s linear infinite;
+      z-index: -1;
+    }
+    @keyframes rotate {
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+    .header {
+      margin-bottom: 2rem;
+    }
+    .header i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: #00ff00;
+      text-shadow: 0 0 10px #00ff00;
+    }
+    h1 {
+      font-size: 2rem;
+      margin: 0;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      animation: glow 2s ease-in-out infinite alternate;
+    }
+    @keyframes glow {
+      from {
+        text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #00ff00, 0 0 20px #00ff00;
+      }
+      to {
+        text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #00ff00, 0 0 40px #00ff00;
+      }
+    }
+    #message {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      min-height: 1.5em;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 1.5rem;
+    }
+    button {
+      font-size: 1rem;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      position: relative;
+      overflow: hidden;
+    }
+    button::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(
+        120deg,
+        transparent,
+        rgba(255, 255, 255, 0.3),
+        transparent
+      );
+      transition: all 0.5s;
+    }
+    button:hover::before {
+      left: 100%;
+    }
+    .primary-button {
+      background: linear-gradient(45deg, #00ff00, #00cc00);
+      color: #000;
+      font-weight: bold;
+      box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    }
+    .primary-button:hover {
+      background: linear-gradient(45deg, #00cc00, #009900);
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(0, 255, 0, 0.7);
+    }
+    .secondary-button {
+      background: linear-gradient(45deg, #ff3300, #cc2900);
+      color: #fff;
+      font-weight: bold;
+      box-shadow: 0 0 10px rgba(255, 51, 0, 0.5);
+    }
+    .secondary-button:hover {
+      background: linear-gradient(45deg, #cc2900, #991f00);
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(255, 51, 0, 0.7);
+    }
+    .theme-name {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      font-size: 0.8rem;
+      opacity: 0.5;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>🔒 Ultra-Secure Door Control Center 🔓</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">🔓 Unleash Access 🚀</button>
+      <button id="lockbutton" class="primary-button">🔒 Fortify Entrance 🛡️</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">🛑 Emergency Halt 🆘</button>
+      <button id="safebutton" class="secondary-button">🛡️ Secure Actuators 🔧</button>
+    </div>
+    <div class="theme-name">Theme: Extremely High Effort 💪🔥</div>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    document.querySelectorAll('button').forEach(button => {
+      button.addEventListener('mouseenter', () => {
+        button.style.transform = 'scale(1.1) rotate(5deg)';
+      });
+      button.addEventListener('mouseleave', () => {
+        button.style.transform = 'scale(1) rotate(0deg)';
+      });
+    });
+
+    const messages = [
+      "🔒 Fortifying your sanctuary...",
+      "🛡️ Implementing quantum encryption...",
+      "🚀 Boosting security protocols...",
+      "🔐 Activating force fields...",
+      "🌟 Synchronizing with the cosmos...",
+    ];
+
+    setInterval(() => {
+      const messageElement = document.getElementById('message');
+      messageElement.textContent = messages[Math.floor(Math.random() * messages.length)];
+      messageElement.style.opacity = 0;
+      setTimeout(() => {
+        messageElement.style.transition = 'opacity 0.5s ease-in-out';
+        messageElement.style.opacity = 1;
+      }, 100);
+    }, 5000);
+  </script>
+</body>
+
+</html>

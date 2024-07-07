@@ -1,0 +1,123 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Kiwi Door Control 🥝</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #1eb53a, #000000, #ffffff);
+      color: #ffffff;
+      margin: 0;
+      padding: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .maincontainer {
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 15px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+      max-width: 90%;
+      width: 350px;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+      animation: rotate 3s linear infinite;
+    }
+    @keyframes rotate {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    h1 {
+      font-size: 1.8em;
+      margin: 0;
+    }
+    #message {
+      margin: 15px 0;
+      font-style: italic;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin: 20px 0;
+    }
+    .primary-button, .secondary-button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .primary-button {
+      background-color: #1eb53a;
+      color: #ffffff;
+    }
+    .primary-button:hover {
+      background-color: #167c2a;
+      transform: scale(1.05);
+    }
+    .secondary-button {
+      background-color: #000000;
+      color: #ffffff;
+    }
+    .secondary-button:hover {
+      background-color: #333333;
+      transform: scale(1.05);
+    }
+    #theme {
+      font-size: 0.8em;
+      margin-top: 20px;
+      color: #cccccc;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>Kiwi Door Control 🥝</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">🔓 Unlock the Hobbit Hole</button>
+      <button id="lockbutton" class="primary-button">🔒 Secure the Shire</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">🛑 All Blacks E-Stop</button>
+      <button id="safebutton" class="secondary-button">🦅 Kiwi Safe Mode</button>
+    </div>
+    <p id="theme">Theme: New Zealand 🇳🇿</p>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    document.querySelectorAll('button').forEach(button => {
+      button.addEventListener('mouseenter', () => {
+        button.style.transform = 'scale(1.1) rotate(5deg)';
+      });
+      button.addEventListener('mouseleave', () => {
+        button.style.transform = 'scale(1) rotate(0deg)';
+      });
+    });
+  </script>
+</body>
+
+</html>

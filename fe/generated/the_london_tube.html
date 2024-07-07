@@ -1,0 +1,169 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🚇 Mind the Gap: Door Control</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      font-family: 'Johnston', Arial, sans-serif;
+      background-color: #1c3f94;
+      color: #ffffff;
+    }
+    .maincontainer {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+    }
+    h1 {
+      font-size: 2.5em;
+      margin: 0;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+    .primary-button, .secondary-button {
+      padding: 10px 20px;
+      margin: 0 10px;
+      font-size: 1.2em;
+      border: none;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .primary-button {
+      background-color: #dc241f;
+      color: #ffffff;
+    }
+    .secondary-button {
+      background-color: #ffd300;
+      color: #1c3f94;
+    }
+    .primary-button:hover, .secondary-button:hover {
+      transform: scale(1.05);
+    }
+    #message {
+      font-size: 1.2em;
+      margin: 20px 0;
+    }
+    #tube-map {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+    .theme-name {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      font-size: 0.8em;
+      color: #ffffff;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="tube-map"></canvas>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-subway"></i>
+      <h1>🚪 Mind the Gap: Door Control 🚪</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">🔓 Open the Gates</button>
+      <button id="lockbutton" class="primary-button">🔒 Close the Gates</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">🛑 Emergency Stop</button>
+      <button id="safebutton" class="secondary-button">🛡️ Secure Platform</button>
+    </div>
+  </div>
+  <div class="theme-name">Theme: The London Tube 🚇</div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    const canvas = document.getElementById('tube-map');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const colors = ['#dc241f', '#ffd300', '#00782a', '#9b0056', '#0098d4', '#868f98'];
+    const boroughs = ['Westminster', 'Camden', 'Hackney', 'Tower Hamlets', 'Southwark', 'Lambeth'];
+
+    function drawCurve(startX, startY, endX, endY, color) {
+      ctx.beginPath();
+      ctx.moveTo(startX, startY);
+      ctx.bezierCurveTo(
+        startX + (endX - startX) / 2, startY,
+        startX + (endX - startX) / 2, endY,
+        endX, endY
+      );
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 4;
+      ctx.stroke();
+    }
+
+    function drawStation(x, y, name) {
+      ctx.beginPath();
+      ctx.arc(x, y, 5, 0, Math.PI * 2);
+      ctx.fillStyle = '#ffffff';
+      ctx.fill();
+      ctx.font = '12px Johnston';
+      ctx.fillStyle = '#ffffff';
+      ctx.textAlign = 'center';
+      ctx.fillText(name, x, y - 10);
+    }
+
+    function drawMap() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      for (let i = 0; i < 6; i++) {
+        const startX = Math.random() * canvas.width;
+        const startY = Math.random() * canvas.height;
+        const endX = Math.random() * canvas.width;
+        const endY = Math.random() * canvas.height;
+        
+        drawCurve(startX, startY, endX, endY, colors[i]);
+        drawStation(startX, startY, boroughs[i]);
+        drawStation(endX, endY, boroughs[(i + 1) % 6]);
+      }
+    }
+
+    drawMap();
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      drawMap();
+    });
+
+    setInterval(drawMap, 10000);  // Redraw every 10 seconds for a dynamic effect
+  </script>
+</body>
+
+</html>

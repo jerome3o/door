@@ -1,0 +1,235 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🪢 Rope Door Control 🪢</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+      background-color: #f0f0f0;
+    }
+    .maincontainer {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+    .header {
+      text-align: center;
+      padding: 10px;
+      background-color: #4a4a4a;
+      color: #fff;
+    }
+    .header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+    #message {
+      text-align: center;
+      padding: 10px;
+      font-weight: bold;
+    }
+    #ropeCanvas {
+      flex-grow: 1;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      padding: 10px;
+      background-color: #4a4a4a;
+    }
+    .primary-button, .secondary-button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: transform 0.1s;
+    }
+    .primary-button {
+      background-color: #f1c40f;
+      color: #2c3e50;
+    }
+    .secondary-button {
+      background-color: #e74c3c;
+      color: #fff;
+    }
+    .primary-button:active, .secondary-button:active {
+      transform: scale(0.95);
+    }
+    #theme {
+      text-align: center;
+      font-style: italic;
+      padding: 5px;
+      background-color: #2c3e50;
+      color: #fff;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>🪢 Rope Door Control 🪢</h1>
+    </div>
+    <p id="message"></p>
+    <canvas id="ropeCanvas"></canvas>
+    <div id="theme">Theme: Hanging Rope Simulation 🧵</div>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">🔓 Unravel</button>
+      <button id="lockbutton" class="primary-button">🔒 Tighten</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">🛑 Cut Rope</button>
+      <button id="safebutton" class="secondary-button">🔐 Secure Knots</button>
+    </div>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    const canvas = document.getElementById('ropeCanvas');
+    const ctx = canvas.getContext('2d');
+    let ropes = [];
+    const numRopes = 10;
+    const segmentLength = 10;
+    const numSegments = 20;
+    let isDragging = false;
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight - 150; // Adjust for buttons
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    class RopeSegment {
+      constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.oldX = x;
+        this.oldY = y;
+      }
+    }
+
+    function createRope(startX) {
+      let rope = [];
+      for (let i = 0; i < numSegments; i++) {
+        rope.push(new RopeSegment(startX, i * segmentLength));
+      }
+      return rope;
+    }
+
+    for (let i = 0; i < numRopes; i++) {
+      ropes.push(createRope(canvas.width / (numRopes + 1) * (i + 1)));
+    }
+
+    function updatePhysics() {
+      ropes.forEach(rope => {
+        for (let i = 1; i < rope.length; i++) {
+          let segment = rope[i];
+          let vx = segment.x - segment.oldX;
+          let vy = segment.y - segment.oldY;
+          
+          segment.oldX = segment.x;
+          segment.oldY = segment.y;
+          
+          segment.x += vx;
+          segment.y += vy;
+          segment.y += 0.5; // gravity
+        }
+        
+        for (let i = 0; i < 5; i++) { // constraint iterations
+          rope[0].x = rope[0].oldX;
+          rope[0].y = 0; // fix first point to top
+          
+          for (let j = 0; j < rope.length - 1; j++) {
+            let segment = rope[j];
+            let nextSegment = rope[j + 1];
+            
+            let dx = nextSegment.x - segment.x;
+            let dy = nextSegment.y - segment.y;
+            let distance = Math.sqrt(dx * dx + dy * dy);
+            let difference = segmentLength - distance;
+            let percent = difference / distance / 2;
+            let offsetX = dx * percent;
+            let offsetY = dy * percent;
+            
+            if (j > 0) {
+              segment.x -= offsetX;
+              segment.y -= offsetY;
+            }
+            nextSegment.x += offsetX;
+            nextSegment.y += offsetY;
+          }
+        }
+      });
+    }
+
+    function drawRopes() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.strokeStyle = '#8b4513';
+      ctx.lineWidth = 2;
+      
+      ropes.forEach(rope => {
+        ctx.beginPath();
+        ctx.moveTo(rope[0].x, rope[0].y);
+        for (let i = 1; i < rope.length; i++) {
+          ctx.lineTo(rope[i].x, rope[i].y);
+        }
+        ctx.stroke();
+      });
+    }
+
+    function animate() {
+      updatePhysics();
+      drawRopes();
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    canvas.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      isDragging = true;
+    });
+
+    canvas.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+      if (isDragging) {
+        const touch = e.touches[0];
+        const rect = canvas.getBoundingClientRect();
+        const x = touch.clientX - rect.left;
+        const y = touch.clientY - rect.top;
+        
+        ropes.forEach(rope => {
+          rope.forEach(segment => {
+            let dx = segment.x - x;
+            let dy = segment.y - y;
+            let distance = Math.sqrt(dx * dx + dy * dy);
+            if (distance < 50) {
+              let angle = Math.atan2(dy, dx);
+              segment.x = x + Math.cos(angle) * 50;
+              segment.y = y + Math.sin(angle) * 50;
+            }
+          });
+        });
+      }
+    });
+
+    canvas.addEventListener('touchend', () => {
+      isDragging = false;
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,129 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🚬 Dad's Door Dilemma 🚪</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive;
+      background-color: #f0f0f0;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .maincontainer {
+      background-color: #fff;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 90%;
+      width: 350px;
+    }
+    .header {
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 48px;
+      color: #4a4a4a;
+      animation: smoke 3s infinite;
+    }
+    @keyframes smoke {
+      0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+      50% { transform: translateY(-10px) rotate(5deg); opacity: 0.5; }
+      100% { transform: translateY(-20px) rotate(0deg); opacity: 0; }
+    }
+    h1 {
+      margin-top: 10px;
+      font-size: 24px;
+      color: #4a4a4a;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    .primary-button, .secondary-button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .primary-button {
+      background-color: #ffd700;
+      color: #4a4a4a;
+    }
+    .primary-button:hover {
+      background-color: #ffed4a;
+      transform: scale(1.05);
+    }
+    .secondary-button {
+      background-color: #d3d3d3;
+      color: #4a4a4a;
+    }
+    .secondary-button:hover {
+      background-color: #bfbfbf;
+      transform: scale(1.05);
+    }
+    #message {
+      margin: 20px 0;
+      font-style: italic;
+      color: #666;
+    }
+    .theme {
+      font-size: 12px;
+      color: #999;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-smoking-ban"></i>
+      <h1>🚪 Dad's Door Dilemma 🚪</h1>
+    </div>
+    <p id="message">Still waiting for dad to come back... 😢</p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">🔓 Open for Dad</button>
+      <button id="lockbutton" class="primary-button">🔒 Close til Cigs</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">🛑 Dad Stop!</button>
+      <button id="safebutton" class="secondary-button">🦺 Safe Like Dad Said</button>
+    </div>
+    <p class="theme">Theme: Dad left for cigarettes 🚬</p>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    const messages = [
+      "Still waiting for dad to come back... 😢",
+      "Maybe he's just stuck in traffic? 🚗",
+      "Those must be some hard-to-find cigarettes... 🕵️",
+      "I'm sure he'll be back any minute now! ⏰",
+      "Dad always keeps his promises, right? 🤞"
+    ];
+    
+    function changeMessage() {
+      const messageElement = document.getElementById('message');
+      const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+      messageElement.textContent = randomMessage;
+    }
+
+    setInterval(changeMessage, 5000);
+  </script>
+</body>
+
+</html>

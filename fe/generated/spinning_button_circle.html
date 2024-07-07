@@ -1,0 +1,124 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🚪 Roundabout Door Control 🔄</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+    .maincontainer {
+      text-align: center;
+      background-color: #ffffff;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    }
+    .header {
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2em;
+      color: #4CAF50;
+    }
+    h1 {
+      color: #333;
+      margin: 10px 0;
+    }
+    #message {
+      font-style: italic;
+      margin-bottom: 20px;
+    }
+    .button-circle {
+      position: relative;
+      width: 300px;
+      height: 300px;
+      margin: 50px auto;
+    }
+    .primary-button, .secondary-button {
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 5px;
+    }
+    .primary-button:hover, .secondary-button:hover {
+      transform: scale(1.1);
+    }
+    .secondary-button {
+      background-color: #f44336;
+    }
+    #theme {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-style: italic;
+      color: #666;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="theme">Theme: Spinning Button Circle 🎡</div>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>🚗 Roundabout Door Control 🚙</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-circle">
+      <button id="unlockbutton" class="primary-button">🔓 Unlock Lane</button>
+      <button id="lockbutton" class="primary-button">🔒 Lock Lane</button>
+      <button id="stopbutton" class="secondary-button">🛑 Emergency Pit Stop</button>
+      <button id="safebutton" class="secondary-button">🚦 Safe Traffic Flow</button>
+    </div>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    const buttons = document.querySelectorAll('.primary-button, .secondary-button');
+    let angle = 0;
+    const centerX = 150;
+    const centerY = 150;
+    const radius = 120;
+
+    function rotateButtons() {
+      buttons.forEach((button, index) => {
+        const buttonAngle = angle + (index * 90);
+        const x = centerX + radius * Math.cos(buttonAngle * Math.PI / 180) - 40;
+        const y = centerY + radius * Math.sin(buttonAngle * Math.PI / 180) - 40;
+        button.style.left = `${x}px`;
+        button.style.top = `${y}px`;
+      });
+      angle += 0.5;
+      if (angle >= 360) angle = 0;
+      requestAnimationFrame(rotateButtons);
+    }
+
+    rotateButtons();
+  </script>
+</body>
+
+</html>

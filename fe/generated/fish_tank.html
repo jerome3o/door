@@ -1,0 +1,209 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🐠 Aquatic Door Control 🐟</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #e6f3ff;
+      overflow: hidden;
+    }
+    .maincontainer {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      height: 100vh;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .header {
+      text-align: center;
+      color: #0077be;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2em;
+    }
+    h1 {
+      margin: 10px 0;
+    }
+    #message {
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.1s;
+    }
+    button:active {
+      transform: scale(0.95);
+    }
+    .primary-button {
+      background-color: #0077be;
+      color: white;
+    }
+    .secondary-button {
+      background-color: #f0f0f0;
+      color: #333;
+    }
+    #fish-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    .fish {
+      position: absolute;
+      font-size: 24px;
+      transition: transform 0.5s;
+    }
+    #theme-name {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 0.8em;
+      color: #0077be;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="fish-container"></div>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>🐠 Aquatic Door Control 🐟</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">🐟 Unlock Aquarium</button>
+      <button id="lockbutton" class="primary-button">🔒 Seal Fish Tank</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">🛑 Emergency Drain</button>
+      <button id="safebutton" class="secondary-button">🦈 Shark-Proof Mode</button>
+    </div>
+  </div>
+  <div id="theme-name">Theme: Fish Tank 🐠</div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    // Fish emojis array
+    const fishEmojis = ['🐠', '🐟', '🐡', '🦈', '🐙', '🦑', '🦐', '🦞', '🦀', '🐚'];
+    
+    // Fish class to manage individual fish behavior
+    class Fish {
+      constructor(container) {
+        this.element = document.createElement('div');
+        this.element.className = 'fish';
+        this.element.textContent = fishEmojis[Math.floor(Math.random() * fishEmojis.length)];
+        this.container = container;
+        this.container.appendChild(this.element);
+        this.speed = 0.5 + Math.random() * 2;
+        this.setRandomPosition();
+        this.setRandomDirection();
+      }
+
+      setRandomPosition() {
+        this.x = Math.random() * this.container.clientWidth;
+        this.y = Math.random() * this.container.clientHeight;
+        this.updatePosition();
+      }
+
+      setRandomDirection() {
+        const angle = Math.random() * 2 * Math.PI;
+        this.dx = Math.cos(angle) * this.speed;
+        this.dy = Math.sin(angle) * this.speed;
+      }
+
+      updatePosition() {
+        this.element.style.left = `${this.x}px`;
+        this.element.style.top = `${this.y}px`;
+      }
+
+      move() {
+        this.x += this.dx;
+        this.y += this.dy;
+
+        // Bounce off walls
+        if (this.x < 0 || this.x > this.container.clientWidth) {
+          this.dx *= -1;
+        }
+        if (this.y < 0 || this.y > this.container.clientHeight) {
+          this.dy *= -1;
+        }
+
+        // Update fish rotation based on direction
+        const rotation = Math.atan2(this.dy, this.dx);
+        this.element.style.transform = `rotate(${rotation}rad)`;
+
+        this.updatePosition();
+      }
+
+      moveTowards(targetX, targetY) {
+        const dx = targetX - this.x;
+        const dy = targetY - this.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        this.dx = (dx / distance) * this.speed;
+        this.dy = (dy / distance) * this.speed;
+      }
+    }
+
+    // FishTank class to manage all fish
+    class FishTank {
+      constructor(container, fishCount) {
+        this.container = container;
+        this.fishes = [];
+        for (let i = 0; i < fishCount; i++) {
+          this.fishes.push(new Fish(container));
+        }
+      }
+
+      animate() {
+        this.fishes.forEach(fish => fish.move());
+        requestAnimationFrame(() => this.animate());
+      }
+
+      moveTowards(x, y) {
+        this.fishes.forEach(fish => fish.moveTowards(x, y));
+      }
+    }
+
+    // Initialize fish tank
+    const fishContainer = document.getElementById('fish-container');
+    const fishTank = new FishTank(fishContainer, 50);
+    fishTank.animate();
+
+    // Add click/touch event listener
+    document.addEventListener('click', (event) => {
+      fishTank.moveTowards(event.clientX, event.clientY);
+    });
+
+    document.addEventListener('touchstart', (event) => {
+      const touch = event.touches[0];
+      fishTank.moveTowards(touch.clientX, touch.clientY);
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,145 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🥑 Avocado Door Control 🍞</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #F5F5DC;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      animation: sunrise 10s infinite alternate;
+    }
+
+    @keyframes sunrise {
+      0% { background-color: #F5F5DC; }
+      100% { background-color: #FFD700; }
+    }
+
+    .maincontainer {
+      background-color: #FFFFFF;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      max-width: 90%;
+      width: 400px;
+    }
+
+    .header {
+      margin-bottom: 20px;
+    }
+
+    .header i {
+      font-size: 48px;
+      color: #006400;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    h1 {
+      color: #8B4513;
+      font-size: 28px;
+      margin-top: 10px;
+    }
+
+    #message {
+      color: #006400;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+
+    .primary-button, .secondary-button {
+      padding: 12px 24px;
+      font-size: 16px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .primary-button {
+      background-color: #006400;
+      color: #FFFFFF;
+    }
+
+    .primary-button:hover {
+      background-color: #008000;
+      transform: scale(1.05);
+    }
+
+    .secondary-button {
+      background-color: #FFD700;
+      color: #8B4513;
+    }
+
+    .secondary-button:hover {
+      background-color: #FFA500;
+      transform: scale(1.05);
+    }
+
+    .theme-name {
+      font-size: 14px;
+      color: #8B4513;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 480px) {
+      .maincontainer {
+        padding: 20px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      .primary-button, .secondary-button {
+        padding: 10px 20px;
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-egg"></i>
+      <h1>🥑 Avocado Door Control 🍞</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">🔓 Spread the Joy</button>
+      <button id="lockbutton" class="primary-button">🔒 Toast is Done</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">🛑 Burnt Toast!</button>
+      <button id="safebutton" class="secondary-button">🥚 Poach Safely</button>
+    </div>
+    <p class="theme-name">Theme: Breakfast - Avocado on Toast 🥑🍞</p>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+</body>
+
+</html>
