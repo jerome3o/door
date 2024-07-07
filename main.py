@@ -270,22 +270,11 @@ app.add_middleware(AuthMiddleware)
 # Login page route
 @app.get("/login", response_class=HTMLResponse)
 async def login_page(error: str = None):
-    error_message = ""
-    if error == "invalid_key":
-        error_message = "<p style='color: red;'>Invalid key. Please try again.</p>"
+    # load in the login page from fe/login.html
+    with open("fe/login.html") as f:
+        login_page = f.read()
 
-    return f"""
-    <html>
-        <body>
-            <h1>Enter your key</h1>
-            {error_message}
-            <form action="/auth" method="post">
-                <input type="text" name="key" placeholder="Enter your key">
-                <input type="submit" value="Submit">
-            </form>
-        </body>
-    </html>
-    """
+    return HTMLResponse(content=login_page)
 
 
 # Authentication route
