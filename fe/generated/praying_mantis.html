@@ -1,0 +1,162 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🦗 Mantis Door Guardian 🦗</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #2ecc71;
+      color: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    .maincontainer {
+      background-color: rgba(0, 0, 0, 0.6);
+      border-radius: 15px;
+      padding: 20px;
+      text-align: center;
+      max-width: 90%;
+      width: 300px;
+      position: relative;
+    }
+
+    .header {
+      margin-bottom: 20px;
+    }
+
+    .header i {
+      font-size: 48px;
+      color: #27ae60;
+      animation: prayingMantis 2s infinite;
+    }
+
+    @keyframes prayingMantis {
+      0%, 100% { transform: rotate(-15deg); }
+      50% { transform: rotate(15deg); }
+    }
+
+    h1 {
+      font-size: 24px;
+      margin: 10px 0;
+    }
+
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+
+    button {
+      background-color: #27ae60;
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #219651;
+      transform: scale(1.05);
+    }
+
+    .secondary-button {
+      background-color: #e74c3c;
+    }
+
+    .secondary-button:hover {
+      background-color: #c0392b;
+    }
+
+    #message {
+      font-style: italic;
+      margin: 10px 0;
+    }
+
+    .theme-name {
+      position: absolute;
+      bottom: 5px;
+      right: 10px;
+      font-size: 12px;
+      opacity: 0.7;
+    }
+
+    .mantis {
+      font-size: 24px;
+      position: absolute;
+      animation: flyAround 10s infinite linear;
+    }
+
+    @keyframes flyAround {
+      0% { top: -10%; left: -10%; }
+      25% { top: -10%; left: 110%; }
+      50% { top: 110%; left: 110%; }
+      75% { top: 110%; left: -10%; }
+      100% { top: -10%; left: -10%; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-bug"></i>
+      <h1>🦗 Mantis Door Guardian 🦗</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">🐛 Snatch Open</button>
+      <button id="lockbutton" class="primary-button">🕷️ Trap Shut</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">🚫 Freeze Mantis</button>
+      <button id="safebutton" class="secondary-button">🛡️ Shield Feelers</button>
+    </div>
+    <div class="theme-name">Theme: Praying Mantis (ffmpeg)</div>
+  </div>
+
+  <div class="mantis">🦗</div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    // Add flying mantis emojis
+    for (let i = 0; i < 5; i++) {
+      const mantis = document.createElement('div');
+      mantis.className = 'mantis';
+      mantis.textContent = '🦗';
+      mantis.style.animationDelay = `${i * 2}s`;
+      document.body.appendChild(mantis);
+    }
+
+    // Add ffmpeg easter egg
+    let ffmpegCount = 0;
+    document.addEventListener('click', (e) => {
+      if (e.target.tagName === 'BUTTON') {
+        ffmpegCount++;
+        if (ffmpegCount === 5) {
+          alert("🦗 ffmpeg says hi! 🦗");
+          ffmpegCount = 0;
+        }
+      }
+    });
+  </script>
+</body>
+
+</html>

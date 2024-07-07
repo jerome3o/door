@@ -1,0 +1,131 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Fortnite Door Control 🎮</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive;
+      background: linear-gradient(45deg, #ff00ff, #00ffff);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: #fff;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+    .maincontainer {
+      background: rgba(0,0,0,0.7);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(255,255,255,0.5);
+      text-align: center;
+      max-width: 90%;
+      width: 400px;
+    }
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 3em;
+      margin-right: 10px;
+      animation: bounce 1s infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+    h1 {
+      font-size: 2.5em;
+      margin: 0;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    button {
+      font-family: 'Comic Sans MS', cursive;
+      font-size: 1.2em;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .primary-button {
+      background: #ff4500;
+      color: #fff;
+    }
+    .secondary-button {
+      background: #1e90ff;
+      color: #fff;
+    }
+    button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 10px rgba(255,255,255,0.7);
+    }
+    #message {
+      font-size: 1.2em;
+      margin: 20px 0;
+      min-height: 1.2em;
+    }
+    .theme {
+      font-size: 0.8em;
+      margin-top: 20px;
+      color: #ff00ff;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>Victory Royale Door 🚪</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">Drop In 🪂</button>
+      <button id="lockbutton" class="primary-button">Storm's Coming 🌪️</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">Rage Quit 😡</button>
+      <button id="safebutton" class="secondary-button">Chug Jug 🍺</button>
+    </div>
+    <p class="theme">Theme: Fortnite (Where we droppin' boys? 😎)</p>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    const messages = [
+      "Epic victory royale! 🏆",
+      "Get rekt, noobs! 😎",
+      "1v1 me bro! 💪",
+      "Time for a default dance! 💃",
+      "Tilted Towers or bust! 🏙️",
+      "That's a big oof! 😱",
+      "Let's get this dub! 🏅",
+      "No sweat, just build! 🏗️"
+    ];
+
+    document.querySelectorAll('button').forEach(button => {
+      button.addEventListener('click', () => {
+        const randomMessage = messages[Math.floor(Math.random() * messages.length)];
+        document.getElementById('message').textContent = randomMessage;
+      });
+    });
+  </script>
+</body>
+
+</html>

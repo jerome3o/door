@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🚪 Door Control: Resignation Edition 📄</title>
+  <style>
+    body {
+      font-family: 'Courier New', monospace;
+      background-color: #f5f5f5;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .maincontainer {
+      background-color: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 90%;
+      width: 400px;
+    }
+    .header {
+      margin-bottom: 1rem;
+    }
+    .header i {
+      font-size: 2rem;
+      color: #4a4a4a;
+    }
+    h1 {
+      margin: 0.5rem 0;
+      color: #4a4a4a;
+    }
+    .letter {
+      font-size: 0.9rem;
+      text-align: left;
+      margin-bottom: 1rem;
+      line-height: 1.4;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 1rem;
+    }
+    button {
+      padding: 0.5rem 1rem;
+      font-size: 1rem;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+    .primary-button {
+      background-color: #4a4a4a;
+      color: white;
+    }
+    .secondary-button {
+      background-color: #e0e0e0;
+      color: #4a4a4a;
+    }
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+    #message {
+      margin: 1rem 0;
+      font-weight: bold;
+      color: #4a4a4a;
+    }
+    .theme {
+      font-size: 0.8rem;
+      color: #888;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-door-open"></i>
+      <h1>🚪 Door Control: Resignation Edition 📄</h1>
+    </div>
+    <div class="letter">
+      Dear Employer,<br><br>
+      I hereby <span id="unlockbutton" class="primary-button">unlock</span> my potential elsewhere and <span id="lockbutton" class="primary-button">lock</span> away my time here. I must <span id="stopbutton" class="secondary-button">e-stop</span> my current position and <span id="safebutton" class="secondary-button">safe actuators</span> for my future endeavors.<br><br>
+      Sincerely,<br>
+      [Your Name]
+    </div>
+    <p id="message"></p>
+    <div class="theme">Theme: Letter of Resignation 📝</div>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    document.querySelectorAll('span[id]').forEach(span => {
+      span.addEventListener('click', function() {
+        this.classList.add('clicked');
+        setTimeout(() => this.classList.remove('clicked'), 300);
+      });
+    });
+  </script>
+</body>
+
+</html>

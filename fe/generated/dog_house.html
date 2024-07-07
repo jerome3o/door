@@ -1,0 +1,156 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🐾 Paw-some Door Control 🏠</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #87CEEB;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    .maincontainer {
+      background-color: #8B4513;
+      border-radius: 20px 20px 0 0;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+      max-width: 300px;
+      width: 100%;
+      position: relative;
+    }
+    .maincontainer::before {
+      content: "";
+      position: absolute;
+      top: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 0;
+      height: 0;
+      border-left: 60px solid transparent;
+      border-right: 60px solid transparent;
+      border-bottom: 30px solid #8B4513;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 40px;
+      color: #FFD700;
+    }
+    h1 {
+      color: #FFFFFF;
+      margin: 10px 0;
+      font-size: 24px;
+    }
+    #message {
+      background-color: #FFFFFF;
+      border-radius: 10px;
+      padding: 10px;
+      margin-bottom: 20px;
+      text-align: center;
+      font-weight: bold;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 15px;
+    }
+    .primary-button, .secondary-button {
+      background-color: #4CAF50;
+      border: none;
+      color: white;
+      padding: 15px 25px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+      border-radius: 12px;
+      transition: all 0.3s;
+    }
+    .primary-button:hover, .secondary-button:hover {
+      transform: scale(1.05);
+    }
+    .primary-button:active, .secondary-button:active {
+      transform: scale(0.95);
+    }
+    #unlockbutton {
+      background-color: #4CAF50;
+    }
+    #lockbutton {
+      background-color: #f44336;
+    }
+    #stopbutton {
+      background-color: #ff9800;
+    }
+    #safebutton {
+      background-color: #2196F3;
+    }
+    .theme-name {
+      position: absolute;
+      bottom: -30px;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: #FFD700;
+      padding: 5px 10px;
+      border-radius: 0 0 10px 10px;
+      font-weight: bold;
+      color: #8B4513;
+    }
+    @keyframes wag {
+      0% { transform: rotate(0deg); }
+      25% { transform: rotate(5deg); }
+      75% { transform: rotate(-5deg); }
+      100% { transform: rotate(0deg); }
+    }
+    .bone {
+      position: absolute;
+      font-size: 24px;
+      animation: wag 1s infinite;
+    }
+    .bone:nth-child(1) { top: 10px; left: 10px; }
+    .bone:nth-child(2) { top: 10px; right: 10px; }
+    .bone:nth-child(3) { bottom: 10px; left: 10px; }
+    .bone:nth-child(4) { bottom: 10px; right: 10px; }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="bone">🦴</div>
+    <div class="bone">🦴</div>
+    <div class="bone">🦴</div>
+    <div class="bone">🦴</div>
+    <div class="header">
+      <i class="fas fa-paw"></i>
+      <h1>🐾 Paw-some Door Control 🏠</h1>
+    </div>
+    <p id="message">Woof! Ready to control your doggy door? 🐶</p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">🐾 Open Flap</button>
+      <button id="lockbutton" class="primary-button">🔒 Close Flap</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">🛑 Paws Now!</button>
+      <button id="safebutton" class="secondary-button">🦺 Safe Doggo</button>
+    </div>
+    <div class="theme-name">🐕 Dog House Theme 🏠</div>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+</body>
+
+</html>

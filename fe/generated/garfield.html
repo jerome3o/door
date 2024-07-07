@@ -1,0 +1,124 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Garfield's Lasagna Vault 🐱🍝</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', sans-serif;
+      background-color: #FFA500;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .maincontainer {
+      background-color: #FFD700;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      max-width: 400px;
+      width: 100%;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+      color: #FF6347;
+    }
+    h1 {
+      font-size: 2em;
+      color: #FF4500;
+      margin: 0;
+    }
+    #message {
+      text-align: center;
+      font-size: 1.2em;
+      margin-bottom: 20px;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+    button {
+      font-family: 'Comic Sans MS', sans-serif;
+      font-size: 1.2em;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    .primary-button {
+      background-color: #FF6347;
+      color: white;
+    }
+    .secondary-button {
+      background-color: #FF4500;
+      color: white;
+    }
+    #theme {
+      text-align: center;
+      font-size: 0.8em;
+      margin-top: 20px;
+      color: #FF4500;
+    }
+    @keyframes wiggle {
+      0% { transform: rotate(0deg); }
+      25% { transform: rotate(5deg); }
+      75% { transform: rotate(-5deg); }
+      100% { transform: rotate(0deg); }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-cat"></i>
+      <h1>Garfield's Lasagna Vault 🐱🍝</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">Open Lasagna Vault 🍝</button>
+      <button id="lockbutton" class="primary-button">Secure Lasagna 🔒</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">Odie Alert! 🐶</button>
+      <button id="safebutton" class="secondary-button">Monday Mode 😴</button>
+    </div>
+    <div id="theme">Theme: Garfield 🐱</div>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    document.querySelectorAll('button').forEach(button => {
+      button.addEventListener('mouseenter', () => {
+        button.style.animation = 'wiggle 0.5s ease-in-out';
+      });
+      button.addEventListener('animationend', () => {
+        button.style.animation = '';
+      });
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,170 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>💩 Diarrhea Door Control 💩</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4d03f;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      animation: rumble 0.5s infinite;
+    }
+
+    @keyframes rumble {
+      0% { transform: translate(0, 0); }
+      25% { transform: translate(2px, 2px); }
+      50% { transform: translate(-2px, -2px); }
+      75% { transform: translate(-2px, 2px); }
+      100% { transform: translate(2px, -2px); }
+    }
+
+    .maincontainer {
+      background-color: #d35400;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+      max-width: 90%;
+      width: 300px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+      color: #f1c40f;
+    }
+
+    h1 {
+      color: #f1c40f;
+      margin: 0;
+      font-size: 1.5em;
+    }
+
+    #message {
+      text-align: center;
+      color: #fff;
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+
+    .primary-button, .secondary-button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .primary-button {
+      background-color: #f1c40f;
+      color: #d35400;
+    }
+
+    .primary-button:hover {
+      background-color: #f39c12;
+      transform: scale(1.05);
+    }
+
+    .secondary-button {
+      background-color: #e74c3c;
+      color: #fff;
+    }
+
+    .secondary-button:hover {
+      background-color: #c0392b;
+      transform: scale(1.05);
+    }
+
+    #unlockbutton::before, #lockbutton::before {
+      content: "💩 ";
+    }
+
+    #unlockbutton::after, #lockbutton::after {
+      content: " 💩";
+    }
+
+    #stopbutton::before, #safebutton::before {
+      content: "🚽 ";
+    }
+
+    #stopbutton::after, #safebutton::after {
+      content: " 🧻";
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-toilet"></i>
+      <h1>💩 Diarrhea Door Control 💩</h1>
+    </div>
+    <p id="message">Theme: Diarrhea 🚽</p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">Flush Open</button>
+      <button id="lockbutton" class="primary-button">Clog Shut</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">Plunger Stop</button>
+      <button id="safebutton" class="secondary-button">Sanitize</button>
+    </div>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    function addBubbles() {
+      const bubble = document.createElement('div');
+      bubble.style.position = 'absolute';
+      bubble.style.backgroundColor = '#8e44ad';
+      bubble.style.borderRadius = '50%';
+      bubble.style.opacity = '0.7';
+      bubble.style.animation = 'rise 4s ease-in';
+      bubble.style.left = Math.random() * window.innerWidth + 'px';
+      bubble.style.top = window.innerHeight + 'px';
+      bubble.style.width = Math.random() * 20 + 10 + 'px';
+      bubble.style.height = bubble.style.width;
+      document.body.appendChild(bubble);
+
+      setTimeout(() => {
+        document.body.removeChild(bubble);
+      }, 4000);
+    }
+
+    setInterval(addBubbles, 500);
+
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes rise {
+        0% { transform: translateY(0); }
+        100% { transform: translateY(-100vh); }
+      }
+    `;
+    document.head.appendChild(style);
+  </script>
+</body>
+
+</html>

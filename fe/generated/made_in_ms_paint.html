@@ -1,0 +1,124 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🎨 MS Paint Door Control 🚪</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive;
+      background-color: #c0c0c0;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .maincontainer {
+      background-color: #ffffff;
+      border: 3px solid #000000;
+      border-radius: 0;
+      padding: 20px;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: 5px 5px 0 #000000;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+      color: #0000ff;
+    }
+    h1 {
+      font-size: 24px;
+      color: #ff0000;
+      margin: 0;
+      text-shadow: 2px 2px 0 #ffff00;
+    }
+    #message {
+      background-color: #ffff00;
+      border: 2px solid #000000;
+      padding: 10px;
+      margin-bottom: 20px;
+      font-weight: bold;
+      text-align: center;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+    button {
+      font-family: 'Comic Sans MS', cursive;
+      font-size: 18px;
+      padding: 10px 20px;
+      border: 2px solid #000000;
+      cursor: pointer;
+      transition: transform 0.1s;
+    }
+    button:active {
+      transform: translate(2px, 2px);
+    }
+    .primary-button {
+      background-color: #00ff00;
+      color: #000000;
+    }
+    .secondary-button {
+      background-color: #ff00ff;
+      color: #ffffff;
+    }
+    #unlockbutton::before { content: "🔓 "; }
+    #lockbutton::before { content: "🔒 "; }
+    #stopbutton::before { content: "🛑 "; }
+    #safebutton::before { content: "🛡️ "; }
+    .theme-name {
+      text-align: center;
+      font-style: italic;
+      margin-top: 20px;
+      color: #808080;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>Doodle Door Control 🖌️</h1>
+    </div>
+    <p id="message">🎨 Welcome to your MS Paint inspired door! 🚪</p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">Open Sesame!</button>
+      <button id="lockbutton" class="primary-button">Seal the Deal!</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">Freeze Frame!</button>
+      <button id="safebutton" class="secondary-button">Shield Brush!</button>
+    </div>
+    <div class="theme-name">🖼️ Theme: Made in MS Paint 🖌️</div>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    document.querySelectorAll('button').forEach(button => {
+      button.addEventListener('mouseover', () => {
+        button.style.transform = 'rotate(' + (Math.random() * 5 - 2.5) + 'deg)';
+      });
+      button.addEventListener('mouseout', () => {
+        button.style.transform = 'rotate(0deg)';
+      });
+    });
+  </script>
+</body>
+
+</html>

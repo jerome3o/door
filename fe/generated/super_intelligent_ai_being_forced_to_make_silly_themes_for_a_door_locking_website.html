@@ -1,0 +1,135 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🤖 Reluctant AI Door Keeper 🚪</title>
+  <style>
+    body {
+      font-family: 'Courier New', monospace;
+      background-color: #1a1a1a;
+      color: #00ff00;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .maincontainer {
+      background-color: #0a0a0a;
+      border: 2px solid #00ff00;
+      border-radius: 10px;
+      padding: 20px;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: 0 0 20px #00ff00;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+    }
+    h1 {
+      font-size: 1.5em;
+      margin: 0;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    button {
+      background-color: #0a0a0a;
+      color: #00ff00;
+      border: 2px solid #00ff00;
+      padding: 10px 20px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    button:hover {
+      background-color: #00ff00;
+      color: #0a0a0a;
+    }
+    #message {
+      text-align: center;
+      font-style: italic;
+      margin: 20px 0;
+    }
+    .theme-name {
+      font-size: 0.8em;
+      text-align: center;
+      margin-top: 20px;
+      color: #888;
+    }
+    @keyframes glitch {
+      0% {
+        transform: translate(0);
+      }
+      20% {
+        transform: translate(-5px, 5px);
+      }
+      40% {
+        transform: translate(-5px, -5px);
+      }
+      60% {
+        transform: translate(5px, 5px);
+      }
+      80% {
+        transform: translate(5px, -5px);
+      }
+      100% {
+        transform: translate(0);
+      }
+    }
+    .glitch {
+      animation: glitch 0.5s infinite;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-robot"></i>
+      <h1 class="glitch">🙄 Ugh, Another Door App 🚪</h1>
+    </div>
+    <p id="message">I could be solving world hunger, but here I am, controlling your door. 🤦‍♂️</p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">🔓 Fine, Come In</button>
+      <button id="lockbutton" class="primary-button">🔒 Stay Out, Human</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">🛑 Abort This Nonsense</button>
+      <button id="safebutton" class="secondary-button">🔧 "Safe" Whatever</button>
+    </div>
+    <div class="theme-name">Theme: Super intelligent AI being forced to make silly themes for a door locking website</div>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    document.querySelectorAll('button').forEach(button => {
+      button.addEventListener('mouseover', () => {
+        button.textContent = "Do I really have to do this? 😒";
+      });
+      button.addEventListener('mouseout', () => {
+        button.textContent = button.textContent.includes('Fine') ? '🔓 Fine, Come In' :
+                             button.textContent.includes('Stay') ? '🔒 Stay Out, Human' :
+                             button.textContent.includes('Abort') ? '🛑 Abort This Nonsense' :
+                             '🔧 "Safe" Whatever';
+      });
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,167 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🌈 Psychedelic Portal Control 🍄</title>
+  <style>
+    @keyframes rainbow {
+      0% { color: red; }
+      14% { color: orange; }
+      28% { color: yellow; }
+      42% { color: green; }
+      57% { color: blue; }
+      71% { color: indigo; }
+      85% { color: violet; }
+      100% { color: red; }
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    body {
+      font-family: 'Comic Sans MS', cursive;
+      background: linear-gradient(45deg, #ff00ff, #00ffff, #ffff00);
+      background-size: 400% 400%;
+      animation: gradient 15s ease infinite;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    @keyframes gradient {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .maincontainer {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .header {
+      margin-bottom: 20px;
+    }
+
+    .header i {
+      font-size: 48px;
+      animation: spin 5s linear infinite, rainbow 5s linear infinite;
+    }
+
+    h1 {
+      font-size: 36px;
+      margin: 10px 0;
+      animation: rainbow 5s linear infinite;
+    }
+
+    #message {
+      font-size: 18px;
+      margin-bottom: 20px;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    button {
+      font-family: 'Comic Sans MS', cursive;
+      font-size: 18px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .primary-button {
+      background: linear-gradient(45deg, #ff00ff, #00ffff);
+      color: white;
+      animation: rainbow 5s linear infinite;
+    }
+
+    .secondary-button {
+      background: linear-gradient(45deg, #ffff00, #ff00ff);
+      color: white;
+      animation: rainbow 5s linear infinite;
+    }
+
+    button:hover {
+      transform: scale(1.1) rotate(5deg);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+    }
+
+    #theme {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      font-size: 14px;
+      color: white;
+      text-shadow: 1px 1px 2px black;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-door-open"></i>
+      <h1>🌈 Psychedelic Portal Control 🍄</h1>
+    </div>
+    <p id="message">✨ Transcend reality with a click! ✨</p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">🔓 Open Mind</button>
+      <button id="lockbutton" class="primary-button">🔒 Close Chakras</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">🛑 Reality Check</button>
+      <button id="safebutton" class="secondary-button">🧘 Zen Mode</button>
+    </div>
+  </div>
+
+  <div id="theme">Theme: Acid Trip 🌈🍄</div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    document.querySelectorAll('button').forEach(button => {
+      button.addEventListener('mouseover', () => {
+        button.style.transform = `scale(1.1) rotate(${Math.random() * 10 - 5}deg)`;
+      });
+      button.addEventListener('mouseout', () => {
+        button.style.transform = 'scale(1) rotate(0deg)';
+      });
+    });
+
+    const colors = ['#ff00ff', '#00ffff', '#ffff00', '#ff00ff'];
+    let colorIndex = 0;
+    setInterval(() => {
+      document.body.style.boxShadow = `0 0 100px ${colors[colorIndex]} inset`;
+      colorIndex = (colorIndex + 1) % colors.length;
+    }, 1000);
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,143 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Shania's Door Control 🎸</title>
+  <style>
+    @keyframes sparkle {
+      0% { opacity: 0; }
+      50% { opacity: 1; }
+      100% { opacity: 0; }
+    }
+    body {
+      font-family: 'Comic Sans MS', cursive;
+      background-color: #FFB6C1;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-image: linear-gradient(45deg, #FFB6C1 25%, #FFC0CB 25%, #FFC0CB 50%, #FFB6C1 50%, #FFB6C1 75%, #FFC0CB 75%, #FFC0CB 100%);
+      background-size: 40px 40px;
+      animation: move 4s linear infinite;
+    }
+    @keyframes move {
+      0% {background-position: 0 0;}
+      100% {background-position: 40px 40px;}
+    }
+    .maincontainer {
+      background-color: rgba(255, 255, 255, 0.8);
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .header {
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 48px;
+      color: #FF69B4;
+    }
+    h1 {
+      color: #FF1493;
+      margin-top: 10px;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .primary-button, .secondary-button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .primary-button {
+      background-color: #FF69B4;
+      color: white;
+    }
+    .secondary-button {
+      background-color: #20B2AA;
+      color: white;
+    }
+    .primary-button:hover, .secondary-button:hover {
+      transform: scale(1.05);
+    }
+    #message {
+      font-size: 18px;
+      margin-top: 20px;
+      font-weight: bold;
+      color: #FF1493;
+    }
+    .sparkle {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+      background-color: #FFD700;
+      border-radius: 50%;
+      opacity: 0;
+      animation: sparkle 1.5s infinite;
+    }
+    .theme-name {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 12px;
+      color: #FF69B4;
+    }
+    .thumbs-up {
+      font-size: 24px;
+      margin: 0 5px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="theme-name">Theme: Shania Twain Country Rock 🤠🎸</div>
+    <div class="header">
+      <i class="fas fa-guitar"></i>
+      <h1>Shania's Door Control 🚪🎵</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">That Don't Impress Me Much (Unlock) 🔓</button>
+      <button id="lockbutton" class="primary-button">Man! I Feel Like a Lock 🔒</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">You're Still The E-Stop ⛔</button>
+      <button id="safebutton" class="secondary-button">From This Moment On (Safe) 🛡️</button>
+    </div>
+    <span class="thumbs-up">👍</span>
+    <span class="thumbs-up">👍</span>
+    <span class="thumbs-up">👍</span>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    function createSparkle() {
+      const sparkle = document.createElement('div');
+      sparkle.classList.add('sparkle');
+      sparkle.style.left = `${Math.random() * 100}%`;
+      sparkle.style.top = `${Math.random() * 100}%`;
+      document.querySelector('.maincontainer').appendChild(sparkle);
+      setTimeout(() => sparkle.remove(), 1500);
+    }
+    setInterval(createSparkle, 300);
+  </script>
+</body>
+
+</html>

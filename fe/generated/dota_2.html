@@ -1,0 +1,175 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Dota 2 Door Control 🎮</title>
+  <style>
+    body {
+      font-family: 'Radiance', Arial, sans-serif;
+      background-color: #1e2129;
+      color: #ffffff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🌋</text></svg>');
+      background-repeat: repeat;
+      animation: backgroundScroll 20s linear infinite;
+    }
+    
+    @keyframes backgroundScroll {
+      from {background-position: 0 0;}
+      to {background-position: 100% 100%;}
+    }
+
+    .maincontainer {
+      background-color: rgba(30, 33, 41, 0.9);
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+      max-width: 400px;
+      width: 90%;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+      color: #ff6b6b;
+    }
+
+    h1 {
+      font-size: 2em;
+      color: #ff6b6b;
+      text-shadow: 2px 2px 4px rgba(255, 0, 0, 0.5);
+    }
+
+    #message {
+      text-align: center;
+      margin-bottom: 20px;
+      font-style: italic;
+      color: #4ee44e;
+    }
+
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+
+    .primary-button, .secondary-button {
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .primary-button {
+      background-color: #ff6b6b;
+      color: white;
+    }
+
+    .secondary-button {
+      background-color: #4a4e57;
+      color: white;
+    }
+
+    .primary-button:hover, .secondary-button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+
+    #theme-name {
+      text-align: center;
+      font-size: 0.8em;
+      margin-top: 20px;
+      color: #888;
+    }
+
+    @keyframes shake {
+      0% { transform: translate(1px, 1px) rotate(0deg); }
+      10% { transform: translate(-1px, -2px) rotate(-1deg); }
+      20% { transform: translate(-3px, 0px) rotate(1deg); }
+      30% { transform: translate(3px, 2px) rotate(0deg); }
+      40% { transform: translate(1px, -1px) rotate(1deg); }
+      50% { transform: translate(-1px, 2px) rotate(-1deg); }
+      60% { transform: translate(-3px, 1px) rotate(0deg); }
+      70% { transform: translate(3px, 1px) rotate(-1deg); }
+      80% { transform: translate(-1px, -1px) rotate(1deg); }
+      90% { transform: translate(1px, 2px) rotate(0deg); }
+      100% { transform: translate(1px, -2px) rotate(-1deg); }
+    }
+
+    .shake {
+      animation: shake 0.5s;
+      animation-iteration-count: infinite;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>Aegis of the Immortal Door 🛡️</h1>
+    </div>
+    <p id="message">Waiting for your next move, carry! 🎮💦</p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">Smoke Gank 💨</button>
+      <button id="lockbutton" class="primary-button">Backdoor Protection 🚪</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">Pause Game ⏸️</button>
+      <button id="safebutton" class="secondary-button">Fountain Dive 🏊</button>
+    </div>
+    <div id="theme-name">Theme: Dota 2 (GG EZ Mid) 🏆</div>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+        button.classList.add('shake');
+        setTimeout(() => {
+          button.classList.remove('shake');
+        }, 500);
+      });
+    });
+
+    const messages = [
+      "Cyka Blyat! 🤬",
+      "Mid or feed! 😤",
+      "gg wp 👏",
+      "Report jungle LC! 🌲",
+      "Where are the wards?! 👀",
+      "I said gank! 😠",
+      "Noob team 🤦‍♂️",
+      "Ez game 😎",
+      "Need more farm 🚜",
+      "Rosh! Rosh! Rosh! 🐉"
+    ];
+
+    setInterval(() => {
+      const messageElement = document.getElementById('message');
+      messageElement.textContent = messages[Math.floor(Math.random() * messages.length)];
+    }, 5000);
+  </script>
+</body>
+
+</html>

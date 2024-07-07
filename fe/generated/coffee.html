@@ -1,0 +1,117 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>☕ Brew-tiful Door Control ☕</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #4a2c2a;
+      color: #f3e5ab;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .maincontainer {
+      background-color: #6f4e37;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+      text-align: center;
+      max-width: 90%;
+      width: 300px;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+      animation: steam 2s infinite;
+    }
+    @keyframes steam {
+      0% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-10px) rotate(5deg); }
+      100% { transform: translateY(0) rotate(0deg); }
+    }
+    h1 {
+      font-size: 1.5em;
+      margin: 0;
+    }
+    #message {
+      margin-bottom: 20px;
+      font-style: italic;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 15px;
+    }
+    .primary-button, .secondary-button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .primary-button {
+      background-color: #c0ffee;
+      color: #4a2c2a;
+    }
+    .secondary-button {
+      background-color: #f3e5ab;
+      color: #4a2c2a;
+    }
+    .primary-button:hover, .secondary-button:hover {
+      transform: scale(1.05);
+    }
+    #theme {
+      font-size: 0.8em;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-coffee"></i>
+      <h1>Brew-tiful Door Control</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">☕ Espresso Open</button>
+      <button id="lockbutton" class="primary-button">🔒 Latte Lock</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">⚠️ Bean Brake</button>
+      <button id="safebutton" class="secondary-button">🛡️ Mocha Mode</button>
+    </div>
+    <p id="theme">Theme: ☕ Coffee ☕</p>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    document.querySelectorAll('button').forEach(button => {
+      button.addEventListener('mouseenter', () => {
+        button.style.transform = 'scale(1.1) rotate(5deg)';
+      });
+      button.addEventListener('mouseleave', () => {
+        button.style.transform = 'scale(1) rotate(0deg)';
+      });
+    });
+  </script>
+</body>
+
+</html>

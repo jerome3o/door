@@ -1,0 +1,118 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Door Thingy 🚪</title>
+  <style>
+    body {
+      font-family: Comic Sans MS, cursive;
+      background: linear-gradient(to bottom, #ffffff, #cccccc);
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .maincontainer {
+      background-color: #f0f0f0;
+      border: 3px dashed #999;
+      border-radius: 15px;
+      padding: 20px;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+      color: #555;
+    }
+    h1 {
+      font-size: 2em;
+      color: #333;
+      margin: 0;
+    }
+    #message {
+      text-align: center;
+      margin-bottom: 20px;
+      font-style: italic;
+      color: #666;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+    button {
+      font-family: inherit;
+      font-size: 1em;
+      padding: 10px 20px;
+      border: 2px solid #999;
+      border-radius: 5px;
+      background-color: #fff;
+      cursor: pointer;
+      transition: transform 0.1s;
+    }
+    button:active {
+      transform: scale(0.95);
+    }
+    .primary-button {
+      background-color: #ddd;
+    }
+    .secondary-button {
+      background-color: #eee;
+      font-size: 0.9em;
+    }
+    #theme {
+      text-align: center;
+      font-size: 0.8em;
+      color: #999;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>Door Thingy 🚪</h1>
+    </div>
+    <p id="message">Meh... 😒</p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">Open... I guess 🔓</button>
+      <button id="lockbutton" class="primary-button">Close... whatever 🔒</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">Stop... or don't 🛑</button>
+      <button id="safebutton" class="secondary-button">Safe... if you care 🦺</button>
+    </div>
+    <div id="theme">Theme: Low effort (like, barely trying) 🥱</div>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    document.querySelectorAll('button').forEach(button => {
+      button.addEventListener('mouseover', () => {
+        button.style.transform = `rotate(${Math.random() * 5 - 2.5}deg)`;
+      });
+      button.addEventListener('mouseout', () => {
+        button.style.transform = 'rotate(0deg)';
+      });
+    });
+  </script>
+</body>
+
+</html>

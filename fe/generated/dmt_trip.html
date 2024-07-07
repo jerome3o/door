@@ -1,0 +1,148 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Interdimensional Portal Control 🌌</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(45deg, #FF00FF, #00FFFF, #FF00FF);
+      background-size: 400% 400%;
+      animation: gradientBG 15s ease infinite;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: #FFFFFF;
+    }
+
+    @keyframes gradientBG {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+
+    .maincontainer {
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+      text-align: center;
+      max-width: 90%;
+      width: 400px;
+    }
+
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .header i {
+      font-size: 2rem;
+      margin-right: 1rem;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% {transform: scale(1);}
+      50% {transform: scale(1.2);}
+      100% {transform: scale(1);}
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin: 0;
+    }
+
+    #message {
+      font-size: 1.2rem;
+      margin: 1rem 0;
+      min-height: 1.5em;
+    }
+
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin: 1rem 0;
+    }
+
+    button {
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: #FFFFFF;
+    }
+
+    .primary-button {
+      background: linear-gradient(45deg, #FF00FF, #00FFFF);
+      background-size: 200% 200%;
+      animation: gradientButton 5s ease infinite;
+    }
+
+    @keyframes gradientButton {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+
+    .secondary-button {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
+    }
+
+    #theme-name {
+      font-size: 0.8rem;
+      margin-top: 1rem;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-door-open"></i>
+      <h1>Interdimensional Portal Control 🌌</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">Open Reality 🚀</button>
+      <button id="lockbutton" class="primary-button">Close Vortex 🌀</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">Reality Break ⚠️</button>
+      <button id="safebutton" class="secondary-button">Stabilize Dimension 🛡️</button>
+    </div>
+    <div id="theme-name">Theme: DMT Trip 🍄</div>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    document.querySelectorAll('button').forEach(button => {
+      button.addEventListener('mouseenter', () => {
+        button.style.transform = `rotate(${Math.random() * 10 - 5}deg) scale(1.1)`;
+      });
+      button.addEventListener('mouseleave', () => {
+        button.style.transform = 'rotate(0deg) scale(1)';
+      });
+    });
+  </script>
+</body>
+
+</html>

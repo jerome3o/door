@@ -1,0 +1,118 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>M'Door Control 🎩</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive;
+      background-color: #ffd1dc;
+      color: #8b4513;
+      text-align: center;
+      margin: 0;
+      padding: 20px;
+    }
+    .maincontainer {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #fff;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+    }
+    h1 {
+      font-size: 2.5em;
+      margin: 0;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+    #message {
+      font-style: italic;
+      margin-bottom: 20px;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .primary-button, .secondary-button {
+      font-family: 'Comic Sans MS', cursive;
+      font-size: 1.2em;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .primary-button {
+      background-color: #ff69b4;
+      color: white;
+    }
+    .secondary-button {
+      background-color: #87ceeb;
+      color: #8b4513;
+    }
+    .primary-button:hover, .secondary-button:hover {
+      transform: scale(1.1);
+    }
+    .theme-name {
+      font-size: 0.8em;
+      color: #8b4513;
+      margin-top: 20px;
+    }
+    @keyframes tip {
+      0% { transform: rotate(0deg); }
+      25% { transform: rotate(-30deg); }
+      75% { transform: rotate(30deg); }
+      100% { transform: rotate(0deg); }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-hat-cowboy" style="animation: tip 2s infinite;"></i>
+      <h1>M'Door Control 🎩</h1>
+    </div>
+    <p id="message">How may I serve thee, fair maiden? 🌹</p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">Unshackle M'lady 🗝️</button>
+      <button id="lockbutton" class="primary-button">Secure M'lady's Chamber 🔒</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">Cease, Knave! 🛑</button>
+      <button id="safebutton" class="secondary-button">Safeguard M'mechanisms 🛡️</button>
+    </div>
+    <p class="theme-name">Theme: M'lady cringe whiteknight 😬</p>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    document.querySelectorAll('button').forEach(button => {
+      button.addEventListener('mouseover', () => {
+        button.innerHTML += ' *tips fedora*';
+      });
+      button.addEventListener('mouseout', () => {
+        button.innerHTML = button.innerHTML.replace(' *tips fedora*', '');
+      });
+    });
+  </script>
+</body>
+
+</html>

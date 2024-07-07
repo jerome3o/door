@@ -1,0 +1,148 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🗣️ Talking Door Control 🚪</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      transition: background-color 0.5s;
+    }
+    .maincontainer {
+      background-color: #ffffff;
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      max-width: 90%;
+      width: 400px;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 1rem;
+    }
+    .header i {
+      font-size: 2rem;
+      margin-right: 0.5rem;
+      color: #4a4a4a;
+    }
+    h1 {
+      font-size: 1.8rem;
+      color: #4a4a4a;
+      margin: 0;
+    }
+    #message {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      min-height: 1.5em;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 1rem;
+    }
+    button {
+      font-size: 1rem;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    button:active {
+      transform: translateY(-1px);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+    .primary-button {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .secondary-button {
+      background-color: #f44336;
+      color: white;
+    }
+    .theme-name {
+      font-size: 0.8rem;
+      color: #888;
+      margin-top: 1rem;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    .talking {
+      animation: pulse 1s infinite;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-microphone"></i>
+      <h1>🗣️ Talking Door Control 🚪</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">🔓 Speak to Unlock</button>
+      <button id="lockbutton" class="primary-button">🔒 Voice Lock</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">🛑 Vocal E-Stop</button>
+      <button id="safebutton" class="secondary-button">🔊 Safe Actuators</button>
+    </div>
+    <div class="theme-name">Theme: Speech Synthesis 🎙️</div>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    const synth = window.speechSynthesis;
+
+    function speak(text) {
+      const utterance = new SpeechSynthesisUtterance(text);
+      synth.speak(utterance);
+      document.body.classList.add('talking');
+      utterance.onend = () => document.body.classList.remove('talking');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      speak("Welcome to the door control app");
+    });
+
+    document.getElementById('unlockbutton').addEventListener('click', () => {
+      speak("Unlocking the door");
+    });
+
+    document.getElementById('lockbutton').addEventListener('click', () => {
+      speak("Locking the door");
+    });
+
+    document.getElementById('stopbutton').addEventListener('click', () => {
+      speak("Emergency stop activated");
+    });
+
+    document.getElementById('safebutton').addEventListener('click', () => {
+      speak("Safeguarding actuators");
+    });
+  </script>
+</body>
+
+</html>
