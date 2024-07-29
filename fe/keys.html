@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Key Management</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
+  <style>
+    :root {
+      --primary-color: #3498db;
+      --secondary-color: #2ecc71;
+      --background-color: #f5f7fa;
+      --text-color: #34495e;
+      --danger-color: #e74c3c;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--background-color);
+      color: var(--text-color);
+      line-height: 1.6;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+      background-color: white;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      text-align: center;
+      color: var(--primary-color);
+      margin-bottom: 30px;
+    }
+
+    .add-key-form {
+      display: flex;
+      margin-bottom: 20px;
+    }
+
+    #newKeyName {
+      flex-grow: 1;
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #ddd;
+      border-radius: 4px 0 0 4px;
+    }
+
+    button {
+      padding: 10px 15px;
+      font-size: 16px;
+      cursor: pointer;
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #2980b9;
+    }
+
+    #addKeyBtn {
+      border-radius: 0 4px 4px 0;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    li {
+      background-color: #f8f9fa;
+      margin-bottom: 10px;
+      padding: 15px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .key-info {
+      flex-grow: 1;
+      margin-right: 10px;
+    }
+
+    .key-name {
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+
+    .key-value {
+      font-family: monospace;
+      background-color: #e9ecef;
+      padding: 2px 4px;
+      border-radius: 3px;
+    }
+
+    .button-group button {
+      margin-left: 5px;
+    }
+
+    .copy-btn {
+      background-color: var(--secondary-color);
+    }
+
+    .copy-btn:hover {
+      background-color: #27ae60;
+    }
+
+    .delete-btn {
+      background-color: var(--danger-color);
+    }
+
+    .delete-btn:hover {
+      background-color: #c0392b;
+    }
+
+    @media (max-width: 600px) {
+      li {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .button-group {
+        margin-top: 10px;
+      }
+
+      .button-group button {
+        margin-left: 0;
+        margin-right: 5px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h1>Key Management</h1>
+    <div class="add-key-form">
+      <input type="text" id="newKeyName" placeholder="Enter new key name">
+      <button id="addKeyBtn" onclick="addKey()">Add Key</button>
+    </div>
+    <ul id="keyList"></ul>
+  </div>
+
+  <script>
+    const API_BASE_URL = '/api';
+
+    async function fetchKeys() {
+      const response = await fetch(`${API_BASE_URL}/keys`);
+      const keys = await response.json();
+      return keys;
+    }
+
+    async function renderKeys() {
+      const keyList = document.getElementById('keyList');
+      keyList.innerHTML = '';
+      const keys = await fetchKeys();
+      keys.forEach(([name, key]) => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+                    <div class="key-info">
+                        <span class="key-name">${name}</span>:
+                        <span class="key-value">${key}</span>
+                    </div>
+                    <div class="button-group">
+                        <button class="copy-btn" data-clipboard-text="${key}">Copy</button>
+                        <button class="delete-btn" onclick="deleteKey('${name}')">Delete</button>
+                    </div>
+                `;
+        keyList.appendChild(li);
+      });
+
+      // Initialize clipboard.js for copy buttons
+      new ClipboardJS('.copy-btn');
+    }
+
+    async function addKey() {
+      const nameInput = document.getElementById('newKeyName');
+      const name = nameInput.value.trim();
+      if (!name) return;
+
+      const response = await fetch(`${API_BASE_URL}/keys`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name })
+      });
+
+      const result = await response.json();
+      alert(`Key added: ${result.key}`);
+      nameInput.value = '';
+      renderKeys();
+    }
+
+    async function deleteKey(name) {
+      if (!confirm(`Are you sure you want to delete the key for "${name}"?`)) return;
+
+      const response = await fetch(`${API_BASE_URL}/keys`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name })
+      });
+
+      const result = await response.json();
+      alert(`Key deleted: ${result.key}`);
+      renderKeys();
+    }
+
+    // Initial render
+    renderKeys();
+  </script>
+</body>
+
+</html>

@@ -5,8 +5,10 @@ import os
 import random
 import re
 import requests
+import string
 from pathlib import Path
-from typing import Dict, Optional
+import secrets
+from typing import Dict, Optional, Annotated
 from urllib.parse import urlencode
 
 from fastapi import Cookie, Depends, FastAPI, Form, Request
@@ -26,18 +28,32 @@ from fastapi.staticfiles import StaticFiles
 from starlette.middleware.base import BaseHTTPMiddleware
 
 _NTFY_TOPIC = os.getenv("NTFY_TOPIC")
+FLATMATES: set[str] = set(os.environ["FLATMATES"].split(","))
 
 DEFAULT_DELAY = 17
 
 # Key management
-KEY_FILE = ".keys.json"
+SEED_KEY_FILE = ".keys.json"
+KEY_FILE = ".keys.db.json"
+
+
+def generate_key(length=32):
+    alphabet = string.ascii_letters + string.digits
+    return "".join(secrets.choice(alphabet) for _ in range(length))
 
 
 def load_keys() -> Dict[str, str]:
+    keys = {}
     if os.path.exists(KEY_FILE):
-        with open(KEY_FILE, "r") as f:
-            return json.load(f)
-    return {}
+        with open(KEY_FILE) as f:
+            keys = json.load(f)
+
+    if os.path.exists(SEED_KEY_FILE):
+        with open(SEED_KEY_FILE) as f:
+            seed_keys = json.load(f)
+        keys = {**keys, **seed_keys}
+
+    return keys
 
 
 KEYS = load_keys()
@@ -62,6 +78,14 @@ async def get_api_key(
     api_key_cookie: Optional[str] = Cookie(None, alias="api_key"),
 ) -> str:
     return api_key_header or api_key_query or api_key_cookie
+
+
+def is_flatmate(request: Request) -> str:
+    assert request.state.user in FLATMATES
+    return request.state.user
+
+
+Flatmate = Annotated[str, Depends(is_flatmate)]
 
 
 # Authentication middleware
@@ -461,6 +485,54 @@ def logs(request: Request):
     _logger.info(f"{request.state.user} requested logs")
     with open("door_access.log") as f:
         return HTMLResponse(content=f"<pre>{f.read()}</pre>")
+
+
+@app.get("/api/keys")
+def get_keys(
+    flatmate: Flatmate,
+):
+    return list(KEYS.items())
+
+
+class AddKeyParams(BaseModel):
+    name: str
+
+
+class DeleteKeyParams(BaseModel):
+    name: str
+
+
+@app.post("/api/keys")
+def add_keys(
+    AddKeyParams: AddKeyParams,
+    flatmate: Flatmate,
+):
+    key = generate_key()
+    KEYS[AddKeyParams.name] = key
+
+    # add to key file
+    with open(KEY_FILE, "w") as f:
+        json.dump(KEYS, f, indent=2)
+
+    _send_message(f"{flatmate} added key for {AddKeyParams.name}")
+
+    return {"message": "Key added", "key": key, "name": AddKeyParams.name}
+
+
+@app.delete("/api/keys")
+def delete_keys(
+    DeleteKeyParams: DeleteKeyParams,
+    flatmate: Flatmate,
+):
+    key = KEYS.pop(DeleteKeyParams.name, None)
+
+    # add to key file
+    with open(KEY_FILE, "w") as f:
+        json.dump(KEYS, f, indent=2)
+
+    _send_message(f"{flatmate} deleted key for {DeleteKeyParams.name}")
+
+    return {"message": "Key deleted", "key": key, "name": DeleteKeyParams.name}
 
 
 app.mount("/", StaticFiles(directory="fe"), name="fe")

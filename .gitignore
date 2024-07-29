@@ -2,4 +2,5 @@ venv/
 .env
 __pycache__/
 .keys.json
+.keys.db.json
 door_access.log
