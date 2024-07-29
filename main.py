@@ -13,6 +13,10 @@ from urllib.parse import urlencode
 
 from fastapi import Cookie, Depends, FastAPI, Form, Request
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, RedirectResponse
+
+# not found exception
+from fastapi.exceptions import HTTPException
+
 from pydantic import BaseModel
 
 if os.getenv("ENVIRONMENT") == "development":
@@ -81,7 +85,8 @@ async def get_api_key(
 
 
 def is_flatmate(request: Request) -> str:
-    assert request.state.user in FLATMATES
+    if request.state.user not in FLATMATES:
+        raise HTTPException(status_code=403, detail="Not authorized")
     return request.state.user
 
 
@@ -524,6 +529,10 @@ def delete_keys(
     DeleteKeyParams: DeleteKeyParams,
     flatmate: Flatmate,
 ):
+    # can't delete flatmate keys
+    if DeleteKeyParams.name in FLATMATES:
+        return {"message": "Cannot delete flatmate keys"}
+
     key = KEYS.pop(DeleteKeyParams.name, None)
 
     # add to key file
