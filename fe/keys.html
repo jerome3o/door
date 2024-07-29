@@ -100,6 +100,7 @@
       background-color: #e9ecef;
       padding: 2px 4px;
       border-radius: 3px;
+      word-break: break-all;
     }
 
     .button-group button {
@@ -153,6 +154,12 @@
   <script>
     const API_BASE_URL = '/api';
 
+    function createKeyUrl(key) {
+      const currentUrl = new URL(window.location.href);
+      currentUrl.searchParams.set('key', key);
+      return currentUrl.toString();
+    }
+
     async function fetchKeys() {
       const response = await fetch(`${API_BASE_URL}/keys`);
       const keys = await response.json();
@@ -164,14 +171,15 @@
       keyList.innerHTML = '';
       const keys = await fetchKeys();
       keys.forEach(([name, key]) => {
+        const keyUrl = createKeyUrl(key);
         const li = document.createElement('li');
         li.innerHTML = `
                     <div class="key-info">
                         <span class="key-name">${name}</span>:
-                        <span class="key-value">${key}</span>
+                        <span class="key-value">${keyUrl}</span>
                     </div>
                     <div class="button-group">
-                        <button class="copy-btn" data-clipboard-text="${key}">Copy</button>
+                        <button class="copy-btn" data-clipboard-text="${keyUrl}">Copy URL</button>
                         <button class="delete-btn" onclick="deleteKey('${name}')">Delete</button>
                     </div>
                 `;
@@ -194,7 +202,8 @@
       });
 
       const result = await response.json();
-      alert(`Key added: ${result.key}`);
+      const keyUrl = createKeyUrl(result.key);
+      alert(`Key added: ${keyUrl}`);
       nameInput.value = '';
       renderKeys();
     }
