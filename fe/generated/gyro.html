@@ -1,0 +1,212 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🌀 Gyroscopic Door Control 🚪</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f0f8ff;
+      overflow: hidden;
+    }
+    .maincontainer {
+      padding: 20px;
+      text-align: center;
+    }
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+      color: #4169e1;
+    }
+    h1 {
+      color: #4169e1;
+      margin: 0;
+    }
+    #message {
+      margin-bottom: 20px;
+      font-weight: bold;
+      color: #4169e1;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+    .primary-button, .secondary-button {
+      margin: 0 10px;
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .primary-button {
+      background-color: #4169e1;
+      color: white;
+    }
+    .secondary-button {
+      background-color: #f0f8ff;
+      color: #4169e1;
+      border: 1px solid #4169e1;
+    }
+    .primary-button:hover, .secondary-button:hover {
+      transform: scale(1.05);
+    }
+    #ball-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+    .ball {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background-color: #4169e1;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-sync-alt fa-spin"></i>
+      <h1>🌀 Gyroscopic Door Control 🚪</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">🔓 Spin to Unlock</button>
+      <button id="lockbutton" class="primary-button">🔒 Whirl to Lock</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">🛑 Gyro Stop</button>
+      <button id="safebutton" class="secondary-button">🔄 Stabilize Gyros</button>
+    </div>
+  </div>
+
+  <div id="ball-container"></div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    const ballContainer = document.getElementById('ball-container');
+    const balls = [];
+    const ballRadius = 10;
+    const numBalls = 20;
+
+    class Ball {
+      constructor(x, y) {
+        this.x = x;
+        this.y = y;
+        this.vx = 0;
+        this.vy = 0;
+        this.element = document.createElement('div');
+        this.element.className = 'ball';
+        ballContainer.appendChild(this.element);
+      }
+
+      update(ax, ay) {
+        this.vx += ax;
+        this.vy += ay;
+        this.x += this.vx;
+        this.y += this.vy;
+
+        // Boundary collision
+        if (this.x < ballRadius) {
+          this.x = ballRadius;
+          this.vx *= -0.8;
+        } else if (this.x > window.innerWidth - ballRadius) {
+          this.x = window.innerWidth - ballRadius;
+          this.vx *= -0.8;
+        }
+        if (this.y < ballRadius) {
+          this.y = ballRadius;
+          this.vy *= -0.8;
+        } else if (this.y > window.innerHeight - ballRadius) {
+          this.y = window.innerHeight - ballRadius;
+          this.vy *= -0.8;
+        }
+
+        this.element.style.left = `${this.x - ballRadius}px`;
+        this.element.style.top = `${this.y - ballRadius}px`;
+      }
+    }
+
+    function createBalls() {
+      for (let i = 0; i < numBalls; i++) {
+        const x = Math.random() * (window.innerWidth - 2 * ballRadius) + ballRadius;
+        const y = Math.random() * (window.innerHeight - 2 * ballRadius) + ballRadius;
+        balls.push(new Ball(x, y));
+      }
+    }
+
+    function checkCollisions() {
+      for (let i = 0; i < balls.length; i++) {
+        for (let j = i + 1; j < balls.length; j++) {
+          const dx = balls[j].x - balls[i].x;
+          const dy = balls[j].y - balls[i].y;
+          const distance = Math.sqrt(dx * dx + dy * dy);
+
+          if (distance < 2 * ballRadius) {
+            const angle = Math.atan2(dy, dx);
+            const sin = Math.sin(angle);
+            const cos = Math.cos(angle);
+
+            // Rotate velocities
+            const vx1 = balls[i].vx * cos + balls[i].vy * sin;
+            const vy1 = balls[i].vy * cos - balls[i].vx * sin;
+            const vx2 = balls[j].vx * cos + balls[j].vy * sin;
+            const vy2 = balls[j].vy * cos - balls[j].vx * sin;
+
+            // Swap velocities
+            balls[i].vx = vx2 * cos - vy1 * sin;
+            balls[i].vy = vy1 * cos + vx2 * sin;
+            balls[j].vx = vx1 * cos - vy2 * sin;
+            balls[j].vy = vy2 * cos + vx1 * sin;
+
+            // Move balls apart
+            const overlap = 2 * ballRadius - distance;
+            balls[i].x -= overlap / 2 * cos;
+            balls[i].y -= overlap / 2 * sin;
+            balls[j].x += overlap / 2 * cos;
+            balls[j].y += overlap / 2 * sin;
+          }
+        }
+      }
+    }
+
+    function handleOrientation(event) {
+      const ax = event.accelerationIncludingGravity.x * 0.1;
+      const ay = event.accelerationIncludingGravity.y * 0.1;
+
+      balls.forEach(ball => ball.update(ax, ay));
+      checkCollisions();
+    }
+
+    createBalls();
+
+    if (window.DeviceOrientationEvent) {
+      window.addEventListener('devicemotion', handleOrientation);
+    } else {
+      alert('Device orientation not supported on this device 😢');
+    }
+  </script>
+</body>
+
+</html>

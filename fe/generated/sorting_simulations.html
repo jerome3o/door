@@ -1,0 +1,206 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🔢 Sorting Door Control 📊</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .maincontainer {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+      color: #4CAF50;
+    }
+    h1 {
+      font-size: 1.5em;
+      color: #333;
+    }
+    #message {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: center;
+      width: 100%;
+      margin-top: 10px;
+    }
+    .primary-button, .secondary-button {
+      font-size: 1em;
+      padding: 10px 20px;
+      margin: 0 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.1s;
+    }
+    .primary-button {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .secondary-button {
+      background-color: #f44336;
+      color: white;
+    }
+    .primary-button:hover, .secondary-button:hover {
+      filter: brightness(110%);
+    }
+    .primary-button:active, .secondary-button:active {
+      transform: scale(0.98);
+    }
+    #sortingCanvas {
+      width: 100%;
+      height: 50vh;
+      background-color: #fff;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin-bottom: 20px;
+    }
+    #algoName {
+      font-size: 1.2em;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    @media (max-width: 600px) {
+      .button-container, .secondary-button-container {
+        flex-direction: column;
+      }
+      .primary-button, .secondary-button {
+        margin: 5px 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-sort-amount-down"></i>
+      <h1>🔢 Sorting Door Control 📊</h1>
+    </div>
+    <div id="algoName">🔄 Insertion Sort Algorithm 🔄</div>
+    <canvas id="sortingCanvas"></canvas>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">🔓 Unlock (Ascending)</button>
+      <button id="lockbutton" class="primary-button">🔒 Lock (Descending)</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">🛑 E-Stop (Pause Sort)</button>
+      <button id="safebutton" class="secondary-button">🔄 Safe Actuators (Shuffle)</button>
+    </div>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    const canvas = document.getElementById('sortingCanvas');
+    const ctx = canvas.getContext('2d');
+    let array = [];
+    let sorting = false;
+    let timeoutId = null;
+
+    function initArray() {
+      array = Array.from({length: 100}, (_, i) => i + 1);
+      shuffleArray(array);
+    }
+
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    function drawArray() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const barWidth = canvas.width / array.length;
+      array.forEach((value, index) => {
+        const barHeight = (value / array.length) * canvas.height;
+        ctx.fillStyle = 'rgb(0, 150, 200)';
+        ctx.fillRect(index * barWidth, canvas.height - barHeight, barWidth, barHeight);
+      });
+    }
+
+    async function insertionSort() {
+      for (let i = 1; i < array.length; i++) {
+        let j = i;
+        while (j > 0 && array[j - 1] > array[j]) {
+          [array[j - 1], array[j]] = [array[j], array[j - 1]];
+          j--;
+          drawArray();
+          await new Promise(resolve => setTimeout(resolve, 20));
+          if (!sorting) return;
+        }
+      }
+      sorting = false;
+    }
+
+    function resizeCanvas() {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+      drawArray();
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+
+    function startSorting() {
+      if (!sorting) {
+        sorting = true;
+        insertionSort();
+      }
+    }
+
+    function stopSorting() {
+      sorting = false;
+    }
+
+    function shuffleAndRestart() {
+      stopSorting();
+      initArray();
+      drawArray();
+      startSorting();
+    }
+
+    document.getElementById('stopbutton').addEventListener('click', stopSorting);
+    document.getElementById('safebutton').addEventListener('click', shuffleAndRestart);
+
+    initArray();
+    resizeCanvas();
+    startSorting();
+
+    // Restart sorting when it's finished
+    setInterval(() => {
+      if (!sorting) {
+        shuffleAndRestart();
+      }
+    }, 1000);
+  </script>
+</body>
+
+</html>

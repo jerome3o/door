@@ -1,0 +1,222 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🚪 3D Door Control Playground 🎮</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cannon.js/0.6.2/cannon.min.js"></script>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+    }
+    .maincontainer {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.7);
+      padding: 10px;
+      border-radius: 10px;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+    .header i {
+      font-size: 24px;
+      margin-right: 10px;
+    }
+    h1 {
+      font-size: 18px;
+      margin: 0;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 5px;
+    }
+    button {
+      font-size: 12px;
+      padding: 5px 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: transform 0.1s;
+    }
+    button:active {
+      transform: scale(0.95);
+    }
+    .primary-button {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .secondary-button {
+      background-color: #f44336;
+      color: white;
+    }
+    #message {
+      font-size: 14px;
+      margin-bottom: 5px;
+    }
+    #restartButton {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      z-index: 100;
+      font-size: 16px;
+      padding: 10px 20px;
+      background-color: #2196F3;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #themeInfo {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      z-index: 100;
+      font-size: 14px;
+      background: rgba(255, 255, 255, 0.7);
+      padding: 5px 10px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>🚪 3D Door Control 🎮</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">🔓 Unlock Portal</button>
+      <button id="lockbutton" class="primary-button">🔒 Lock Gateway</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">🛑 Dimension E-Stop</button>
+      <button id="safebutton" class="secondary-button">🛡️ Safe Portals</button>
+    </div>
+  </div>
+
+  <button id="restartButton">🔄 Restart Physics</button>
+
+  <div id="themeInfo">Theme: Three.js fun 🎉</div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    let scene, camera, renderer, world, shapes = [];
+
+    function init() {
+      // Three.js setup
+      scene = new THREE.Scene();
+      camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+      renderer = new THREE.WebGLRenderer();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      document.body.appendChild(renderer.domElement);
+
+      // Cannon.js setup
+      world = new CANNON.World();
+      world.gravity.set(0, -9.82, 0);
+
+      // Add lights
+      const ambientLight = new THREE.AmbientLight(0x404040);
+      scene.add(ambientLight);
+      const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+      directionalLight.position.set(1, 1, 1);
+      scene.add(directionalLight);
+
+      // Add floor
+      const floorShape = new CANNON.Plane();
+      const floorBody = new CANNON.Body({ mass: 0 });
+      floorBody.addShape(floorShape);
+      floorBody.quaternion.setFromAxisAngle(new CANNON.Vec3(1, 0, 0), -Math.PI / 2);
+      world.addBody(floorBody);
+
+      const floorGeometry = new THREE.PlaneGeometry(10, 10);
+      const floorMaterial = new THREE.MeshPhongMaterial({ color: 0xcccccc });
+      const floorMesh = new THREE.Mesh(floorGeometry, floorMaterial);
+      floorMesh.rotation.x = -Math.PI / 2;
+      scene.add(floorMesh);
+
+      camera.position.set(0, 5, 10);
+      camera.lookAt(0, 0, 0);
+
+      addShape();
+      animate();
+    }
+
+    function addShape() {
+      const shape = new CANNON.Box(new CANNON.Vec3(0.5, 0.5, 0.5));
+      const body = new CANNON.Body({
+        mass: 1,
+        position: new CANNON.Vec3(Math.random() * 2 - 1, 5, Math.random() * 2 - 1),
+      });
+      body.addShape(shape);
+      world.addBody(body);
+
+      const geometry = new THREE.BoxGeometry(1, 1, 1);
+      const material = new THREE.MeshPhongMaterial({ color: Math.random() * 0xffffff });
+      const mesh = new THREE.Mesh(geometry, material);
+      scene.add(mesh);
+
+      shapes.push({ body, mesh });
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      world.step(1 / 60);
+
+      shapes.forEach(({ body, mesh }) => {
+        mesh.position.copy(body.position);
+        mesh.quaternion.copy(body.quaternion);
+      });
+
+      if (Math.random() < 0.02) addShape();
+
+      renderer.render(scene, camera);
+    }
+
+    function onTouchMove(event) {
+      const touch = event.touches[0];
+      const x = (touch.clientX / window.innerWidth) * 2 - 1;
+      const y = -(touch.clientY / window.innerHeight) * 2 + 1;
+      camera.position.x = x * 5;
+      camera.position.y = 5 + y * 2;
+      camera.lookAt(0, 0, 0);
+    }
+
+    function restart() {
+      shapes.forEach(({ body, mesh }) => {
+        world.remove(body);
+        scene.remove(mesh);
+      });
+      shapes = [];
+    }
+
+    window.addEventListener('touchmove', onTouchMove);
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    document.getElementById('restartButton').addEventListener('click', restart);
+
+    init();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,203 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🚪🔒 Quick Sort Door Control 🔓🚪</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    .maincontainer {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 48px;
+      color: #4a4a4a;
+    }
+    h1 {
+      margin: 10px 0;
+      color: #333;
+    }
+    #message {
+      font-size: 18px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .primary-button, .secondary-button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s, transform 0.1s;
+    }
+    .primary-button {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .primary-button:hover {
+      background-color: #45a049;
+    }
+    .secondary-button {
+      background-color: #f44336;
+      color: white;
+    }
+    .secondary-button:hover {
+      background-color: #da190b;
+    }
+    .primary-button:active, .secondary-button:active {
+      transform: scale(0.95);
+    }
+    #sorting-container {
+      width: 100%;
+      height: 50vh;
+      margin-bottom: 20px;
+    }
+    #algo-name {
+      text-align: center;
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>🚀 Quick Sort Door Control 🚀</h1>
+    </div>
+    <div id="algo-name">QuickSort in Action! 🔢↔️</div>
+    <canvas id="sorting-container"></canvas>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">🔓 Unlock (Partition)</button>
+      <button id="lockbutton" class="primary-button">🔒 Lock (Merge)</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">⛔ E-Stop (Halt Sort)</button>
+      <button id="safebutton" class="secondary-button">🛡️ Safe Actuators (Reset Array)</button>
+    </div>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    const canvas = document.getElementById('sorting-container');
+    const ctx = canvas.getContext('2d');
+    let array = [];
+    let sorting = false;
+
+    function initArray() {
+      array = Array.from({length: 100}, (_, i) => i + 1);
+      shuffleArray(array);
+    }
+
+    function shuffleArray(array) {
+      for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+    }
+
+    function drawArray() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const barWidth = canvas.width / array.length;
+      array.forEach((value, index) => {
+        const hue = (value / array.length) * 360;
+        ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;
+        ctx.fillRect(index * barWidth, canvas.height - (value / array.length) * canvas.height, barWidth, (value / array.length) * canvas.height);
+      });
+    }
+
+    async function quickSort(arr, start, end) {
+      if (start >= end) return;
+      let index = await partition(arr, start, end);
+      await Promise.all([
+        quickSort(arr, start, index - 1),
+        quickSort(arr, index + 1, end)
+      ]);
+    }
+
+    async function partition(arr, start, end) {
+      const pivotValue = arr[end];
+      let pivotIndex = start;
+      for (let i = start; i < end; i++) {
+        if (arr[i] < pivotValue) {
+          await swap(arr, i, pivotIndex);
+          pivotIndex++;
+        }
+      }
+      await swap(arr, pivotIndex, end);
+      return pivotIndex;
+    }
+
+    async function swap(arr, a, b) {
+      if (!sorting) return;
+      [arr[a], arr[b]] = [arr[b], arr[a]];
+      drawArray();
+      await new Promise(resolve => setTimeout(resolve, 20));
+    }
+
+    function startSorting() {
+      if (sorting) return;
+      sorting = true;
+      quickSort(array, 0, array.length - 1).then(() => {
+        sorting = false;
+        setTimeout(() => {
+          initArray();
+          startSorting();
+        }, 1000);
+      });
+    }
+
+    function stopSorting() {
+      sorting = false;
+    }
+
+    function resizeCanvas() {
+      canvas.width = canvas.clientWidth;
+      canvas.height = canvas.clientHeight;
+      drawArray();
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    document.getElementById('stopbutton').addEventListener('click', stopSorting);
+    document.getElementById('safebutton').addEventListener('click', () => {
+      stopSorting();
+      initArray();
+      drawArray();
+    });
+
+    initArray();
+    resizeCanvas();
+    startSorting();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,133 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🚪🔐 Tricky Door Unlocker 🔓🎭</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+    .maincontainer {
+      background-color: #ffffff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
+      position: relative;
+    }
+    .header {
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 48px;
+      color: #4CAF50;
+    }
+    h1 {
+      color: #333;
+      margin-top: 10px;
+    }
+    #message {
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+    .primary-button, .secondary-button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+    .primary-button {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .secondary-button {
+      background-color: #f44336;
+      color: white;
+    }
+    #unlockbutton {
+      animation: moveAround 5s infinite;
+    }
+    @keyframes moveAround {
+      0%, 100% { transform: translate(0, 0); }
+      25% { transform: translate(50px, 50px); }
+      50% { transform: translate(-50px, 50px); }
+      75% { transform: translate(-50px, -50px); }
+    }
+    #lockbutton:hover {
+      transform: scale(1.1);
+    }
+    .theme-name {
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+      font-size: 12px;
+      color: #888;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>🚪 Tricky Door Unlocker 🔓</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">🏃‍♂️ Catch me if you can! 🏃‍♀️</button>
+      <button id="lockbutton" class="primary-button">🔒 Seal the Deal 🔒</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">🛑 Freeze! 🛑</button>
+      <button id="safebutton" class="secondary-button">🛡️ Shield Activated 🛡️</button>
+    </div>
+    <div class="theme-name">Theme: Moving Buttons 🔄</div>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    document.getElementById('unlockbutton').addEventListener('mouseover', function() {
+      this.style.animation = 'none';
+      const x = Math.random() * (window.innerWidth - this.offsetWidth);
+      const y = Math.random() * (window.innerHeight - this.offsetHeight);
+      this.style.position = 'fixed';
+      this.style.left = `${x}px`;
+      this.style.top = `${y}px`;
+    });
+    
+    document.getElementById('unlockbutton').addEventListener('click', function() {
+      alert('Nice try! 😜 But you need to be quicker than that!');
+    });
+    
+    let clickCount = 0;
+    document.getElementById('lockbutton').addEventListener('click', function() {
+      clickCount++;
+      if(clickCount >= 5) {
+        alert('Wow, you really want to lock this door! 🔒 Go ahead, it\'s all yours!');
+      } else {
+        this.style.transform = `scale(${1 + (clickCount * 0.1)})`;
+      }
+    });
+  </script>
+</body>
+
+</html>

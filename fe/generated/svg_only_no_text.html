@@ -1,0 +1,153 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Door Control</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .maincontainer {
+      background-color: #ffffff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .header svg {
+      width: 40px;
+      height: 40px;
+      margin-right: 10px;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    button {
+      background-color: #4CAF50;
+      border: none;
+      color: white;
+      padding: 15px 32px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: background-color 0.3s;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .secondary-button {
+      background-color: #f44336;
+    }
+    .secondary-button:hover {
+      background-color: #da190b;
+    }
+    #message {
+      margin: 20px 0;
+      font-size: 18px;
+    }
+    .theme-name {
+      font-size: 12px;
+      color: #888;
+      margin-top: 20px;
+    }
+    @keyframes wiggle {
+      0% { transform: rotate(0deg); }
+      25% { transform: rotate(5deg); }
+      50% { transform: rotate(0deg); }
+      75% { transform: rotate(-5deg); }
+      100% { transform: rotate(0deg); }
+    }
+    .header svg:hover {
+      animation: wiggle 0.5s ease-in-out infinite;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <svg viewBox="0 0 24 24" width="40" height="40">
+        <path fill="currentColor" d="M12 17a2 2 0 0 0 2-2 2 2 0 0 0-2-2 2 2 0 0 0-2 2 2 2 0 0 0 2 2m6-9a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V10a2 2 0 0 1 2-2h1V6a5 5 0 0 1 5-5 5 5 0 0 1 5 5v2h1m-6-5a3 3 0 0 0-3 3v2h6V6a3 3 0 0 0-3-3z"/>
+      </svg>
+      <svg viewBox="0 0 100 30" width="200" height="60">
+        <path d="M10 10 h20 v20 h-20 z" fill="none" stroke="black" stroke-width="2"/>
+        <path d="M40 10 h20 v20 h-20 v-10 h20" fill="none" stroke="black" stroke-width="2"/>
+        <path d="M70 10 v20 M70 20 h20" fill="none" stroke="black" stroke-width="2"/>
+        <path d="M100 10 v20 M100 10 h20 v10 h-20" fill="none" stroke="black" stroke-width="2"/>
+      </svg>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">
+        <svg viewBox="0 0 100 30" width="100" height="30">
+          <path d="M10 10 v20 M10 20 h20" fill="none" stroke="white" stroke-width="2"/>
+          <path d="M40 30 v-20 l10 10 l10 -10 v20" fill="none" stroke="white" stroke-width="2"/>
+          <path d="M70 10 h20 v20 h-20 z M70 20 h20" fill="none" stroke="white" stroke-width="2"/>
+          <path d="M100 10 v20 M100 10 h20 v10 h-20" fill="none" stroke="white" stroke-width="2"/>
+        </svg>
+      </button>
+      <button id="lockbutton" class="primary-button">
+        <svg viewBox="0 0 100 30" width="100" height="30">
+          <path d="M10 10 h20 v20 h-20 z" fill="none" stroke="white" stroke-width="2"/>
+          <path d="M40 30 v-20 M40 30 h20" fill="none" stroke="white" stroke-width="2"/>
+          <path d="M70 10 v20 M70 20 h20" fill="none" stroke="white" stroke-width="2"/>
+          <path d="M100 10 h20 v20 h-20 z M100 20 h20" fill="none" stroke="white" stroke-width="2"/>
+        </svg>
+      </button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">
+        <svg viewBox="0 0 100 30" width="100" height="30">
+          <path d="M10 10 h20 v20 h-20 z" fill="none" stroke="white" stroke-width="2"/>
+          <path d="M40 10 v20 M40 10 h20 v10 h-20" fill="none" stroke="white" stroke-width="2"/>
+          <path d="M70 30 v-20 M70 30 h20" fill="none" stroke="white" stroke-width="2"/>
+          <path d="M100 10 h20 v20 h-20 v-10 h20" fill="none" stroke="white" stroke-width="2"/>
+        </svg>
+      </button>
+      <button id="safebutton" class="secondary-button">
+        <svg viewBox="0 0 100 30" width="100" height="30">
+          <path d="M10 10 h20 v20 h-20 v-10 h20" fill="none" stroke="white" stroke-width="2"/>
+          <path d="M40 30 l10 -20 l10 20" fill="none" stroke="white" stroke-width="2"/>
+          <path d="M70 10 v20 M70 10 h20 v10 h-20" fill="none" stroke="white" stroke-width="2"/>
+          <path d="M100 10 h20 v20 h-20 z" fill="none" stroke="white" stroke-width="2"/>
+        </svg>
+      </button>
+    </div>
+    <div class="theme-name">Theme: SVG Only No Text 🎨</div>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    document.querySelector('.header svg').addEventListener('click', function() {
+      this.style.animation = 'wiggle 0.5s ease-in-out';
+      setTimeout(() => {
+        this.style.animation = '';
+      }, 500);
+    });
+  </script>
+</body>
+
+</html>

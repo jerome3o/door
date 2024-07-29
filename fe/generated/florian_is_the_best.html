@@ -1,0 +1,158 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🌟 Florian's Fantastic Door Control 🌟</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    .maincontainer {
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      max-width: 90%;
+      width: 400px;
+      position: relative;
+      overflow: hidden;
+    }
+    .header {
+      margin-bottom: 20px;
+      position: relative;
+    }
+    .header::after {
+      content: '🌈 Florian is the best! 🌈';
+      position: absolute;
+      bottom: -20px;
+      left: 0;
+      right: 0;
+      font-size: 0.8em;
+      color: #ff6b6b;
+    }
+    h1 {
+      color: #ff6b6b;
+      margin: 0;
+      font-size: 2.5em;
+    }
+    .fas {
+      font-size: 3em;
+      color: #ff6b6b;
+      margin-bottom: 10px;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+    #message {
+      font-size: 1.2em;
+      margin: 20px 0;
+      color: #4a4a4a;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    .primary-button, .secondary-button {
+      padding: 15px 30px;
+      font-size: 1.2em;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      outline: none;
+    }
+    .primary-button {
+      background-color: #ff6b6b;
+      color: white;
+    }
+    .primary-button:hover {
+      background-color: #ff4757;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+    }
+    .secondary-button {
+      background-color: #ff9ff3;
+      color: #4a4a4a;
+    }
+    .secondary-button:hover {
+      background-color: #f368e0;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(255, 159, 243, 0.4);
+    }
+    @media (max-width: 480px) {
+      .maincontainer {
+        padding: 20px;
+      }
+      h1 {
+        font-size: 2em;
+      }
+      .primary-button, .secondary-button {
+        padding: 10px 20px;
+        font-size: 1em;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>🚪 Florian's Fantastic Door 🚪</h1>
+    </div>
+    <p id="message">🌟 Welcome to the best door control ever! 🌟</p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">🔓 Unlock Florian's Magic</button>
+      <button id="lockbutton" class="primary-button">🔒 Lock Florian's Treasure</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">🛑 Florian's Emergency Stop</button>
+      <button id="safebutton" class="secondary-button">🛡️ Florian's Safety Shield</button>
+    </div>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(button => {
+      button.addEventListener('mouseover', () => {
+        button.style.animation = 'pulse 0.5s';
+      });
+      button.addEventListener('animationend', () => {
+        button.style.animation = '';
+      });
+    });
+
+    const message = document.getElementById('message');
+    const phrases = [
+      "🌟 Florian's door is the coolest! 🌟",
+      "🎉 Welcome to Florian's magical realm! 🎉",
+      "🚀 Florian's door: Out of this world! 🚀",
+      "🌈 Florian makes everything better! 🌈",
+      "🦄 Florian's door: Unicorn approved! 🦄"
+    ];
+    setInterval(() => {
+      message.textContent = phrases[Math.floor(Math.random() * phrases.length)];
+    }, 5000);
+  </script>
+</body>
+
+</html>

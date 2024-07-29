@@ -1,0 +1,238 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🏙️ Urban Door Control 🚪</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #1a1a1a;
+      color: #fff;
+      overflow: hidden;
+    }
+    .maincontainer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      padding: 20px;
+      box-sizing: border-box;
+      z-index: 10;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+    .header i {
+      font-size: 24px;
+      margin-right: 10px;
+    }
+    h1 {
+      font-size: 24px;
+      margin: 0;
+    }
+    #message {
+      text-align: center;
+      margin-bottom: 10px;
+      min-height: 20px;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+    button:active {
+      transform: scale(0.95);
+      box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+    }
+    .primary-button {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .secondary-button {
+      background-color: #f44336;
+      color: white;
+    }
+    #cityCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+    .theme-name {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      font-size: 12px;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="cityCanvas"></canvas>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>🏙️ Urban Door Control 🚪</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">🔓 Open City Gates</button>
+      <button id="lockbutton" class="primary-button">🔒 Secure Skyscraper</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">🚨 Metro Emergency</button>
+      <button id="safebutton" class="secondary-button">🏢 Building Safety</button>
+    </div>
+  </div>
+  <div class="theme-name">Theme: City Life 🌆</div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    const canvas = document.getElementById('cityCanvas');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const buildings = [];
+    const colors = ['#FFD700', '#FF6347', '#4682B4', '#2E8B57', '#DB7093'];
+    const windowShapes = ['rect', 'circle', 'triangle'];
+    const roofStyles = ['flat', 'pointed', 'domed'];
+
+    function drawBuilding(x, y, width, height, color, windowShape, roofStyle, nChimneys, hasPlants, seed) {
+      ctx.fillStyle = color;
+      ctx.fillRect(x, y - height, width, height);
+
+      // Windows
+      const windowSize = 10;
+      const windowGap = 15;
+      ctx.fillStyle = '#FFFF00';
+      for (let i = x + 10; i < x + width - 10; i += windowGap) {
+        for (let j = y - height + 20; j < y - 20; j += windowGap) {
+          if (Math.random() > 0.3) {
+            if (windowShape === 'rect') {
+              ctx.fillRect(i, j, windowSize, windowSize);
+            } else if (windowShape === 'circle') {
+              ctx.beginPath();
+              ctx.arc(i + windowSize/2, j + windowSize/2, windowSize/2, 0, Math.PI * 2);
+              ctx.fill();
+            } else if (windowShape === 'triangle') {
+              ctx.beginPath();
+              ctx.moveTo(i, j + windowSize);
+              ctx.lineTo(i + windowSize/2, j);
+              ctx.lineTo(i + windowSize, j + windowSize);
+              ctx.closePath();
+              ctx.fill();
+            }
+          }
+        }
+      }
+
+      // Roof
+      ctx.fillStyle = '#A0522D';
+      if (roofStyle === 'flat') {
+        ctx.fillRect(x, y - height - 10, width, 10);
+      } else if (roofStyle === 'pointed') {
+        ctx.beginPath();
+        ctx.moveTo(x, y - height);
+        ctx.lineTo(x + width/2, y - height - 30);
+        ctx.lineTo(x + width, y - height);
+        ctx.closePath();
+        ctx.fill();
+      } else if (roofStyle === 'domed') {
+        ctx.beginPath();
+        ctx.arc(x + width/2, y - height, width/2, Math.PI, 0);
+        ctx.fill();
+      }
+
+      // Chimneys
+      for (let i = 0; i < nChimneys; i++) {
+        ctx.fillRect(x + (width / (nChimneys + 1)) * (i + 1), y - height - 20, 10, 20);
+      }
+
+      // Plants
+      if (hasPlants) {
+        ctx.fillStyle = '#228B22';
+        for (let i = 0; i < 5; i++) {
+          ctx.beginPath();
+          ctx.arc(x + Math.random() * width, y - height - 5, 5, 0, Math.PI * 2);
+          ctx.fill();
+        }
+      }
+    }
+
+    function generateBuildings() {
+      for (let i = 0; i < 20; i++) {
+        buildings.push({
+          x: i * 200,
+          width: 100 + Math.random() * 100,
+          height: 100 + Math.random() * 300,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          windowShape: windowShapes[Math.floor(Math.random() * windowShapes.length)],
+          roofStyle: roofStyles[Math.floor(Math.random() * roofStyles.length)],
+          nChimneys: Math.floor(Math.random() * 3),
+          hasPlants: Math.random() > 0.5,
+          seed: Math.random()
+        });
+      }
+    }
+
+    function drawCity() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // Draw sky gradient
+      const gradient = ctx.createLinearGradient(0, 0, 0, canvas.height);
+      gradient.addColorStop(0, '#1a1a1a');
+      gradient.addColorStop(1, '#4b6cb7');
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Draw buildings
+      buildings.forEach(building => {
+        drawBuilding(building.x, canvas.height, building.width, building.height, building.color, building.windowShape, building.roofStyle, building.nChimneys, building.hasPlants, building.seed);
+      });
+
+      // Move buildings
+      buildings.forEach(building => {
+        building.x -= 1;
+        if (building.x + building.width < 0) {
+          building.x = canvas.width;
+        }
+      });
+
+      requestAnimationFrame(drawCity);
+    }
+
+    generateBuildings();
+    drawCity();
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
+
+</html>

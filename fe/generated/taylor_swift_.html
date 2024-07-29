@@ -1,0 +1,151 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Swiftie Door Control 🎤</title>
+  <style>
+    body {
+      font-family: 'Helvetica Neue', sans-serif;
+      background: linear-gradient(135deg, #ff69b4, #ff1493);
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+    .maincontainer {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 2rem;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      backdrop-filter: blur(10px);
+      max-width: 90%;
+      width: 400px;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 2rem;
+    }
+    .header i {
+      font-size: 2.5rem;
+      margin-right: 1rem;
+      animation: shake 0.5s ease infinite;
+    }
+    @keyframes shake {
+      0%, 100% { transform: rotate(0); }
+      25% { transform: rotate(15deg); }
+      75% { transform: rotate(-15deg); }
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin: 0;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    }
+    #message {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      min-height: 1.5em;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 1rem;
+    }
+    button {
+      font-size: 1.2rem;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .primary-button {
+      background-color: #fff;
+      color: #ff1493;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .primary-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+    }
+    .secondary-button {
+      background-color: rgba(255, 255, 255, 0.2);
+      color: #fff;
+    }
+    .secondary-button:hover {
+      background-color: rgba(255, 255, 255, 0.3);
+    }
+    #unlockbutton::before { content: '🎵 '; }
+    #lockbutton::before { content: '🔐 '; }
+    #stopbutton::before { content: '🛑 '; }
+    #safebutton::before { content: '🛡️ '; }
+    .theme-name {
+      font-size: 0.9rem;
+      margin-top: 2rem;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>Swiftie Door Control</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">Shake It Off</button>
+      <button id="lockbutton" class="primary-button">You Belong With Me</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">Look What You Made Me Do</button>
+      <button id="safebutton" class="secondary-button">Safe & Sound</button>
+    </div>
+    <div class="theme-name">🎸 Theme: Taylor Swift 🎸</div>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+        button.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+          button.style.transform = 'scale(1)';
+        }, 100);
+      });
+    });
+
+    const mainContainer = document.querySelector('.maincontainer');
+    mainContainer.addEventListener('mousemove', (e) => {
+      const { left, top, width, height } = mainContainer.getBoundingClientRect();
+      const x = (e.clientX - left) / width;
+      const y = (e.clientY - top) / height;
+      
+      mainContainer.style.boxShadow = `
+        ${x * 20 - 10}px ${y * 20 - 10}px 30px rgba(255, 20, 147, 0.3),
+        ${-x * 20 + 10}px ${-y * 20 + 10}px 30px rgba(255, 105, 180, 0.3)
+      `;
+    });
+
+    mainContainer.addEventListener('mouseleave', () => {
+      mainContainer.style.boxShadow = '0 8px 32px rgba(0, 0, 0, 0.1)';
+    });
+  </script>
+</body>
+
+</html>

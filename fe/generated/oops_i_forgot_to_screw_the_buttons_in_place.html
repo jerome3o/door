@@ -1,0 +1,200 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Oops! Loose Door Control 🔧</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    .maincontainer {
+      background-color: #ffffff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      width: 90%;
+      max-width: 400px;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+      color: #ff6b6b;
+    }
+    h1 {
+      color: #ff6b6b;
+      margin: 0;
+    }
+    #message {
+      margin-bottom: 20px;
+      font-weight: bold;
+      color: #4a4a4a;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+    button {
+      font-size: 1em;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: absolute;
+    }
+    .primary-button {
+      background-color: #4ecdc4;
+      color: white;
+    }
+    .secondary-button {
+      background-color: #ff6b6b;
+      color: white;
+    }
+    button:hover {
+      transform: scale(1.05);
+    }
+    .theme-name {
+      font-style: italic;
+      color: #888;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-tools"></i>
+      <h1>Loose Door Control 🚪</h1>
+    </div>
+    <p id="message">Oops! The buttons are falling! 😱</p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">Unscrew 🔓</button>
+      <button id="lockbutton" class="primary-button">Lock (if you can) 🔒</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">E-Stumble 🛑</button>
+      <button id="safebutton" class="secondary-button">Safe... maybe? 🤔</button>
+    </div>
+    <p class="theme-name">Theme: Oops I forgot to screw the buttons in place</p>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    // Approach:
+    // 1. Define button properties (width, height, initial positions)
+    // 2. Create physics simulation (gravity, collision detection)
+    // 3. Animate buttons falling and colliding
+    // 4. Ensure buttons don't overlap and are always visible
+    // 5. Stop animation when buttons reach the bottom
+
+    // Button properties
+    const buttonWidth = 150;
+    const buttonHeight = 40;
+    const buttons = document.querySelectorAll('button');
+
+    // Physics constants
+    const gravity = 0.5;
+    const bounce = 0.7;
+    const friction = 0.99;
+
+    // Helper Functions
+
+    // Generate random number within a range
+    function random(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    // Check collision between two buttons
+    function checkCollision(btn1, btn2) {
+      return (
+        btn1.x < btn2.x + buttonWidth &&
+        btn1.x + buttonWidth > btn2.x &&
+        btn1.y < btn2.y + buttonHeight &&
+        btn1.y + buttonHeight > btn2.y
+      );
+    }
+
+    // Update button position
+    function updatePosition(btn) {
+      btn.vy += gravity;
+      btn.vx *= friction;
+      btn.x += btn.vx;
+      btn.y += btn.vy;
+
+      if (btn.y + buttonHeight > window.innerHeight) {
+        btn.y = window.innerHeight - buttonHeight;
+        btn.vy *= -bounce;
+      }
+
+      if (btn.x + buttonWidth > window.innerWidth) {
+        btn.x = window.innerWidth - buttonWidth;
+        btn.vx *= -1;
+      } else if (btn.x < 0) {
+        btn.x = 0;
+        btn.vx *= -1;
+      }
+    }
+
+    // Simulation Logic
+    let animationId;
+
+    function startSimulation() {
+      buttons.forEach((btn, index) => {
+        btn.style.position = 'absolute';
+        btn.x = random(0, window.innerWidth - buttonWidth);
+        btn.y = window.innerHeight / 2 - buttonHeight * index;
+        btn.vx = random(-2, 2);
+        btn.vy = 0;
+      });
+
+      function animate() {
+        buttons.forEach(updatePosition);
+
+        for (let i = 0; i < buttons.length; i++) {
+          for (let j = i + 1; j < buttons.length; j++) {
+            if (checkCollision(buttons[i], buttons[j])) {
+              buttons[j].y = buttons[i].y - buttonHeight - 1;
+              buttons[j].vy = buttons[i].vy;
+            }
+          }
+        }
+
+        buttons.forEach(btn => {
+          btn.style.left = `${btn.x}px`;
+          btn.style.top = `${btn.y}px`;
+        });
+
+        animationId = requestAnimationFrame(animate);
+      }
+
+      animate();
+    }
+
+    // Start simulation after a short delay
+    setTimeout(startSimulation, 1000);
+  </script>
+</body>
+
+</html>

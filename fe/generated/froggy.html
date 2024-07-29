@@ -1,0 +1,221 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🐸 Froggy Door Hop 🚪</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #8FBC8F;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    .maincontainer {
+      background-color: #4CAF50;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      max-width: 90%;
+      width: 350px;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+      color: #FFD700;
+    }
+    h1 {
+      color: #FFFFFF;
+      margin: 0;
+    }
+    #message {
+      background-color: #FFFFFF;
+      border-radius: 10px;
+      padding: 10px;
+      margin-bottom: 20px;
+      min-height: 20px;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+    .primary-button, .secondary-button {
+      background-color: #FFD700;
+      border: none;
+      color: #4CAF50;
+      padding: 10px 20px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      margin: 4px 2px;
+      cursor: pointer;
+      border-radius: 12px;
+      transition: all 0.3s;
+    }
+    .primary-button:hover, .secondary-button:hover {
+      background-color: #FFA500;
+      transform: scale(1.05);
+    }
+    .secondary-button {
+      background-color: #FF6347;
+      color: #FFFFFF;
+    }
+    #game-container {
+      width: 300px;
+      height: 400px;
+      background-color: #000000;
+      position: relative;
+      overflow: hidden;
+      margin: 20px auto;
+    }
+    #frog {
+      width: 30px;
+      height: 30px;
+      background-color: #00FF00;
+      position: absolute;
+      bottom: 0;
+      left: 135px;
+      transition: top 0.2s;
+    }
+    .car {
+      width: 60px;
+      height: 30px;
+      background-color: #FF0000;
+      position: absolute;
+      transition: left 5s linear;
+    }
+    #game-message {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(255, 255, 255, 0.8);
+      padding: 10px;
+      border-radius: 5px;
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-frog"></i>
+      <h1>🐸 Froggy Door Hop 🚪</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">🐸 Hop In</button>
+      <button id="lockbutton" class="primary-button">🔒 Lily Pad Lock</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">🛑 Frog Stop</button>
+      <button id="safebutton" class="secondary-button">🦺 Safe Froggy</button>
+    </div>
+    <div id="game-container">
+      <div id="frog"></div>
+      <div id="game-message"></div>
+    </div>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    const frog = document.getElementById('frog');
+    const gameContainer = document.getElementById('game-container');
+    const gameMessage = document.getElementById('game-message');
+    let frogPosition = 0;
+    let cars = [];
+    let gameOver = false;
+
+    function createCar() {
+      const car = document.createElement('div');
+      car.className = 'car';
+      car.style.top = `${Math.floor(Math.random() * 10) * 40}px`;
+      car.style.left = '300px';
+      gameContainer.appendChild(car);
+      cars.push(car);
+
+      car.animate([
+        { left: '300px' },
+        { left: '-60px' }
+      ], {
+        duration: 5000,
+        iterations: 1
+      }).onfinish = () => {
+        gameContainer.removeChild(car);
+        cars = cars.filter(c => c !== car);
+      };
+    }
+
+    function checkCollision() {
+      const frogRect = frog.getBoundingClientRect();
+      for (const car of cars) {
+        const carRect = car.getBoundingClientRect();
+        if (
+          frogRect.left < carRect.right &&
+          frogRect.right > carRect.left &&
+          frogRect.top < carRect.bottom &&
+          frogRect.bottom > carRect.top
+        ) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    function showMessage(message) {
+      gameMessage.textContent = message;
+      gameMessage.style.display = 'block';
+      setTimeout(() => {
+        gameMessage.style.display = 'none';
+      }, 2000);
+    }
+
+    function resetGame() {
+      frogPosition = 0;
+      frog.style.top = '370px';
+      cars.forEach(car => gameContainer.removeChild(car));
+      cars = [];
+      gameOver = false;
+    }
+
+    gameContainer.addEventListener('click', () => {
+      if (gameOver) return;
+
+      frogPosition++;
+      frog.style.top = `${370 - frogPosition * 40}px`;
+
+      if (checkCollision()) {
+        showMessage('Game Over! 🐸💥');
+        gameOver = true;
+        setTimeout(resetGame, 2000);
+      } else if (frogPosition === 10) {
+        showMessage('Nice, you win! 🎉🐸');
+        gameOver = true;
+        setTimeout(resetGame, 2000);
+      }
+    });
+
+    setInterval(createCar, 2000);
+  </script>
+</body>
+
+</html>

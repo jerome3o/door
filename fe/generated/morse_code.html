@@ -1,0 +1,123 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Morse Code Door Control 📡</title>
+  <style>
+    body {
+      font-family: 'Courier New', monospace;
+      background-color: #000;
+      color: #00ff00;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+    .maincontainer {
+      background-color: #111;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px #00ff00;
+      text-align: center;
+      max-width: 90%;
+      width: 300px;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 24px;
+      margin-right: 10px;
+    }
+    h1 {
+      font-size: 24px;
+      margin: 0;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    button {
+      background-color: #222;
+      color: #00ff00;
+      border: 2px solid #00ff00;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-family: 'Courier New', monospace;
+    }
+    button:hover {
+      background-color: #00ff00;
+      color: #000;
+    }
+    #message {
+      height: 20px;
+      margin: 10px 0;
+    }
+    .morse-animation {
+      animation: morse 1.5s infinite;
+    }
+    @keyframes morse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-broadcast-tower morse-animation"></i>
+      <h1>Morse Code Door Control 📡</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">• • − (U)</button>
+      <button id="lockbutton" class="primary-button">• − • • (L)</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">• • • (S)</button>
+      <button id="safebutton" class="secondary-button">• • • − (V)</button>
+    </div>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    function animateMorse(element, morseCode) {
+      element.textContent = '';
+      let index = 0;
+      const interval = setInterval(() => {
+        if (index < morseCode.length) {
+          element.textContent += morseCode[index];
+          index++;
+        } else {
+          clearInterval(interval);
+        }
+      }, 300);
+    }
+
+    document.querySelectorAll('button').forEach(button => {
+      button.addEventListener('mouseover', () => {
+        const morseCode = button.textContent.match(/\(([^)]+)\)/)[1];
+        animateMorse(document.getElementById('message'), morseCode);
+      });
+      button.addEventListener('mouseout', () => {
+        document.getElementById('message').textContent = '';
+      });
+    });
+  </script>
+</body>
+
+</html>

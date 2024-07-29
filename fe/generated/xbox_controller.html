@@ -1,0 +1,129 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🎮 Xbox Door Control 🚪</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #107C10;
+      color: #FFFFFF;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+    .maincontainer {
+      background-color: #0E0E0E;
+      border-radius: 20px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+    }
+    h1 {
+      font-size: 2em;
+      margin: 0;
+    }
+    #message {
+      font-size: 1.2em;
+      margin: 20px 0;
+    }
+    .button-container {
+      display: grid;
+      grid-template-areas:
+        ". y ."
+        "x . b"
+        ". a .";
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+    .primary-button {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      border: none;
+      font-size: 1.5em;
+      color: #FFFFFF;
+      cursor: pointer;
+      transition: transform 0.1s;
+    }
+    .primary-button:active {
+      transform: scale(0.95);
+    }
+    #unlockbutton { grid-area: y; background-color: #FFFF00; color: #000000; }
+    #lockbutton { grid-area: b; background-color: #FF0000; }
+    #stopbutton { grid-area: x; background-color: #0000FF; }
+    #safebutton { grid-area: a; background-color: #00FF00; color: #000000; }
+    .button-instruction {
+      font-size: 0.8em;
+      margin-top: 5px;
+    }
+    .theme-name {
+      font-size: 0.8em;
+      margin-top: 20px;
+      opacity: 0.7;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-gamepad"></i>
+      <h1>🎮 Xbox Door Control 🚪</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">Y</button>
+      <button id="lockbutton" class="primary-button">B</button>
+      <button id="stopbutton" class="primary-button">X</button>
+      <button id="safebutton" class="primary-button">A</button>
+    </div>
+    <div>
+      <p class="button-instruction">Y (Yellow) - Unlock the door 🔓</p>
+      <p class="button-instruction">B (Red) - Lock the door 🔒</p>
+      <p class="button-instruction">X (Blue) - Emergency Stop ⚠️</p>
+      <p class="button-instruction">A (Green) - Safe Actuators 🛡️</p>
+    </div>
+    <p class="theme-name">Theme: Xbox Controller 🎮</p>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    document.querySelectorAll('.primary-button').forEach(button => {
+      button.addEventListener('mouseover', () => {
+        button.classList.add('pulse');
+      });
+      button.addEventListener('mouseout', () => {
+        button.classList.remove('pulse');
+      });
+    });
+  </script>
+</body>
+
+</html>
