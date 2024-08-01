@@ -156,6 +156,7 @@
 
     function createKeyUrl(key) {
       const currentUrl = new URL(window.location.href);
+      currentUrl.pathname = "/"
       currentUrl.searchParams.set('key', key);
       return currentUrl.toString();
     }
