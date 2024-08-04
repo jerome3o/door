@@ -8,7 +8,7 @@ import requests
 import string
 from pathlib import Path
 import secrets
-from typing import Dict, Optional, Annotated
+from typing import Dict, Annotated, Optional
 from urllib.parse import urlencode
 
 from fastapi import Cookie, Depends, FastAPI, Form, Request
@@ -78,10 +78,9 @@ api_key_query = APIKeyQuery(name="key", auto_error=False)
 # Authentication function
 async def get_api_key(
     api_key_header: str = Depends(api_key_header),
-    api_key_query: str = Depends(api_key_query),
     api_key_cookie: Optional[str] = Cookie(None, alias="api_key"),
 ) -> str:
-    return api_key_header or api_key_query or api_key_cookie
+    return api_key_header or api_key_cookie
 
 
 def is_flatmate(request: Request) -> str:
@@ -99,12 +98,47 @@ class AuthMiddleware(BaseHTTPMiddleware):
         # List of paths that don't require authentication
         open_paths = ["/login", "/auth", "/favicon.ico"]
 
+        query_param_key = request.query_params.get("key")
+        if query_param_key:
+            user = next(
+                (name for name, k in KEYS.items() if k == query_param_key), None
+            )
+            if user:
+                # Set cookie to expire in 10 years
+                expiration = datetime.utcnow() + timedelta(days=365 * 10)
+
+                # Preserve other query parameters if any
+                query_params = dict(request.query_params)
+                query_params.pop("key", None)
+                if query_params:
+                    query_string = f"?{urlencode(query_params)}"
+                else:
+                    query_string = ""
+
+                response = RedirectResponse(
+                    # redirect to the same page to avoid the key being in the
+                    #   url bar
+                    url=f"{request.url.path}{query_string}",
+                    status_code=303,
+                )  # 303 See Other
+                response.set_cookie(
+                    key="api_key",
+                    value=query_param_key,
+                    expires=expiration.strftime("%a, %d %b %Y %H:%M:%S GMT"),
+                    httponly=True,
+                    samesite="Lax",
+                )
+                return response
+
+            else:
+                _failed_login(request, query_param_key)
+                return RedirectResponse(url="/login?error=invalid_key", status_code=303)
+
         if request.url.path in open_paths:
             return await call_next(request)
 
         api_key = await get_api_key(
             api_key_header=request.headers.get("X-API-Key"),
-            api_key_query=request.query_params.get("key"),
             api_key_cookie=request.cookies.get("api_key"),
         )
 
@@ -310,7 +344,7 @@ async def login_page(error: str = None):
 
 # Authentication route
 @app.post("/auth")
-async def auth(key: str = Form(...)):
+async def auth(request: Request, key: str = Form(...)):
     user = next((name for name, k in KEYS.items() if k == key), None)
     if user:
         # Set cookie to expire in 10 years
@@ -325,8 +359,8 @@ async def auth(key: str = Form(...)):
         )
         _send_message(f"{user} logged in via /auth")
         return response
-    else:
-        _send_message(f"Someone tried to access with an invalid key: {key}")
+
+    _failed_login(request, key)
     return RedirectResponse(
         url="/login?error=invalid_key", status_code=303
     )  # 303 See Other
@@ -362,7 +396,7 @@ def _send_message(msg: str):
 
 def _failed_login(request, key):
     _send_message(
-        f"Someone tried to access with an invalid key: {key},"
+        f"Someone tried to access with an invalid key: {key}, "
         f"IP: {request.client.host}"
     )
 
@@ -430,33 +464,7 @@ async def accept_theme(accept_theme: AcceptThemeParams, request: Request):
 
 
 @app.get("/")
-async def index(request: Request, key: Optional[str] = None):
-    response = None
-    if key:
-        user = next((name for name, k in KEYS.items() if k == key), None)
-        if user:
-            # Set cookie to expire in 10 years
-            expiration = datetime.utcnow() + timedelta(days=365 * 10)
-            response = RedirectResponse(url="/", status_code=303)  # 303 See Other
-            response.set_cookie(
-                key="api_key",
-                value=key,
-                expires=expiration.strftime("%a, %d %b %Y %H:%M:%S GMT"),
-                httponly=True,
-                samesite="Lax",
-            )
-
-            # Preserve other query parameters if any
-            query_params = dict(request.query_params)
-            query_params.pop("key", None)
-            if query_params:
-                response = RedirectResponse(
-                    url=f"/?{urlencode(query_params)}", status_code=303
-                )
-            return response
-        else:
-            _failed_login(request, key)
-
+async def index():
     # If no key or invalid key, just return the random frontend
     return HTMLResponse(content=get_random_frontend())
 
