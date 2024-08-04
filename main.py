@@ -325,6 +325,8 @@ async def auth(key: str = Form(...)):
         )
         _send_message(f"{user} logged in via /auth")
         return response
+    else:
+        _send_message(f"Someone tried to access with an invalid key: {key}")
     return RedirectResponse(
         url="/login?error=invalid_key", status_code=303
     )  # 303 See Other
@@ -356,6 +358,13 @@ def _send_message(msg: str):
         )
     except Exception as e:
         _logger.error(f"Failed to send ntfy message: {e}")
+
+
+def _failed_login(request, key):
+    _send_message(
+        f"Someone tried to access with an invalid key: {key},"
+        f"IP: {request.client.host}"
+    )
 
 
 @app.post("/api/unlock")
@@ -444,9 +453,9 @@ async def index(request: Request, key: Optional[str] = None):
                 response = RedirectResponse(
                     url=f"/?{urlencode(query_params)}", status_code=303
                 )
-
-            _send_message(f"{user} logged in via key in URL")
             return response
+        else:
+            _failed_login(request, key)
 
     # If no key or invalid key, just return the random frontend
     return HTMLResponse(content=get_random_frontend())
