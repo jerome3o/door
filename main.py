@@ -192,9 +192,14 @@ When generating the html claude should:
 * Respond with only the html content, enclosed in triple backticks
 * Use animations and javascript where appropriate to make the website interesting
 * Ensure the websites are mobile friendly
-* Ensure that any existing id's and scripts loaded are still functional
+* Ensure that any existing scripts are loaded and still functional, specifically id "message"
 * Make sure to add the theme name to the door controller website so the user knows what the theme is
 * Try and incorporate the theme in the text on the buttons and title
+* You don't need to keep the buttons, if it makes sense in the theme to activate the door in a different way, feel free to change it
+* Try and use canvases, javascript, or other interactive elements to make the website more interesting
+* You are welcome (and encouraged) to use three.js and other libraries to make the website more interesting (make sure to pull in the libraries you need)
+* Try an go above and beyond to make the website interesting, fun, novel, and engaging using your knowledge of web development and design
+* If you use a non-standard way of doing something, please explain somewhere visible on the page
 """
 
 _MESSAGE_TEMPLATE = """\
@@ -204,6 +209,13 @@ Please generate html for this website:
 ```
 
 With the following theme: {theme}
+{additional_information}
+
+Please write up how you are going to use cool animations and javascript to make the website \
+interesting, describe what packages you will use, describe the tricky parts and how you will solve \
+them, and describe how you will make the website mobile friendly.
+
+Then write out the full html file enclosed in triple backticks.
 """
 
 _ADDITIONAL_INFO_TEMPLATE = """
@@ -224,12 +236,17 @@ def generate_theme(theme_spec: Theme) -> str:
     theme = theme_spec.theme
     additional_information = theme_spec.additional_information
 
-    content = _MESSAGE_TEMPLATE.format(html=EXAMPLE_HTML, theme=theme)
-
+    additional_content = ""
     if additional_information != "":
-        content += _ADDITIONAL_INFO_TEMPLATE.format(
+        additional_content += _ADDITIONAL_INFO_TEMPLATE.format(
             additional_information=additional_information
         )
+
+    content = _MESSAGE_TEMPLATE.format(
+        html=EXAMPLE_HTML,
+        theme=theme,
+        additional_information=additional_content,
+    )
 
     response = client.messages.create(
         max_tokens=4096,

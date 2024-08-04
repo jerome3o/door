@@ -17,16 +17,16 @@
     </div>
     <p id="message"></p>
     <div class="button-container">
-      <button id="unlockbutton" class="primary-button">Unlock</button>
-      <button id="lockbutton" class="primary-button">Lock</button>
+      <button onclick="unlock()" class="primary-button">Unlock</button>
+      <button onclick="lock()" class="primary-button">Lock</button>
     </div>
     <div class="secondary-button-container">
-      <button id="stopbutton" class="secondary-button">E-Stop</button>
-      <button id="safebutton" class="secondary-button">Safe Actuators</button>
+      <button onclick="stop()" class="secondary-button">E-Stop</button>
+      <button onclick="safe()" class="secondary-button">Safe Actuators</button>
     </div>
   </div>
 
-  <script type="module" src="/index.js"></script>
+  <script src="/index.js"></script>
 </body>
 
 </html>
