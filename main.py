@@ -83,13 +83,25 @@ async def get_api_key(
     return api_key_header or api_key_cookie
 
 
-def is_flatmate(request: Request) -> str:
-    if request.state.user not in FLATMATES:
+def get_user(request: Request) -> str:
+    user = request.state.user
+
+    if user is None:
+        raise HTTPException(status_code=401, detail="Authentication required")
+
+    return user
+
+
+User = Annotated[str, Depends(get_user)]
+
+
+def get_flatmate(user: User) -> str:
+    if user not in FLATMATES:
         raise HTTPException(status_code=403, detail="Not authorized")
-    return request.state.user
+    return user
 
 
-Flatmate = Annotated[str, Depends(is_flatmate)]
+Flatmate = Annotated[str, Depends(get_flatmate)]
 
 
 # Authentication middleware
@@ -402,38 +414,37 @@ def _failed_login(request, key):
 
 
 @app.post("/api/unlock")
-async def unlock_door(request: Request):
+async def unlock_door(user: User):
     await door_controller.unlock()
-    _send_message(f"{request.state.user} called unlock")
+    _send_message(f"{user} called unlock")
 
     return {"message": "Unlocking door"}
 
 
 @app.post("/api/lock")
-async def lock_door(request: Request):
+async def lock_door(user: User):
     await door_controller.lock()
-    _send_message(f"{request.state.user} called lock")
+    _send_message(f"{user} called lock")
     return {"message": "Locking door"}
 
 
 @app.post("/api/safe")
-async def safe(request: Request):
+async def safe(user: User):
     await door_controller.safe()
-    _send_message(f"{request.state.user} called safe")
+    _send_message(f"{user} called safe")
     return {"message": "Safing Actuators"}
 
 
 @app.post("/api/stop")
-async def stop(request: Request):
+async def stop(user: User):
     await door_controller.stop()
-    _send_message(f"{request.state.user} called stop")
+    _send_message(f"{user} called stop")
     return {"message": "Stopping actuators"}
 
 
 @app.post("/api/generate_theme")
-async def generate_theme_endpoint(theme: Theme, request: Request):
-
-    _logger.info(f"{request.state.user} requested theme: {theme.theme}")
+async def generate_theme_endpoint(theme: Theme, user: User):
+    _logger.info(f"{user} requested theme: {theme.theme}")
     theme_path = generate_theme(theme)
     return {"message": "Theme generated", "theme_path": theme_path}
 
@@ -443,8 +454,8 @@ class AcceptThemeParams(BaseModel):
 
 
 @app.post("/api/accept_theme")
-async def accept_theme(accept_theme: AcceptThemeParams, request: Request):
-    _logger.info(f"{request.state.user} accepted theme: {accept_theme.theme_path}")
+async def accept_theme(accept_theme: AcceptThemeParams, user: User):
+    _logger.info(f"{user} accepted theme: {accept_theme.theme_path}")
     theme_path = accept_theme.theme_path
     # move from ./fe/staging/{theme_path} to ./fe/generated/{theme_path}
     old_path = Path(f"./fe/staging/{theme_path}")
@@ -503,8 +514,8 @@ async def favicon():
 
 
 @app.get("/logs")
-def logs(request: Request):
-    _logger.info(f"{request.state.user} requested logs")
+def logs(user: User):
+    _logger.info(f"{user} requested logs")
     with open("door_access.log") as f:
         return HTMLResponse(content=f"<pre>{f.read()}</pre>")
 
