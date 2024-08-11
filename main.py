@@ -30,7 +30,6 @@ else:
     import RPi.GPIO as gpio
 from datetime import datetime, timedelta
 
-from anthropic import Anthropic
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import APIKeyHeader, APIKeyQuery
 from fastapi.staticfiles import StaticFiles
@@ -279,10 +278,10 @@ class Theme(BaseModel):
     additional_information: str
 
 
-client = Anthropic()
+client = anthropic.AsyncAnthropic()
 
 
-def generate_theme(theme_spec: Theme) -> str:
+async def generate_theme(theme_spec: Theme) -> str:
     theme = theme_spec.theme
     additional_information = theme_spec.additional_information
 
@@ -298,7 +297,7 @@ def generate_theme(theme_spec: Theme) -> str:
         additional_information=additional_content,
     )
 
-    response = client.messages.create(
+    response = await client.messages.create(
         max_tokens=8000,
         system=_SYSTEM_PROMPT,
         model="claude-3-5-sonnet-20240620",
@@ -516,7 +515,7 @@ async def stop(user: User):
 @app.post("/api/generate_theme")
 async def generate_theme_endpoint(theme: Theme, user: User):
     _logger.info(f"{user} requested theme: {theme.theme}")
-    theme_path = generate_theme(theme)
+    theme_path = await generate_theme(theme)
     return {"message": "Theme generated", "theme_path": theme_path}
 
 
