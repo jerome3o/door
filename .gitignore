@@ -4,3 +4,4 @@ __pycache__/
 .keys.json
 .keys.db.json
 door_access.log
+.prompts.json

@@ -17,6 +17,59 @@ from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, Redirect
 # not found exception
 from fastapi.exceptions import HTTPException
 
+from elevenlabs import play
+from elevenlabs.client import ElevenLabs
+import os
+import asyncio
+import anthropic
+
+ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY")
+
+with open('.prompts.json', 'r') as file:
+    user_prompts = json.load(file)
+
+elevenlabs_client = ElevenLabs(
+    api_key=ELEVENLABS_API_KEY,
+)
+
+async def generate_welcome(prompt):
+    print("generate prompt")
+    anthropic_client = anthropic.AsyncAnthropic()
+    message = await anthropic_client.messages.create(
+        model="claude-3-opus-20240229",
+        max_tokens=300,
+        temperature=0.7,
+        system=(
+            "This is a conversation between a user and a welcoming bot/assistant, "
+            "the assistant creates welcome messages for people to the Tower House "
+            "Apartment in London. The welcome messages should be at maximum 1 sentence long."
+        ),
+        messages=[
+            {"role": "user", "content": f"Write welcome for: {prompt}"}
+        ]
+    )
+
+    msg = message.content[0].text
+    print(f"generated prompt: {msg}")
+    return msg
+
+async def generate_and_play_audio(text, voice="Chris", model="eleven_multilingual_v2"):
+    print("generating audio")
+    audio = elevenlabs_client.generate(
+        text=text,
+        voice=voice,
+        model=model
+    )
+
+    print("playing audio")
+    play(audio)
+    print("finished playing audio")
+
+async def poem_to_speech(prompt):
+    welcome = await generate_welcome(prompt)
+    asyncio.create_task(generate_and_play_audio(welcome))
+    # return poem
+
 from pydantic import BaseModel
 
 if os.getenv("ENVIRONMENT") == "development":
@@ -249,7 +302,7 @@ def generate_theme(theme_spec: Theme) -> str:
     )
 
     response = client.messages.create(
-        max_tokens=4096,
+        max_tokens=8000,
         system=_SYSTEM_PROMPT,
         model="claude-3-5-sonnet-20240620",
         messages=[{"role": "user", "content": content}],
@@ -434,6 +487,10 @@ def _failed_login(request, key):
 async def unlock_door(user: User):
     await door_controller.unlock()
     _send_message(f"{user} called unlock")
+
+    # Generate and play welcome poem asynchronously
+    if user in user_prompts:
+        asyncio.create_task(poem_to_speech(user_prompts[user]))
 
     return {"message": "Unlocking door"}
 
