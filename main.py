@@ -22,18 +22,43 @@ from elevenlabs.client import ElevenLabs
 import os
 import asyncio
 import anthropic
+from pydantic import BaseModel
+
+if os.getenv("ENVIRONMENT") == "development":
+    from mockgpio import gpio
+else:
+    import RPi.GPIO as gpio
+from datetime import datetime, timedelta
+
+from anthropic import Anthropic
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.security import APIKeyHeader, APIKeyQuery
+from fastapi.staticfiles import StaticFiles
+from starlette.middleware.base import BaseHTTPMiddleware
+
+
+_NTFY_TOPIC = os.getenv("NTFY_TOPIC")
+FLATMATES: set[str] = set(os.environ["FLATMATES"].split(","))
+
+DEFAULT_DELAY = 17
+
+# Key management
+SEED_KEY_FILE = ".keys.json"
+KEY_FILE = ".keys.db.json"
 
 ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY")
 
-with open('.prompts.json', 'r') as file:
-    user_prompts = json.load(file)
+try:
+    with open('.prompts.json', 'r') as file:
+        user_prompts = json.load(file)
+except FileNotFoundError:
+    user_prompts = {}
 
 elevenlabs_client = ElevenLabs(
     api_key=ELEVENLABS_API_KEY,
 )
 
 async def generate_welcome(prompt):
-    print("generate prompt")
     anthropic_client = anthropic.AsyncAnthropic()
     message = await anthropic_client.messages.create(
         model="claude-3-opus-20240229",
@@ -50,49 +75,21 @@ async def generate_welcome(prompt):
     )
 
     msg = message.content[0].text
-    print(f"generated prompt: {msg}")
     return msg
 
 async def generate_and_play_audio(text, voice="Chris", model="eleven_multilingual_v2"):
-    print("generating audio")
     audio = elevenlabs_client.generate(
         text=text,
         voice=voice,
         model=model
     )
 
-    print("playing audio")
     play(audio)
-    print("finished playing audio")
 
 async def poem_to_speech(prompt):
     welcome = await generate_welcome(prompt)
     asyncio.create_task(generate_and_play_audio(welcome))
     # return poem
-
-from pydantic import BaseModel
-
-if os.getenv("ENVIRONMENT") == "development":
-    from mockgpio import gpio
-else:
-    import RPi.GPIO as gpio
-from datetime import datetime, timedelta
-
-from anthropic import Anthropic
-from fastapi.middleware.cors import CORSMiddleware
-from fastapi.security import APIKeyHeader, APIKeyQuery
-from fastapi.staticfiles import StaticFiles
-from starlette.middleware.base import BaseHTTPMiddleware
-
-_NTFY_TOPIC = os.getenv("NTFY_TOPIC")
-FLATMATES: set[str] = set(os.environ["FLATMATES"].split(","))
-
-DEFAULT_DELAY = 17
-
-# Key management
-SEED_KEY_FILE = ".keys.json"
-KEY_FILE = ".keys.db.json"
-
 
 def generate_key(length=32):
     alphabet = string.ascii_letters + string.digits
