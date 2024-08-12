@@ -10,6 +10,7 @@ from pathlib import Path
 import secrets
 from typing import Dict, Annotated, Optional
 from urllib.parse import urlencode
+from datetime import datetime, time
 
 from fastapi import Cookie, Depends, FastAPI, Form, Request
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, RedirectResponse
@@ -49,9 +50,9 @@ ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY")
 
 try:
     with open('.prompts.json', 'r') as file:
-        user_prompts = json.load(file)
+        _USER_WELCOME_PROMPTS: dict[str, list[str]] = json.load(file)
 except FileNotFoundError:
-    user_prompts = {}
+    _USER_WELCOME_PROMPTS = {}
 
 elevenlabs_client = ElevenLabs(
     api_key=ELEVENLABS_API_KEY,
@@ -85,10 +86,10 @@ async def generate_and_play_audio(text, voice="Chris", model="eleven_multilingua
 
     play(audio)
 
-async def poem_to_speech(prompt):
-    # welcome = await generate_welcome(prompt)
-    asyncio.create_task(generate_and_play_audio(prompt))
-    # return poem
+async def poem_to_speech(prompt: str, delay: float=1.0):
+    await asyncio.sleep(delay)
+    welcome = await generate_welcome(prompt)
+    asyncio.create_task(generate_and_play_audio(welcome))
 
 def generate_key(length=32):
     alphabet = string.ascii_letters + string.digits
@@ -480,8 +481,14 @@ async def unlock_door(user: User):
     _send_message(f"{user} called unlock")
 
     # Generate and play welcome poem asynchronously
-    if user in user_prompts:
-        asyncio.create_task(poem_to_speech(f"Welcome {user_prompts[user]}"))
+    if user in _USER_WELCOME_PROMPTS:
+        current_time = datetime.now().time()
+        if time(9, 0) <= current_time < time(22, 0):
+            # If a string, set that as the prompt, if a list, choose a random one
+            prompt = _USER_WELCOME_PROMPTS[user]
+            if isinstance(prompt, list):
+                prompt = random.choice(prompt)
+            asyncio.create_task(poem_to_speech(prompt, delay=5))
 
     return {"message": "Unlocking door"}
 
@@ -531,7 +538,7 @@ async def accept_theme(accept_theme: AcceptThemeParams, user: User):
 
     i = 0
     while new_path.exists():
-        i + 1
+        i = i + 1
         new_path = new_path.with_name(f"{new_path.stem}_{i}{new_path.suffix}")
 
     old_path.rename(new_path)
