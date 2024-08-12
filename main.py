@@ -244,11 +244,8 @@ When generating the html claude should:
 * Ensure that any existing scripts are loaded and still functional, specifically id "message"
 * Make sure to add the theme name to the door controller website so the user knows what the theme is
 * Try and incorporate the theme in the text on the buttons and title
-* You don't need to keep the buttons, if it makes sense in the theme to activate the door in a different way, feel free to change it
 * Try and use canvases, javascript, or other interactive elements to make the website more interesting
-* You are welcome (and encouraged) to use three.js and other libraries to make the website more interesting (make sure to pull in the libraries you need)
 * Try an go above and beyond to make the website interesting, fun, novel, and engaging using your knowledge of web development and design
-* If you use a non-standard way of doing something, please explain somewhere visible on the page
 """
 
 _MESSAGE_TEMPLATE = """\
@@ -260,9 +257,7 @@ Please generate html for this website:
 With the following theme: {theme}
 {additional_information}
 
-Please write up how you are going to use cool animations and javascript to make the website \
-interesting, describe what packages you will use, describe the tricky parts and how you will solve \
-them, and describe how you will make the website mobile friendly.
+If it seems appropriate, try and use javascript and canvases (or three.js etc) to make it interesting
 
 Then write out the full html file enclosed in triple backticks.
 """
@@ -298,7 +293,7 @@ async def generate_theme(theme_spec: Theme) -> str:
     )
 
     response = await client.messages.create(
-        max_tokens=8000,
+        max_tokens=4096,
         system=_SYSTEM_PROMPT,
         model="claude-3-5-sonnet-20240620",
         messages=[{"role": "user", "content": content}],
