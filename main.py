@@ -86,8 +86,8 @@ async def generate_and_play_audio(text, voice="Chris", model="eleven_multilingua
     play(audio)
 
 async def poem_to_speech(prompt):
-    welcome = await generate_welcome(prompt)
-    asyncio.create_task(generate_and_play_audio(welcome))
+    # welcome = await generate_welcome(prompt)
+    asyncio.create_task(generate_and_play_audio(prompt))
     # return poem
 
 def generate_key(length=32):
@@ -481,7 +481,7 @@ async def unlock_door(user: User):
 
     # Generate and play welcome poem asynchronously
     if user in user_prompts:
-        asyncio.create_task(poem_to_speech(user_prompts[user]))
+        asyncio.create_task(poem_to_speech(f"Welcome {user_prompts[user]}"))
 
     return {"message": "Unlocking door"}
 
