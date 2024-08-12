@@ -1,0 +1,125 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Stinky Armpit Door Control 💪💨</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #ffedd5;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: #4a3200;
+    }
+    .maincontainer {
+      background-color: #fff5e6;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      max-width: 90%;
+      width: 350px;
+      text-align: center;
+    }
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2.5em;
+      margin-right: 10px;
+      color: #8b6914;
+    }
+    h1 {
+      font-size: 1.8em;
+      margin: 0;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    .primary-button, .secondary-button {
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .primary-button {
+      background-color: #ffd700;
+      color: #4a3200;
+    }
+    .secondary-button {
+      background-color: #ffe699;
+      color: #4a3200;
+    }
+    .primary-button:hover, .secondary-button:hover {
+      transform: scale(1.05);
+    }
+    #message {
+      font-size: 1.2em;
+      margin: 20px 0;
+      font-weight: bold;
+    }
+    .theme-name {
+      font-size: 0.8em;
+      margin-top: 20px;
+      font-style: italic;
+    }
+    @keyframes stink {
+      0% { transform: rotate(0deg); }
+      25% { transform: rotate(5deg); }
+      75% { transform: rotate(-5deg); }
+      100% { transform: rotate(0deg); }
+    }
+    .stinky {
+      display: inline-block;
+      animation: stink 0.5s ease-in-out infinite;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-user-secret"></i>
+      <h1>Stinky Armpit Door Control</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">Raise 💪 Arm</button>
+      <button id="lockbutton" class="primary-button">Lower 💪 Arm</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">Deodorant 🧴</button>
+      <button id="safebutton" class="secondary-button">Shower 🚿</button>
+    </div>
+    <p class="theme-name">Theme: Stinky Armpits <span class="stinky">💨</span></p>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    document.querySelectorAll('.primary-button, .secondary-button').forEach(button => {
+      button.addEventListener('mouseover', () => {
+        button.innerHTML += ' <span class="stinky">💨</span>';
+      });
+      button.addEventListener('mouseout', () => {
+        button.innerHTML = button.innerHTML.replace(' <span class="stinky">💨</span>', '');
+      });
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,159 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🚪✈️ Split Airport Sucks Door Control</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-image: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+      animation: backgroundShift 10s infinite alternate;
+    }
+
+    @keyframes backgroundShift {
+      0% {
+        background-position: 0% 50%;
+      }
+      100% {
+        background-position: 100% 50%;
+      }
+    }
+
+    .maincontainer {
+      background-color: white;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      max-width: 90%;
+      width: 300px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+      color: #333;
+    }
+
+    h1 {
+      font-size: 1.5em;
+      color: #333;
+      margin: 0;
+    }
+
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+
+    .primary-button, .secondary-button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: transform 0.3s, background-color 0.3s;
+    }
+
+    .primary-button {
+      background-color: #4ecdc4;
+      color: white;
+    }
+
+    .secondary-button {
+      background-color: #ff6b6b;
+      color: white;
+    }
+
+    .primary-button:hover, .secondary-button:hover {
+      transform: scale(1.05);
+    }
+
+    #message {
+      margin-top: 20px;
+      font-style: italic;
+      color: #666;
+    }
+
+    .theme-name {
+      font-size: 0.8em;
+      color: #999;
+      margin-top: 20px;
+    }
+
+    @keyframes shake {
+      0% { transform: translate(1px, 1px) rotate(0deg); }
+      10% { transform: translate(-1px, -2px) rotate(-1deg); }
+      20% { transform: translate(-3px, 0px) rotate(1deg); }
+      30% { transform: translate(3px, 2px) rotate(0deg); }
+      40% { transform: translate(1px, -1px) rotate(1deg); }
+      50% { transform: translate(-1px, 2px) rotate(-1deg); }
+      60% { transform: translate(-3px, 1px) rotate(0deg); }
+      70% { transform: translate(3px, 1px) rotate(-1deg); }
+      80% { transform: translate(-1px, -1px) rotate(1deg); }
+      90% { transform: translate(1px, 2px) rotate(0deg); }
+      100% { transform: translate(1px, -2px) rotate(-1deg); }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-plane-slash"></i>
+      <h1>🚪 Split Airport Sucks Door Control ✈️</h1>
+    </div>
+    <p id="message">No more delays! Control your door like a boss! 😎</p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">🛫 Take Off (Unlock)</button>
+      <button id="lockbutton" class="primary-button">🛬 Land (Lock)</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">❌ Cancel Flight (E-Stop)</button>
+      <button id="safebutton" class="secondary-button">🛡️ Security Check (Safe)</button>
+    </div>
+    <p class="theme-name">Theme: Split Airport Sucks 🤬</p>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    document.querySelectorAll('button').forEach(button => {
+      button.addEventListener('click', () => {
+        button.style.animation = 'shake 0.5s';
+        setTimeout(() => {
+          button.style.animation = '';
+        }, 500);
+      });
+    });
+
+    setInterval(() => {
+      const message = document.getElementById('message');
+      message.textContent = ['No more delays! Control your door like a boss! 😎', 
+                             'Your door: more reliable than Split Airport! ⚡', 
+                             'Skip the airport drama, use your smart door! 🚪💨', 
+                             'Why fly when you can just open your door? 🤔'][Math.floor(Math.random() * 4)];
+    }, 5000);
+  </script>
+</body>
+
+</html>

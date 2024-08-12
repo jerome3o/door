@@ -1,0 +1,108 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>⛳ Tee Time Door Control ⛳</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #91c788;
+      color: #ffffff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+    .maincontainer {
+      background-color: #2d572c;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.3);
+      text-align: center;
+      max-width: 90%;
+      width: 300px;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+    }
+    h1 {
+      font-size: 1.5em;
+      margin: 0;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    button {
+      border: none;
+      border-radius: 50px;
+      padding: 10px 20px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .primary-button {
+      background-color: #ffffff;
+      color: #2d572c;
+    }
+    .secondary-button {
+      background-color: #91c788;
+      color: #2d572c;
+    }
+    button:hover {
+      transform: scale(1.05);
+    }
+    #message {
+      height: 20px;
+      margin: 10px 0;
+    }
+    .theme-name {
+      font-size: 0.8em;
+      margin-top: 20px;
+      opacity: 0.7;
+    }
+    @keyframes swing {
+      0% { transform: rotate(0deg); }
+      25% { transform: rotate(5deg); }
+      75% { transform: rotate(-5deg); }
+      100% { transform: rotate(0deg); }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-golf-ball" style="animation: swing 2s infinite;"></i>
+      <h1>⛳ Tee Time Door Control ⛳</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">🏌️‍♂️ Tee Off</button>
+      <button id="lockbutton" class="primary-button">🔒 19th Hole</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">🛑 Mulligan</button>
+      <button id="safebutton" class="secondary-button">🏳️ Fore!</button>
+    </div>
+    <p class="theme-name">Theme: Golf ⛳</p>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+</body>
+
+</html>

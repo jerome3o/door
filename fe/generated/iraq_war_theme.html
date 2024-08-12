@@ -1,0 +1,144 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Operation Door Freedom 🦅</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #2a3e23;
+      color: #f0e68c;
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+    }
+    .maincontainer {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: rgba(0, 0, 0, 0.7);
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+    }
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2.5em;
+      margin-right: 10px;
+      color: #ffd700;
+    }
+    h1 {
+      font-size: 2em;
+      margin: 0;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    #message {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .primary-button, .secondary-button {
+      padding: 15px 30px;
+      font-size: 1.2em;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+    .primary-button {
+      background-color: #b22222;
+      color: #fff;
+    }
+    .secondary-button {
+      background-color: #daa520;
+      color: #000;
+    }
+    .primary-button:hover, .secondary-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+    #theme-info {
+      font-size: 0.8em;
+      margin-top: 20px;
+      font-style: italic;
+    }
+    @keyframes shake {
+      0% { transform: translate(1px, 1px) rotate(0deg); }
+      10% { transform: translate(-1px, -2px) rotate(-1deg); }
+      20% { transform: translate(-3px, 0px) rotate(1deg); }
+      30% { transform: translate(3px, 2px) rotate(0deg); }
+      40% { transform: translate(1px, -1px) rotate(1deg); }
+      50% { transform: translate(-1px, 2px) rotate(-1deg); }
+      60% { transform: translate(-3px, 1px) rotate(0deg); }
+      70% { transform: translate(3px, 1px) rotate(-1deg); }
+      80% { transform: translate(-1px, -1px) rotate(1deg); }
+      90% { transform: translate(1px, 2px) rotate(0deg); }
+      100% { transform: translate(1px, -2px) rotate(-1deg); }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-fighter-jet"></i>
+      <h1>Operation Door Freedom 🦅</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">Liberate Door 🚪💥</button>
+      <button id="lockbutton" class="primary-button">Secure Perimeter 🔒🛡️</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">Mission Abort 🚫🔴</button>
+      <button id="safebutton" class="secondary-button">Protect Assets 🛡️🔐</button>
+    </div>
+    <p id="theme-info">Theme: Iraq War (featuring George Bush) 🇺🇸🎖️</p>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    document.querySelectorAll('button').forEach(button => {
+      button.addEventListener('click', () => {
+        button.style.animation = 'shake 0.5s';
+        setTimeout(() => {
+          button.style.animation = '';
+        }, 500);
+      });
+    });
+
+    const bushQuotes = [
+      "Mission accomplished! 🎉",
+      "We're bringing freedom to your door! 🗽",
+      "Is our door learning? 🤔",
+      "Fool me once, shame on... shame on you. Fool me—you can't get fooled again. 😅",
+      "I know the human being and door can coexist peacefully. 🕊️",
+    ];
+
+    setInterval(() => {
+      const messageEl = document.getElementById('message');
+      messageEl.textContent = bushQuotes[Math.floor(Math.random() * bushQuotes.length)];
+      messageEl.style.animation = 'shake 0.5s';
+      setTimeout(() => {
+        messageEl.style.animation = '';
+      }, 500);
+    }, 5000);
+  </script>
+</body>
+
+</html>

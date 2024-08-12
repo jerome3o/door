@@ -1,0 +1,157 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🛒 Grocery Gateway 🛍️</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-image: linear-gradient(45deg, #fff 25%, transparent 25%),
+                        linear-gradient(-45deg, #fff 25%, transparent 25%),
+                        linear-gradient(45deg, transparent 75%, #fff 75%),
+                        linear-gradient(-45deg, transparent 75%, #fff 75%);
+      background-size: 20px 20px;
+      background-color: #f0f0f0;
+    }
+    .maincontainer {
+      background-color: #ffffff;
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2.5em;
+      margin-right: 10px;
+      color: #4CAF50;
+    }
+    h1 {
+      font-size: 2em;
+      color: #333;
+      margin: 0;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    .primary-button, .secondary-button {
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .primary-button {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .primary-button:hover {
+      background-color: #45a049;
+    }
+    .secondary-button {
+      background-color: #f44336;
+      color: white;
+    }
+    .secondary-button:hover {
+      background-color: #da190b;
+    }
+    #message {
+      font-size: 1.2em;
+      margin: 20px 0;
+      padding: 10px;
+      border-radius: 5px;
+      background-color: #e7e7e7;
+    }
+    .theme-name {
+      font-size: 0.8em;
+      color: #888;
+      margin-top: 20px;
+    }
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+      40% {transform: translateY(-20px);}
+      60% {transform: translateY(-10px);}
+    }
+    .bouncing-emoji {
+      display: inline-block;
+      animation: bounce 2s infinite;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-shopping-cart"></i>
+      <h1>Grocery Gateway</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">🥕 Open Aisle 🥕</button>
+      <button id="lockbutton" class="primary-button">🍎 Close Aisle 🍎</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">🛑 Emergency Checkout 🛑</button>
+      <button id="safebutton" class="secondary-button">🧹 Clean Up 🧹</button>
+    </div>
+    <p class="theme-name">Theme: Supermarket 🛒</p>
+    <div class="bouncing-emoji">🍞</div>
+    <div class="bouncing-emoji" style="animation-delay: 0.5s;">🥛</div>
+    <div class="bouncing-emoji" style="animation-delay: 1s;">🧀</div>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    const emojis = ['🍎', '🍌', '🥦', '🥕', '🍞', '🥛', '🧀', '🥚'];
+    const container = document.querySelector('.maincontainer');
+    
+    function createFloatingEmoji() {
+      const emoji = document.createElement('div');
+      emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      emoji.style.position = 'absolute';
+      emoji.style.left = `${Math.random() * 100}%`;
+      emoji.style.top = '-20px';
+      emoji.style.fontSize = '20px';
+      emoji.style.opacity = '0.7';
+      emoji.style.animation = `float ${5 + Math.random() * 5}s linear infinite`;
+      container.appendChild(emoji);
+      
+      setTimeout(() => {
+        container.removeChild(emoji);
+      }, 10000);
+    }
+
+    setInterval(createFloatingEmoji, 2000);
+
+    document.styleSheets[0].insertRule(`
+      @keyframes float {
+        0% { transform: translateY(0); }
+        100% { transform: translateY(calc(100vh + 20px)); }
+      }
+    `, document.styleSheets[0].cssRules.length);
+  </script>
+</body>
+
+</html>

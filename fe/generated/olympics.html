@@ -1,0 +1,141 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🥝 Kiwi Olympic Door Control 🥝</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #000;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-image: linear-gradient(45deg, #000 25%, #fff 25%, #fff 50%, #000 50%, #000 75%, #fff 75%, #fff 100%);
+      background-size: 56.57px 56.57px;
+    }
+
+    .maincontainer {
+      background-color: rgba(0, 0, 0, 0.8);
+      border-radius: 15px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+      max-width: 90%;
+      width: 350px;
+    }
+
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .header i {
+      font-size: 2.5em;
+      margin-right: 10px;
+      animation: bounce 1s infinite alternate;
+    }
+
+    h1 {
+      font-size: 1.8em;
+      margin: 0;
+    }
+
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: transform 0.3s, background-color 0.3s;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    .primary-button {
+      background-color: #fff;
+      color: #000;
+    }
+
+    .secondary-button {
+      background-color: #c0c0c0;
+      color: #000;
+    }
+
+    #message {
+      font-size: 1.2em;
+      margin: 20px 0;
+      min-height: 1.5em;
+    }
+
+    @keyframes bounce {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-10px); }
+    }
+
+    @keyframes dance {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(-15deg); }
+      75% { transform: rotate(15deg); }
+    }
+
+    .kiwi {
+      font-size: 2em;
+      display: inline-block;
+      animation: dance 2s infinite;
+      margin: 0 10px;
+    }
+
+    .theme-name {
+      font-size: 0.8em;
+      margin-top: 20px;
+      font-style: italic;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-medal"></i>
+      <h1>🥝 Kiwi Olympic Door Control 🥝</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">🔓 Sprint Open</button>
+      <button id="lockbutton" class="primary-button">🔒 Marathon Close</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">🛑 False Start</button>
+      <button id="safebutton" class="secondary-button">🏅 Podium Safe</button>
+    </div>
+    <div class="kiwi-container">
+      <span class="kiwi">🥝</span>
+      <span class="kiwi">🥝</span>
+      <span class="kiwi">🥝</span>
+    </div>
+    <p class="theme-name">Theme: New Zealand Olympics 🇳🇿</p>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+</body>
+
+</html>

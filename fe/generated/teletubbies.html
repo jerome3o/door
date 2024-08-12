@@ -1,0 +1,134 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Teletubby Door Control 📺</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive;
+      background: linear-gradient(to bottom, #87CEEB, #90EE90);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    .maincontainer {
+      background-color: rgba(255, 255, 255, 0.8);
+      border-radius: 20px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      max-width: 90%;
+      width: 300px;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+      color: #FF69B4;
+    }
+    h1 {
+      color: #FF69B4;
+      margin: 0;
+    }
+    #message {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+      color: #333;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 15px;
+    }
+    .primary-button, .secondary-button {
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: transform 0.3s, background-color 0.3s;
+    }
+    .primary-button {
+      background-color: #FF69B4;
+      color: white;
+    }
+    .secondary-button {
+      background-color: #90EE90;
+      color: #333;
+    }
+    .primary-button:hover, .secondary-button:hover {
+      transform: scale(1.1);
+    }
+    .primary-button:active, .secondary-button:active {
+      transform: scale(0.9);
+    }
+    .sun {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      width: 60px;
+      height: 60px;
+      background-color: #FFD700;
+      border-radius: 50%;
+      box-shadow: 0 0 20px #FFD700;
+      animation: spin 20s linear infinite;
+    }
+    .sun::after {
+      content: '😊';
+      font-size: 40px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    .theme-name {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      font-size: 0.8em;
+      color: #333;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="sun"></div>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>Teletubby Door 🚪</h1>
+    </div>
+    <p id="message">Time for Teletubbies! 📺</p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">Open Tubby Door 🔓</button>
+      <button id="lockbutton" class="primary-button">Close Tubby Door 🔒</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">Tubby Bye-Bye 🛑</button>
+      <button id="safebutton" class="secondary-button">Tubby Custard Safe 🍮</button>
+    </div>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <div class="theme-name">Theme: Teletubbies 📺</div>
+</body>
+
+</html>

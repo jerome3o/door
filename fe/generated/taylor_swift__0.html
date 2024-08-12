@@ -1,0 +1,179 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Swiftie Door Control 🎸</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap');
+
+    body {
+      font-family: 'Dancing Script', cursive;
+      background: linear-gradient(45deg, #ffd1dc, #ffb6c1, #ffc0cb);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .maincontainer {
+      background-color: rgba(255, 255, 255, 0.8);
+      border-radius: 20px;
+      padding: 30px;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      max-width: 90%;
+      width: 400px;
+    }
+
+    .header {
+      margin-bottom: 20px;
+    }
+
+    .header i {
+      font-size: 48px;
+      color: #ff69b4;
+      animation: pulse 1.5s infinite;
+    }
+
+    h1 {
+      font-size: 36px;
+      color: #ff1493;
+      margin: 10px 0;
+    }
+
+    #message {
+      font-size: 18px;
+      margin-bottom: 20px;
+      color: #ff69b4;
+    }
+
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+
+    .primary-button, .secondary-button {
+      font-family: 'Dancing Script', cursive;
+      font-size: 20px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .primary-button {
+      background-color: #ff69b4;
+      color: white;
+    }
+
+    .secondary-button {
+      background-color: #ffd1dc;
+      color: #ff1493;
+    }
+
+    .primary-button:hover, .secondary-button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 15px rgba(255, 105, 180, 0.5);
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0); }
+    }
+
+    .guitar {
+      position: absolute;
+      font-size: 40px;
+      animation: rotate 5s linear infinite;
+    }
+
+    .heart {
+      position: absolute;
+      font-size: 20px;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .bracelet {
+      position: absolute;
+      font-size: 30px;
+      animation: float 4s ease-in-out infinite;
+    }
+
+    .theme-name {
+      font-size: 14px;
+      color: #ff69b4;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>Enchanted Door Control 🎶</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">Shake It Off 🔓</button>
+      <button id="lockbutton" class="primary-button">You Belong With Me 🔒</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">Bad Blood ⛔</button>
+      <button id="safebutton" class="secondary-button">Safe & Sound 🛡️</button>
+    </div>
+    <div class="theme-name">Theme: Taylor Swift 🎤</div>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    function createFloatingEmoji(emoji, className) {
+      const element = document.createElement('div');
+      element.textContent = emoji;
+      element.className = className;
+      element.style.left = `${Math.random() * 100}vw`;
+      element.style.top = `${Math.random() * 100}vh`;
+      document.body.appendChild(element);
+    }
+
+    // Create guitars
+    for (let i = 0; i < 5; i++) {
+      createFloatingEmoji('🎸', 'guitar');
+    }
+
+    // Create hearts
+    const heartColors = ['❤️', '🧡', '💛', '💚', '💙', '💜'];
+    for (let i = 0; i < 10; i++) {
+      createFloatingEmoji(heartColors[Math.floor(Math.random() * heartColors.length)], 'heart');
+    }
+
+    // Create bracelets
+    for (let i = 0; i < 5; i++) {
+      createFloatingEmoji('🎀', 'bracelet');
+    }
+  </script>
+</body>
+
+</html>

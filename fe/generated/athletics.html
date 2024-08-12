@@ -1,0 +1,148 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🏋️‍♂️ Athletic Door Control 🏃‍♀️</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-image: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
+    }
+
+    .maincontainer {
+      background-color: white;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      max-width: 90%;
+      width: 300px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+      color: #ff6b6b;
+    }
+
+    h1 {
+      font-size: 1.5em;
+      color: #333;
+      margin: 0;
+    }
+
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+
+    .primary-button, .secondary-button {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .primary-button {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    .secondary-button {
+      background-color: #f44336;
+      color: white;
+    }
+
+    .primary-button:hover, .secondary-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .primary-button:active, .secondary-button:active {
+      transform: translateY(1px);
+    }
+
+    #message {
+      font-weight: bold;
+      margin: 10px 0;
+      color: #333;
+    }
+
+    .theme-name {
+      font-size: 0.8em;
+      color: #888;
+      margin-top: 20px;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    .animated-icon {
+      animation: pulse 2s infinite;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-running animated-icon"></i>
+      <h1>🏆 Athletic Door Control 🏅</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">🏃‍♂️ Sprint In</button>
+      <button id="lockbutton" class="primary-button">🔒 Cool Down</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">🛑 Time Out</button>
+      <button id="safebutton" class="secondary-button">🏋️‍♀️ Stretch Actuators</button>
+    </div>
+    <p class="theme-name">Theme: Athletics</p>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    document.querySelectorAll('button').forEach(button => {
+      button.addEventListener('mouseover', () => {
+        button.style.transform = 'rotate(5deg)';
+      });
+      button.addEventListener('mouseout', () => {
+        button.style.transform = 'rotate(0deg)';
+      });
+    });
+  </script>
+</body>
+
+</html>

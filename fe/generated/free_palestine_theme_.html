@@ -1,0 +1,120 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🇵🇸 Free Palestine Door Control 🇵🇸</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #006847;
+      color: #ffffff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .maincontainer {
+      background-color: #007c53;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.3);
+      text-align: center;
+      max-width: 90%;
+      width: 350px;
+    }
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+      color: #ce1126;
+    }
+    h1 {
+      font-size: 1.8em;
+      margin: 0;
+      color: #ffffff;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin: 20px 0;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: transform 0.3s, background-color 0.3s;
+    }
+    button:hover {
+      transform: scale(1.05);
+    }
+    .primary-button {
+      background-color: #ffffff;
+      color: #006847;
+    }
+    .secondary-button {
+      background-color: #ce1126;
+      color: #ffffff;
+    }
+    #message {
+      font-size: 1.2em;
+      margin: 20px 0;
+      font-weight: bold;
+    }
+    .theme-name {
+      font-size: 0.8em;
+      margin-top: 20px;
+      color: #ffffff;
+    }
+    .flag {
+      font-size: 2em;
+      animation: wave 2s infinite;
+      display: inline-block;
+    }
+    @keyframes wave {
+      0% { transform: rotate(0deg); }
+      25% { transform: rotate(10deg); }
+      50% { transform: rotate(0deg); }
+      75% { transform: rotate(-10deg); }
+      100% { transform: rotate(0deg); }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>Free Palestine Door Control</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">🔓 Unlock Freedom</button>
+      <button id="lockbutton" class="primary-button">🔒 Lock Oppression</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">🛑 Emergency Stop</button>
+      <button id="safebutton" class="secondary-button">🛡️ Protect Palestinians</button>
+    </div>
+    <div class="flag">🇵🇸</div>
+    <p>Stand with Palestine! 🍉</p>
+    <p class="theme-name">Theme: Free Palestine</p>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,174 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Jerome Sucks Door Control 🚫</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-image: linear-gradient(45deg, #ff6b6b, #feca57);
+      animation: gradientBG 10s ease infinite;
+    }
+
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .maincontainer {
+      background-color: white;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      max-width: 90%;
+      width: 350px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+      color: #ff6b6b;
+    }
+
+    h1 {
+      font-size: 1.8em;
+      color: #333;
+      margin: 0;
+    }
+
+    #message {
+      font-style: italic;
+      color: #666;
+      margin-bottom: 20px;
+    }
+
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 15px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: transform 0.1s, box-shadow 0.1s;
+    }
+
+    button:active {
+      transform: scale(0.95);
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .primary-button {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+    .secondary-button {
+      background-color: #f44336;
+      color: white;
+    }
+
+    #theme-info {
+      font-size: 0.8em;
+      color: #666;
+      margin-top: 20px;
+    }
+
+    #jerome-list {
+      text-align: left;
+      padding-left: 20px;
+      margin-top: 20px;
+    }
+
+    #jerome-list li {
+      margin-bottom: 5px;
+    }
+
+    @media (max-width: 480px) {
+      .maincontainer {
+        width: 90%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>Jerome-Proof Door Control 🚫🚪</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">Unlock (Not for Jerome) 🔓</button>
+      <button id="lockbutton" class="primary-button">Lock Jerome Out 🔒</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">Jerome Alert! 🚨</button>
+      <button id="safebutton" class="secondary-button">Jerome-Proof Mode 🛡️</button>
+    </div>
+    <div id="theme-info">Theme: Jerome Sucks 👎</div>
+    <ul id="jerome-list">
+      <li>Jerome always leaves dirty dishes 🍽️</li>
+      <li>Jerome never pays rent on time 💸</li>
+      <li>Jerome's music taste is terrible 🎵</li>
+      <li>Jerome snores like a chainsaw 😴</li>
+      <li>Jerome steals everyone's food 🍔</li>
+    </ul>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    const jeromeReasons = [
+      "Jerome forgot to flush... again 🚽",
+      "Jerome's socks smell like expired cheese 🧦",
+      "Jerome uses all the hot water 🚿",
+      "Jerome never replaces the toilet paper 🧻",
+      "Jerome's 'jokes' are painfully unfunny 🙄"
+    ];
+
+    function addJeromeReason() {
+      const list = document.getElementById('jerome-list');
+      if (list.children.length < 10) {
+        const randomReason = jeromeReasons[Math.floor(Math.random() * jeromeReasons.length)];
+        const li = document.createElement('li');
+        li.textContent = randomReason;
+        li.style.opacity = '0';
+        list.appendChild(li);
+        setTimeout(() => {
+          li.style.transition = 'opacity 0.5s';
+          li.style.opacity = '1';
+        }, 50);
+      }
+    }
+
+    setInterval(addJeromeReason, 5000);
+  </script>
+</body>
+
+</html>

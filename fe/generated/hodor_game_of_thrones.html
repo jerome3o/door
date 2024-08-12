@@ -1,0 +1,127 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Hodor's Gate Control 🐺</title>
+  <style>
+    body {
+      font-family: 'Times New Roman', serif;
+      background-color: #2c3e50;
+      color: #ecf0f1;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🏰</text></svg>');
+      background-repeat: repeat;
+      background-size: 100px 100px;
+    }
+    .maincontainer {
+      background-color: rgba(44, 62, 80, 0.9);
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+      color: #e74c3c;
+    }
+    h1 {
+      font-size: 2em;
+      margin: 0;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    }
+    #message {
+      font-style: italic;
+      margin-bottom: 20px;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+    button {
+      font-family: 'Times New Roman', serif;
+      font-size: 1em;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .primary-button {
+      background-color: #e74c3c;
+      color: #ecf0f1;
+    }
+    .secondary-button {
+      background-color: #34495e;
+      color: #ecf0f1;
+    }
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 10px rgba(231, 76, 60, 0.7);
+    }
+    #unlockbutton::before { content: "🗡️ "; }
+    #lockbutton::before { content: "🛡️ "; }
+    #stopbutton::before { content: "🐉 "; }
+    #safebutton::before { content: "👸 "; }
+    
+    @keyframes fireAnimation {
+      0% { text-shadow: 0 0 5px #ffa500, 0 0 10px #ffa500, 0 0 20px #ffa500; }
+      50% { text-shadow: 0 0 5px #ff4500, 0 0 15px #ff4500, 0 0 25px #ff4500; }
+      100% { text-shadow: 0 0 5px #ffa500, 0 0 10px #ffa500, 0 0 20px #ffa500; }
+    }
+    h1 {
+      animation: fireAnimation 2s infinite;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-dragon"></i>
+      <h1>Hodor's Gate Control 🐺</h1>
+    </div>
+    <p id="message">Theme: Hodor Game of Thrones 🎭</p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">Unbar Gate</button>
+      <button id="lockbutton" class="primary-button">Bar Gate</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">Dragonfire Halt</button>
+      <button id="safebutton" class="secondary-button">Royal Safeguard</button>
+    </div>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    document.querySelectorAll('button').forEach(button => {
+      button.addEventListener('mouseover', () => {
+        button.style.transform = 'scale(1.1) rotate(5deg)';
+      });
+      button.addEventListener('mouseout', () => {
+        button.style.transform = 'scale(1) rotate(0deg)';
+      });
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,169 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Trump's Terrific Door Control 🇺🇸</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f3f3f3;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-image: linear-gradient(45deg, #ff0000, #ffffff, #0000ff);
+    }
+    .maincontainer {
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      max-width: 90%;
+      width: 400px;
+    }
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+      color: #ffd700;
+    }
+    h1 {
+      font-size: 2em;
+      color: #b22234;
+      margin: 0;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    .primary-button, .secondary-button {
+      padding: 10px 20px;
+      font-size: 1em;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+    .primary-button {
+      background-color: #b22234;
+      color: white;
+    }
+    .secondary-button {
+      background-color: #3c3b6e;
+      color: white;
+    }
+    .primary-button:hover, .secondary-button:hover {
+      transform: scale(1.05);
+    }
+    #message {
+      font-weight: bold;
+      margin: 10px 0;
+    }
+    #trivia-container {
+      margin-top: 30px;
+      padding: 10px;
+      background-color: rgba(255, 255, 255, 0.7);
+      border-radius: 5px;
+    }
+    #trivia-question {
+      font-weight: bold;
+    }
+    #trivia-options {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 10px;
+    }
+    .trivia-option {
+      margin: 5px;
+      padding: 5px 10px;
+      background-color: #ffd700;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .trivia-option:hover {
+      background-color: #ffaa00;
+    }
+    .theme-name {
+      font-style: italic;
+      margin-top: 20px;
+      font-size: 0.8em;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>Trump's Terrific Door Control 🇺🇸</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">Unlock the Swamp 🥕</button>
+      <button id="lockbutton" class="primary-button">Lock Her Up 🥕</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">Fake News Stop 🛑</button>
+      <button id="safebutton" class="secondary-button">MAGA Safe 🦅</button>
+    </div>
+    <div id="trivia-container">
+      <p id="trivia-question">Which president had the most tremendous inauguration crowd ever? 🥕</p>
+      <div id="trivia-options">
+        <button class="trivia-option">Barack Obama</button>
+        <button class="trivia-option">Donald Trump</button>
+        <button class="trivia-option">Joe Biden</button>
+        <button class="trivia-option">George Washington</button>
+      </div>
+    </div>
+    <p class="theme-name">Theme: Make America Great Again 2024 🇺🇸</p>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    const triviaOptions = document.querySelectorAll('.trivia-option');
+    triviaOptions.forEach(option => {
+      option.addEventListener('click', function() {
+        if (this.textContent === 'Donald Trump') {
+          alert('You're absolutely right! It was huge, believe me! 👐');
+        } else {
+          alert('Wrong! Fake news! Try again, folks! 👎');
+        }
+      });
+    });
+
+    // Add some Trump-style animations
+    function animateTrumpStyle() {
+      const buttons = document.querySelectorAll('button');
+      buttons.forEach(button => {
+        button.addEventListener('mouseenter', () => {
+          button.style.transform = 'scale(1.1) rotate(-1deg)';
+        });
+        button.addEventListener('mouseleave', () => {
+          button.style.transform = 'scale(1) rotate(0deg)';
+        });
+      });
+    }
+
+    animateTrumpStyle();
+  </script>
+</body>
+
+</html>

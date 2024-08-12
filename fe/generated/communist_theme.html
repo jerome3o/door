@@ -1,0 +1,135 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Comrade's Door Control 🚪🔨</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #b71c1c;
+      color: #ffeb3b;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      text-align: center;
+    }
+
+    .maincontainer {
+      background-color: #4a0f0f;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      max-width: 90%;
+      width: 350px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .header i {
+      font-size: 2.5em;
+      margin-right: 10px;
+    }
+
+    h1 {
+      font-size: 1.8em;
+      margin: 0;
+    }
+
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+
+    button {
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: transform 0.3s, background-color 0.3s;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+
+    .primary-button {
+      background-color: #ffd54f;
+      color: #b71c1c;
+    }
+
+    .secondary-button {
+      background-color: #ffeb3b;
+      color: #b71c1c;
+    }
+
+    #message {
+      margin: 20px 0;
+      font-weight: bold;
+      min-height: 1.5em;
+    }
+
+    .theme-name {
+      font-size: 0.8em;
+      margin-top: 20px;
+      font-style: italic;
+    }
+
+    @keyframes hammerAnimation {
+      0% { transform: rotate(0deg); }
+      50% { transform: rotate(-20deg); }
+      100% { transform: rotate(0deg); }
+    }
+
+    .fa-lock {
+      animation: hammerAnimation 2s infinite;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>Comrade's Door Control 🚪🔨</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">Liberate Access ✊</button>
+      <button id="lockbutton" class="primary-button">Secure Commune 🔒</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">Seize Control ⚠️</button>
+      <button id="safebutton" class="secondary-button">Protect Workers 🛡️</button>
+    </div>
+    <div class="theme-name">Theme: Communist Comrade 🇷🇺</div>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    document.querySelectorAll('button').forEach(button => {
+      button.addEventListener('mouseenter', () => {
+        button.style.transform = 'scale(1.1) rotate(5deg)';
+      });
+      button.addEventListener('mouseleave', () => {
+        button.style.transform = 'scale(1) rotate(0deg)';
+      });
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,134 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🔥 Controversial Door Control 🔥</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #ff6b6b;
+      color: #fff;
+      margin: 0;
+      padding: 20px;
+      transition: background-color 0.5s;
+    }
+    .maincontainer {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #4ecdc4;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+    }
+    h1 {
+      font-size: 2em;
+      margin: 0;
+      text-align: center;
+    }
+    #message {
+      text-align: center;
+      font-weight: bold;
+      margin-bottom: 20px;
+      font-size: 1.2em;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: transform 0.3s, background-color 0.3s;
+    }
+    button:hover {
+      transform: scale(1.05);
+    }
+    .primary-button {
+      background-color: #f3a683;
+      color: #fff;
+    }
+    .secondary-button {
+      background-color: #303952;
+      color: #fff;
+    }
+    #unlockbutton::before { content: '🔓 '; }
+    #lockbutton::before { content: '🔒 '; }
+    #stopbutton::before { content: '🛑 '; }
+    #safebutton::before { content: '🛡️ '; }
+    .theme-name {
+      text-align: center;
+      font-style: italic;
+      margin-top: 20px;
+    }
+    @keyframes controversy {
+      0% { transform: rotate(0deg); }
+      25% { transform: rotate(-5deg); }
+      75% { transform: rotate(5deg); }
+      100% { transform: rotate(0deg); }
+    }
+    .maincontainer:hover {
+      animation: controversy 0.5s infinite;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>🔥 Spicy Door Control 🔥</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">Free Speech</button>
+      <button id="lockbutton" class="primary-button">Cancel Culture</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">Climate Change</button>
+      <button id="safebutton" class="secondary-button">Vaccine Debate</button>
+    </div>
+    <p class="theme-name">Theme: Controversial 🌶️🗣️💉🌍</p>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    const buttons = document.querySelectorAll('button');
+    const body = document.body;
+    const colors = ['#ff6b6b', '#feca57', '#48dbfb', '#ff9ff3', '#54a0ff'];
+    
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+        body.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+      });
+    });
+    
+    setInterval(() => {
+      const randomButton = buttons[Math.floor(Math.random() * buttons.length)];
+      randomButton.style.transform = 'scale(1.1)';
+      setTimeout(() => {
+        randomButton.style.transform = 'scale(1)';
+      }, 200);
+    }, 2000);
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,121 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🐬 Flipper Door Control 🔑</title>
+  <style>
+    body {
+      font-family: 'Courier New', monospace;
+      background-color: #FF8C00;
+      color: #000;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .maincontainer {
+      background-color: #FFF;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 90%;
+      width: 350px;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+    }
+    h1 {
+      font-size: 1.5em;
+      margin: 0;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    button {
+      font-family: 'Courier New', monospace;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .primary-button {
+      background-color: #FF8C00;
+      color: #FFF;
+    }
+    .secondary-button {
+      background-color: #FFF;
+      color: #FF8C00;
+      border: 2px solid #FF8C00;
+    }
+    button:hover {
+      transform: scale(1.05);
+    }
+    #message {
+      text-align: center;
+      margin: 10px 0;
+      font-weight: bold;
+    }
+    .theme-name {
+      text-align: center;
+      font-size: 0.8em;
+      margin-top: 20px;
+      color: #FF8C00;
+    }
+    @keyframes blink {
+      0% { opacity: 1; }
+      50% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+    .blink {
+      animation: blink 1s infinite;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-dolphin"></i>
+      <h1>🐬 Flipper Door Control 🔑</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">🔓 Hack Open</button>
+      <button id="lockbutton" class="primary-button">🔒 Secure</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">🛑 Abort Mission</button>
+      <button id="safebutton" class="secondary-button">🛡️ Stealth Mode</button>
+    </div>
+    <p class="theme-name">Theme: Flipper0 MIFARE keys 🔐</p>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    document.querySelectorAll('button').forEach(button => {
+      button.addEventListener('click', function() {
+        this.classList.add('blink');
+        setTimeout(() => this.classList.remove('blink'), 1000);
+      });
+    });
+  </script>
+</body>
+
+</html>

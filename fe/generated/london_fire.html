@@ -1,0 +1,137 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🔥 Great Fire Door Control 🔥</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #FF4500;
+      color: #FFD700;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      text-align: center;
+    }
+
+    .maincontainer {
+      background-color: rgba(0, 0, 0, 0.7);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 0 20px #FFD700;
+      max-width: 90%;
+      width: 300px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+      animation: flicker 1s infinite alternate;
+    }
+
+    @keyframes flicker {
+      0% {color: #FFD700;}
+      100% {color: #FF4500;}
+    }
+
+    h1 {
+      font-size: 1.5em;
+      margin: 0;
+    }
+
+    #message {
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+
+    button {
+      background-color: #B22222;
+      color: #FFD700;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: all 0.3s;
+      border-radius: 5px;
+    }
+
+    button:hover {
+      background-color: #8B0000;
+      transform: scale(1.05);
+    }
+
+    .primary-button {
+      font-weight: bold;
+    }
+
+    .secondary-button {
+      background-color: #CD5C5C;
+    }
+
+    #theme {
+      font-size: 0.8em;
+      margin-top: 20px;
+      font-style: italic;
+    }
+
+    @media (max-width: 480px) {
+      .maincontainer {
+        width: 90%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-fire"></i>
+      <h1>Great Fire Door Control</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">🔓 Douse Flames</button>
+      <button id="lockbutton" class="primary-button">🔒 Ignite Blaze</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">🚒 Fire Brigade</button>
+      <button id="safebutton" class="secondary-button">🧯 Extinguish</button>
+    </div>
+    <p id="theme">Theme: London Fire 🔥</p>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    document.querySelectorAll('button').forEach(button => {
+      button.addEventListener('mouseenter', () => {
+        button.style.animation = 'flicker 0.5s infinite alternate';
+      });
+      button.addEventListener('mouseleave', () => {
+        button.style.animation = 'none';
+      });
+    });
+  </script>
+</body>
+
+</html>

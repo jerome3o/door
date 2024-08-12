@@ -1,0 +1,129 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Shoreditch Door Vibes 🎨</title>
+  <style>
+    body {
+      font-family: 'Courier New', monospace;
+      background-color: #f5e5d3;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+      background-image: linear-gradient(45deg, #f5e5d3 25%, transparent 25%), linear-gradient(-45deg, #f5e5d3 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #f5e5d3 75%), linear-gradient(-45deg, transparent 75%, #f5e5d3 75%);
+      background-size: 20px 20px;
+      background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+    }
+    .maincontainer {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: white;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2.5em;
+      margin-right: 10px;
+      color: #e74c3c;
+    }
+    h1 {
+      font-size: 2em;
+      color: #e74c3c;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+    }
+    #message {
+      text-align: center;
+      font-size: 1.2em;
+      margin-bottom: 20px;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+    button {
+      font-family: 'Courier New', monospace;
+      font-size: 1em;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .primary-button {
+      background-color: #3498db;
+      color: white;
+    }
+    .primary-button:hover {
+      background-color: #2980b9;
+      transform: scale(1.05);
+    }
+    .secondary-button {
+      background-color: #e74c3c;
+      color: white;
+    }
+    .secondary-button:hover {
+      background-color: #c0392b;
+      transform: scale(1.05);
+    }
+    #theme-name {
+      text-align: center;
+      font-style: italic;
+      margin-top: 20px;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-paint-brush pulse"></i>
+      <h1>Hipster Door Vibes 🚪</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">Unlock the Creativity 🎨</button>
+      <button id="lockbutton" class="primary-button">Lock in the Inspiration 💡</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">Emergency Flat White ☕</button>
+      <button id="safebutton" class="secondary-button">Safe Street Art 🖌️</button>
+    </div>
+    <p id="theme-name">🏙️ Theme: Shoreditch Chic 🎭</p>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    document.querySelectorAll('button').forEach(button => {
+      button.addEventListener('mouseover', () => {
+        button.style.transform = 'rotate(5deg)';
+      });
+      button.addEventListener('mouseout', () => {
+        button.style.transform = 'rotate(0deg)';
+      });
+    });
+  </script>
+</body>
+
+</html>
