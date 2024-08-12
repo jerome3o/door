@@ -488,7 +488,7 @@ async def unlock_door(user: User):
             prompt = _USER_WELCOME_PROMPTS[user]
             if isinstance(prompt, list):
                 prompt = random.choice(prompt)
-            asyncio.create_task(poem_to_speech(prompt, delay=5))
+            asyncio.create_task(poem_to_speech(prompt, delay=8))
 
     return {"message": "Unlocking door"}
 
@@ -643,5 +643,14 @@ def delete_keys(
 
     return {"message": "Key deleted", "key": key, "name": DeleteKeyParams.name}
 
+class AnnouncementModel(BaseModel):
+    message: str
+
+@app.post("/api/announce")
+async def announce(announcement: AnnouncementModel, flatmate: Flatmate):
+    _logger.info(f"{flatmate} made an announcement: {announcement.message}")
+    asyncio.create_task(generate_and_play_audio(announcement.message))
+    _send_message(f"Announcement from {flatmate}: {announcement.message}")
+    return {"message": "Announcement made successfully"}
 
 app.mount("/", StaticFiles(directory="fe"), name="fe")
