@@ -1,0 +1,177 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🙃 Door Control: Opposite Day Edition 🙃</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+    .maincontainer {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      position: relative;
+    }
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+      animation: spin 2s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    h1 {
+      font-size: 2em;
+      color: #333;
+      margin: 0;
+      transform: rotate(180deg);
+    }
+    #message {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+    .primary-button, .secondary-button {
+      padding: 10px 20px;
+      font-size: 1em;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+    .primary-button {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .secondary-button {
+      background-color: #f44336;
+      color: white;
+    }
+    .theme-name {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 0.8em;
+      color: #666;
+      transform: rotate(-45deg);
+    }
+    #confetti-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="confetti-canvas"></canvas>
+  <div class="maincontainer">
+    <div class="theme-name">🙃 Opposite Day 🙃</div>
+    <div class="header">
+      <i class="fas fa-unlock"></i>
+      <h1>Door Control</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button onclick="lock()" class="primary-button">🔓 Open Sesame!</button>
+      <button onclick="unlock()" class="primary-button">🔒 Seal the Vault!</button>
+    </div>
+    <div class="secondary-button-container">
+      <button onclick="safe()" class="secondary-button">🚨 Panic Mode!</button>
+      <button onclick="stop()" class="secondary-button">🏃‍♂️ Keep Moving!</button>
+    </div>
+  </div>
+
+  <script src="/index.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+  <script>
+    // Make buttons jump around
+    function randomPosition(element) {
+      const maxX = window.innerWidth - element.offsetWidth;
+      const maxY = window.innerHeight - element.offsetHeight;
+      const randomX = Math.floor(Math.random() * maxX);
+      const randomY = Math.floor(Math.random() * maxY);
+      element.style.position = 'fixed';
+      element.style.left = randomX + 'px';
+      element.style.top = randomY + 'px';
+    }
+
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(button => {
+      button.addEventListener('mouseover', () => randomPosition(button));
+    });
+
+    // Confetti effect
+    function shootConfetti() {
+      confetti({
+        particleCount: 100,
+        spread: 70,
+        origin: { y: 0.6 }
+      });
+    }
+
+    buttons.forEach(button => {
+      button.addEventListener('click', shootConfetti);
+    });
+
+    // Reverse text on buttons every 3 seconds
+    setInterval(() => {
+      buttons.forEach(button => {
+        button.textContent = button.textContent.split('').reverse().join('');
+      });
+    }, 3000);
+
+    // Wobble effect on hover
+    buttons.forEach(button => {
+      button.addEventListener('mouseover', () => {
+        button.style.animation = 'wobble 0.5s ease infinite';
+      });
+      button.addEventListener('mouseout', () => {
+        button.style.animation = 'none';
+      });
+    });
+  </script>
+  <style>
+    @keyframes wobble {
+      0% { transform: translateX(0%); }
+      15% { transform: translateX(-25%) rotate(-5deg); }
+      30% { transform: translateX(20%) rotate(3deg); }
+      45% { transform: translateX(-15%) rotate(-3deg); }
+      60% { transform: translateX(10%) rotate(2deg); }
+      75% { transform: translateX(-5%) rotate(-1deg); }
+      100% { transform: translateX(0%); }
+    }
+  </style>
+</body>
+
+</html>

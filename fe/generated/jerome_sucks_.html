@@ -1,0 +1,162 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🚫 Jerome Sucks Door Control 🚫</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #ff6b6b;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    .maincontainer {
+      background-color: #f9f9f9;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    .header {
+      margin-bottom: 20px;
+    }
+    h1 {
+      color: #333;
+      margin: 10px 0;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      transition: transform 0.3s, background-color 0.3s;
+    }
+    button:hover {
+      transform: scale(1.05);
+    }
+    .primary-button {
+      background-color: #4ecdc4;
+      color: white;
+    }
+    .secondary-button {
+      background-color: #ff6b6b;
+      color: white;
+    }
+    #message {
+      font-weight: bold;
+      margin: 10px 0;
+    }
+    #jeromeCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+    .theme-name {
+      font-size: 12px;
+      color: #888;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="jeromeCanvas"></canvas>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>🚫 Jerome-Free Zone 🚫</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button onclick="unlock()" class="primary-button">🔓 Un-Jerome</button>
+      <button onclick="lock()" class="primary-button">🔒 Jerome-Proof</button>
+    </div>
+    <div class="secondary-button-container">
+      <button onclick="stop()" class="secondary-button">🛑 Jerome Alert</button>
+      <button onclick="safe()" class="secondary-button">🦺 Manatee Shield</button>
+    </div>
+    <div class="theme-name">Theme: Jerome Sucks 👎</div>
+  </div>
+
+  <script src="/index.js"></script>
+  <script>
+    const canvas = document.getElementById('jeromeCanvas');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const thumbsDown = '👎';
+    const boo = 'BOO JEROME';
+
+    class FlyingSymbol {
+      constructor(symbol, x, y, speed) {
+        this.symbol = symbol;
+        this.x = x;
+        this.y = y;
+        this.speed = speed;
+      }
+
+      update() {
+        this.y -= this.speed;
+        if (this.y < -50) {
+          this.y = canvas.height + 50;
+          this.x = Math.random() * canvas.width;
+        }
+      }
+
+      draw() {
+        ctx.font = '24px Arial';
+        ctx.fillStyle = 'white';
+        ctx.fillText(this.symbol, this.x, this.y);
+      }
+    }
+
+    const symbols = [];
+    for (let i = 0; i < 20; i++) {
+      symbols.push(new FlyingSymbol(
+        Math.random() < 0.7 ? thumbsDown : boo,
+        Math.random() * canvas.width,
+        Math.random() * canvas.height,
+        1 + Math.random() * 3
+      ));
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      symbols.forEach(symbol => {
+        symbol.update();
+        symbol.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
+
+</html>

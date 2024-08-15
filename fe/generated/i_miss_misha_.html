@@ -1,0 +1,183 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Misha's Magical Door 🚪✨</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(45deg, #ff9a9e, #fad0c4);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    .maincontainer {
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      max-width: 90%;
+      width: 400px;
+    }
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    .header i {
+      font-size: 2rem;
+      margin-right: 0.5rem;
+      color: #ff6b6b;
+    }
+    h1 {
+      color: #ff6b6b;
+      margin: 0;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin: 1rem 0;
+    }
+    button {
+      background: #ff6b6b;
+      border: none;
+      color: white;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      outline: none;
+    }
+    button:hover {
+      transform: scale(1.05);
+      background: #ff8787;
+    }
+    .secondary-button {
+      background: #feca57;
+    }
+    .secondary-button:hover {
+      background: #ffdd59;
+    }
+    #message {
+      margin: 1rem 0;
+      font-weight: bold;
+      color: #ff6b6b;
+    }
+    #misha-love {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.8);
+      padding: 0.5rem;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    #misha-love p {
+      display: inline-block;
+      padding-left: 100%;
+      animation: marquee 30s linear infinite;
+    }
+    @keyframes marquee {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(-100%, 0); }
+    }
+    #hearts-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="hearts-canvas"></canvas>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-heart"></i>
+      <h1>Misha's Magical Door 🚪✨</h1>
+    </div>
+    <p>Theme: I miss Misha 💖</p>
+    <p id="message"></p>
+    <div class="button-container">
+      <button onclick="unlock()" class="primary-button">Open for Misha 🌟</button>
+      <button onclick="lock()" class="primary-button">Misha's Cozy Cocoon 🦋</button>
+    </div>
+    <div class="secondary-button-container">
+      <button onclick="stop()" class="secondary-button">Misha's Safety Hug 🤗</button>
+      <button onclick="safe()" class="secondary-button">Misha's Comfort Zone 🏡</button>
+    </div>
+  </div>
+
+  <div id="misha-love">
+    <p>Misha is the epitome of awesomeness! 🌟 Her radiant smile brightens even the gloomiest days. With her infectious laughter and boundless kindness, she spreads joy wherever she goes. Misha's intelligence and wit make every conversation a delightful adventure. Her compassion knows no bounds, always there to lend a helping hand or a listening ear. Misha's creativity inspires those around her, and her unique perspective brings color to the world. Her strength and resilience in the face of challenges are truly admirable. Misha's friendship is a precious gift, cherished by all who know her. She makes the ordinary extraordinary and turns moments into memories. Misha, you are loved, appreciated, and missed more than words can express! 💖🌈🎉</p>
+  </div>
+
+  <script src="/index.js"></script>
+  <script>
+    const canvas = document.getElementById('hearts-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    class Heart {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = canvas.height + 20;
+        this.size = Math.random() * 15 + 5;
+        this.speed = Math.random() * 2 + 1;
+      }
+
+      draw() {
+        ctx.fillStyle = `rgba(255, ${Math.random() * 100 + 100}, ${Math.random() * 100 + 100}, 0.7)`;
+        ctx.beginPath();
+        ctx.moveTo(this.x, this.y);
+        ctx.bezierCurveTo(this.x - this.size / 2, this.y - this.size / 2, this.x - this.size, this.y + this.size / 3, this.x, this.y + this.size);
+        ctx.bezierCurveTo(this.x + this.size, this.y + this.size / 3, this.x + this.size / 2, this.y - this.size / 2, this.x, this.y);
+        ctx.closePath();
+        ctx.fill();
+      }
+
+      update() {
+        this.y -= this.speed;
+        if (this.y < -20) {
+          this.y = canvas.height + 20;
+          this.x = Math.random() * canvas.width;
+        }
+      }
+    }
+
+    const hearts = Array(50).fill().map(() => new Heart());
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      hearts.forEach(heart => {
+        heart.draw();
+        heart.update();
+      });
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
+
+</html>

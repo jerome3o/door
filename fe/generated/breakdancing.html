@@ -1,0 +1,209 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🕺 B-Boy Door Control 💃</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #1a1a1a;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+    .maincontainer {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      text-align: center;
+    }
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2.5rem;
+      margin-right: 10px;
+      animation: spin 2s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    h1 {
+      font-size: 2.5rem;
+      margin: 0;
+      background: linear-gradient(45deg, #ff00ff, #00ffff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    #message {
+      font-size: 1.2rem;
+      margin-bottom: 20px;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    .primary-button, .secondary-button {
+      font-size: 1.2rem;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+    }
+    .primary-button {
+      background-color: #ff00ff;
+      color: #fff;
+    }
+    .primary-button:hover {
+      background-color: #cc00cc;
+      transform: scale(1.05);
+    }
+    .secondary-button {
+      background-color: #00ffff;
+      color: #000;
+    }
+    .secondary-button:hover {
+      background-color: #00cccc;
+      transform: scale(1.05);
+    }
+    #breakdancer-canvas {
+      width: 100%;
+      height: 200px;
+      margin-bottom: 20px;
+    }
+    .theme-name {
+      font-size: 1rem;
+      margin-top: 20px;
+      font-style: italic;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>🕺 B-Boy Door Control 💃</h1>
+    </div>
+    <canvas id="breakdancer-canvas"></canvas>
+    <p id="message"></p>
+    <div class="button-container">
+      <button onclick="unlock()" class="primary-button">🔓 Pop the Lock</button>
+      <button onclick="lock()" class="primary-button">🔒 Freeze the Door</button>
+    </div>
+    <div class="secondary-button-container">
+      <button onclick="stop()" class="secondary-button">🛑 Break it Down</button>
+      <button onclick="safe()" class="secondary-button">🏆 Olympic Mode</button>
+    </div>
+    <p class="theme-name">Theme: Breakdancing at the Olympics 🏅</p>
+  </div>
+
+  <script src="/index.js"></script>
+  <script>
+    // Breakdancer animation
+    const canvas = document.getElementById('breakdancer-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+
+    class Breakdancer {
+      constructor() {
+        this.x = canvas.width / 2;
+        this.y = canvas.height / 2;
+        this.size = 20;
+        this.angle = 0;
+        this.speed = 0.1;
+      }
+
+      draw() {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.angle);
+        ctx.fillStyle = '#ff00ff';
+        ctx.beginPath();
+        ctx.arc(0, 0, this.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#00ffff';
+        ctx.fillRect(0, -this.size/2, this.size*1.5, this.size/4);
+        ctx.fillRect(-this.size*1.5, -this.size/2, this.size*1.5, this.size/4);
+        ctx.restore();
+      }
+
+      update() {
+        this.angle += this.speed;
+        this.x = canvas.width/2 + Math.cos(this.angle) * 50;
+        this.y = canvas.height/2 + Math.sin(this.angle) * 50;
+      }
+    }
+
+    const dancer = new Breakdancer();
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      dancer.update();
+      dancer.draw();
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    // Button click effects
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+        button.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+          button.style.transform = 'scale(1)';
+        }, 100);
+      });
+    });
+
+    // Confetti effect for Olympic Mode
+    function createConfetti() {
+      const confetti = document.createElement('div');
+      confetti.style.position = 'absolute';
+      confetti.style.width = '10px';
+      confetti.style.height = '10px';
+      confetti.style.backgroundColor = ['#ff00ff', '#00ffff', '#ffff00'][Math.floor(Math.random() * 3)];
+      confetti.style.left = Math.random() * window.innerWidth + 'px';
+      confetti.style.top = '-10px';
+      confetti.style.borderRadius = '50%';
+      document.body.appendChild(confetti);
+
+      const animation = confetti.animate(
+        [
+          { transform: 'translateY(0) rotate(0deg)', opacity: 1 },
+          { transform: `translateY(${window.innerHeight}px) rotate(${Math.random() * 360}deg)`, opacity: 0 }
+        ],
+        {
+          duration: Math.random() * 3000 + 2000,
+          easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+        }
+      );
+
+      animation.onfinish = () => confetti.remove();
+    }
+
+    document.querySelector('.secondary-button:last-child').addEventListener('click', () => {
+      for (let i = 0; i < 50; i++) {
+        setTimeout(createConfetti, i * 50);
+      }
+    });
+  </script>
+</body>
+
+</html>

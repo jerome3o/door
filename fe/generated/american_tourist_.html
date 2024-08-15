@@ -1,0 +1,229 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🇺🇸 MURICA Door Control 🦅</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(45deg, #bf0a30, #ffffff, #002868);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    .maincontainer {
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      max-width: 90%;
+      position: relative;
+      z-index: 1;
+    }
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+      color: #002868;
+    }
+    h1 {
+      font-size: 2em;
+      color: #bf0a30;
+      text-shadow: 2px 2px #002868;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .primary-button, .secondary-button {
+      padding: 15px 30px;
+      font-size: 1.2em;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: bold;
+      text-transform: uppercase;
+    }
+    .primary-button {
+      background-color: #bf0a30;
+      color: white;
+    }
+    .secondary-button {
+      background-color: #002868;
+      color: white;
+    }
+    .primary-button:hover, .secondary-button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    }
+    #message {
+      font-size: 1.2em;
+      margin: 20px 0;
+      font-weight: bold;
+      color: #002868;
+    }
+    #fireworks-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+    .theme-name {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 0.8em;
+      color: #002868;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="fireworks-canvas"></canvas>
+  <div class="maincontainer">
+    <div class="theme-name">Theme: American Tourist 🇺🇸</div>
+    <div class="header">
+      <i class="fas fa-flag-usa"></i>
+      <h1>FREEDOM DOOR CONTROL 🦅</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button onclick="unlock()" class="primary-button">OPEN SESAME! 🗽</button>
+      <button onclick="lock()" class="primary-button">FORT KNOX MODE 🔒</button>
+    </div>
+    <div class="secondary-button-container">
+      <button onclick="stop()" class="secondary-button">HOLD MY BEER! 🍺</button>
+      <button onclick="safe()" class="secondary-button">FREEDOM INSURANCE 🦅</button>
+    </div>
+  </div>
+
+  <script src="/index.js"></script>
+  <script>
+    // Fireworks animation
+    const canvas = document.getElementById('fireworks-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    class Firework {
+      constructor() {
+        this.reset();
+      }
+
+      reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = canvas.height;
+        this.sx = Math.random() * 3 - 1.5;
+        this.sy = -Math.random() * 4 - 4;
+        this.size = Math.random() * 2 + 1;
+        this.exploded = false;
+        this.particles = [];
+      }
+
+      update() {
+        if (!this.exploded) {
+          this.x += this.sx;
+          this.y += this.sy;
+          if (this.y < canvas.height / 2) {
+            this.explode();
+          }
+        } else {
+          this.particles.forEach((p, index) => {
+            p.x += p.sx;
+            p.y += p.sy;
+            p.sy += 0.05;
+            p.size *= 0.95;
+            if (p.size < 0.5) {
+              this.particles.splice(index, 1);
+            }
+          });
+          if (this.particles.length === 0) {
+            this.reset();
+          }
+        }
+      }
+
+      explode() {
+        this.exploded = true;
+        for (let i = 0; i < 50; i++) {
+          const angle = Math.random() * Math.PI * 2;
+          const speed = Math.random() * 3 + 1;
+          this.particles.push({
+            x: this.x,
+            y: this.y,
+            sx: Math.cos(angle) * speed,
+            sy: Math.sin(angle) * speed,
+            size: Math.random() * 2 + 1,
+            color: Math.random() < 0.3 ? '#bf0a30' : (Math.random() < 0.6 ? '#ffffff' : '#002868')
+          });
+        }
+      }
+
+      draw() {
+        if (!this.exploded) {
+          ctx.fillStyle = '#ffffff';
+          ctx.beginPath();
+          ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+          ctx.fill();
+        } else {
+          this.particles.forEach(p => {
+            ctx.fillStyle = p.color;
+            ctx.beginPath();
+            ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
+            ctx.fill();
+          });
+        }
+      }
+    }
+
+    const fireworks = Array(5).fill().map(() => new Firework());
+
+    function animate() {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      fireworks.forEach(f => {
+        f.update();
+        f.draw();
+      });
+      
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    // Make buttons extra loud
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+        const audio = new Audio('https://www.myinstants.com/media/sounds/america-fuck-yeah-team-america-world-police.mp3');
+        audio.volume = 0.5;
+        audio.play();
+      });
+    });
+  </script>
+</body>
+
+</html>

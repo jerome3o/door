@@ -1,0 +1,166 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🍑💨 Jackson the Ripper's Fart-Lock 💨🔒</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive;
+      background-color: #8B4513;
+      color: #FFD700;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    .maincontainer {
+      background-color: #A0522D;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+    }
+    h1 {
+      font-size: 2.5em;
+      margin: 0;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    button {
+      font-family: 'Comic Sans MS', cursive;
+      font-size: 1.2em;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .primary-button {
+      background-color: #FFD700;
+      color: #8B4513;
+    }
+    .secondary-button {
+      background-color: #CD853F;
+      color: #FFD700;
+    }
+    button:hover {
+      transform: scale(1.1);
+    }
+    #message {
+      font-size: 1.2em;
+      margin: 20px 0;
+    }
+    #fartCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="fartCanvas"></canvas>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-wind"></i>
+      <h1>Jackson the Ripper's Fart-Lock 💨🔒</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button onclick="unlock()" class="primary-button">🍑 Release the Gas! 💨</button>
+      <button onclick="lock()" class="primary-button">🔒 Seal the Stench! 🚫</button>
+    </div>
+    <div class="secondary-button-container">
+      <button onclick="stop()" class="secondary-button">🛑 Emergency Plug! 🍑</button>
+      <button onclick="safe()" class="secondary-button">🌬️ Air Freshener 🌺</button>
+    </div>
+  </div>
+
+  <script src="/index.js"></script>
+  <script>
+    const canvas = document.getElementById('fartCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    class FartCloud {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = canvas.height + 20;
+        this.size = Math.random() * 50 + 20;
+        this.speed = Math.random() * 2 + 1;
+        this.color = `rgba(${Math.random() * 50 + 100}, ${Math.random() * 50 + 50}, 0, ${Math.random() * 0.5 + 0.3})`;
+      }
+
+      update() {
+        this.y -= this.speed;
+        if (this.y < -this.size) {
+          this.y = canvas.height + 20;
+          this.x = Math.random() * canvas.width;
+        }
+      }
+
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+      }
+    }
+
+    const fartClouds = Array(20).fill().map(() => new FartCloud());
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      fartClouds.forEach(cloud => {
+        cloud.update();
+        cloud.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+    const originalUnlock = window.unlock;
+    window.unlock = function() {
+      originalUnlock();
+      fartSound();
+    }
+
+    function fartSound() {
+      const audio = new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1vjGeSoGJHfH9dqQPAoXYrTp66hVFApIn+DyvmwhBTGH0fXDdSgDHm7A8d+WQgsUXK/n765aFghEmN31w28lAyt+zPPKfisDGGi669+dRw0RVqjl8bNdGAU7ktj1xHMpBSF6yAPckzsHFmS08OusVhEGPJPc9bt1HAblesfywh0qAhuBztDQhzEEDlSn6PSqXxQNN5DY88rgLgwZZLGw258+CRFWorkEwGUbA1+fve/OdyYCIHHCON+VPAoXXrC+Crl/HgZepM4C0nwiBh1/wODckjsLElSj4QDGdR8HN4zQ+theKwYhfMY48c97Gwhbob4Ezh4kARyAy9rwgjMGEVKlOu22ZBgEP5PY6cKHOwwca7jq5JJGDRlisSDMej4KF160v+fVizsIHHLH0tV/NQwUQ6Dc6qmRHgZTo8IKxA8lBxVjs+jhkEAMF1mtzP7Mjy4DG3HAxuKOQA0ZS6bWT9uYJgQkdcX17JQyCRNUquBZrpMqCRt9wOqVv3YfBlOkz/7NkjAEHXTEvN2LOQsWVKjasaeNJwYpeMLksYZFDBhgsL6luncpCBlyvE/ckUALGVva2GWzlkAEI37ErtmJNQgSQJnL2p9nFQRMrMgEyY4rBRVwuqTEeVsJB2y4tVPNgzQGD0ie59aphRwES6LPpSGQKwQdeLWXy6dcDghXqdLmq4gfBUCWyInQmzgIGXW9pMiQSAoRSZG7XN2PKQMbarYW15k6CRh5vvnTcjkHFVCzrzPUmywBHnG9uGhUEDwFUqzFJ8uMHwMYZ614zXpECRhxwIPUnTwMGlq0ZSvLjh0AFmG0Rs3UGUEHPpvVe7KLIgUieLmxk8t2JAgZaHzHg9IqOAcSR5Xavb+MGwVLn8mFcMIVOAmHwa/lVj0JHS1z1LWawkwHFm/FvNCJFiwDF0SWJc5SNHYLjMqLGXQXZRcAR6YKuNA1CRUcoaDWuSVsEAE0eZXjiLZEBhJIlIjST0RjCoXLVrNfTA4BLHmzibWiLTIBTJT63x90GwIZFpY15jVaFwMabJ1Uxb07Bw1tuurOaDsJHRDVwlY8gAYPACT3WdnLWBQALSUWzH47DQAUXSmK2lRmDQA5oy+6160vBSJ+w7TqfxsACAoomsNOPw0DFi6RFtBYRRgNQScq2tgxAABOOoSXjWcmCAAz5G8j19RQAAAxQ6+MpBDQ+wChCAAAAAAAAOAJskSWjpkAAADcR6Nm0kkAAAAAAAAAAAAAAAAAAAAAAAA=');
+      audio.play();
+    }
+  </script>
+</body>
+
+</html>

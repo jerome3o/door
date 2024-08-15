@@ -1,0 +1,206 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🏌️‍♂️ Masters Golf Door Control 🚪</title>
+  <style>
+    body {
+      font-family: 'Georgia', serif;
+      background-color: #006747;
+      color: #ffffff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .maincontainer {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+      max-width: 90%;
+      width: 400px;
+    }
+
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .header i {
+      font-size: 2.5em;
+      margin-right: 10px;
+      animation: swing 2s infinite;
+    }
+
+    @keyframes swing {
+      0%, 100% { transform: rotate(-10deg); }
+      50% { transform: rotate(10deg); }
+    }
+
+    h1 {
+      font-size: 2em;
+      margin: 0;
+    }
+
+    #message {
+      font-style: italic;
+      margin-bottom: 20px;
+    }
+
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+
+    button {
+      font-family: 'Georgia', serif;
+      font-size: 1em;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .primary-button {
+      background-color: #ffd700;
+      color: #006747;
+    }
+
+    .primary-button:hover {
+      background-color: #fff;
+      transform: scale(1.05);
+    }
+
+    .secondary-button {
+      background-color: #c41e3a;
+      color: #fff;
+    }
+
+    .secondary-button:hover {
+      background-color: #ff4d6d;
+      transform: scale(1.05);
+    }
+
+    #golfCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+
+    #theme {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      font-size: 0.8em;
+      color: #ffd700;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="golfCanvas"></canvas>
+  <div id="theme">🏌️‍♂️ Theme: The Masters Golf Tournament 🏆</div>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-golf-ball"></i>
+      <h1>Masters Door Control</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button onclick="unlock()" class="primary-button">🏌️‍♂️ Tee Off (Unlock)</button>
+      <button onclick="lock()" class="primary-button">🕳️ Hole In (Lock)</button>
+    </div>
+    <div class="secondary-button-container">
+      <button onclick="stop()" class="secondary-button">🛑 Penalty Stroke (E-Stop)</button>
+      <button onclick="safe()" class="secondary-button">🏳️ Concede (Safe Actuators)</button>
+    </div>
+  </div>
+
+  <script src="/index.js"></script>
+  <script>
+    // Golf ball animation
+    const canvas = document.getElementById('golfCanvas');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    class GolfBall {
+      constructor() {
+        this.radius = 5;
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.dx = (Math.random() - 0.5) * 4;
+        this.dy = (Math.random() - 0.5) * 4;
+      }
+
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = '#ffffff';
+        ctx.fill();
+        ctx.closePath();
+      }
+
+      update() {
+        if (this.x + this.radius > canvas.width || this.x - this.radius < 0) {
+          this.dx = -this.dx;
+        }
+        if (this.y + this.radius > canvas.height || this.y - this.radius < 0) {
+          this.dy = -this.dy;
+        }
+
+        this.x += this.dx;
+        this.y += this.dy;
+
+        this.draw();
+      }
+    }
+
+    const golfBalls = [];
+    for (let i = 0; i < 20; i++) {
+      golfBalls.push(new GolfBall());
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      golfBalls.forEach(ball => ball.update());
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    // Resize canvas when window is resized
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+    // Add golf swing sound effect to buttons
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+        const swingSound = new Audio('https://www.soundjay.com/sports/sounds/golf-swing-1.mp3');
+        swingSound.play();
+      });
+    });
+  </script>
+</body>
+
+</html>

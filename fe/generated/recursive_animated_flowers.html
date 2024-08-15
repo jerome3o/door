@@ -1,0 +1,164 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🌸 Blooming Door Control 🌼</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      font-family: 'Arial', sans-serif;
+      overflow: hidden;
+    }
+    #flowerCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+    .maincontainer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      text-align: center;
+      color: #333;
+      background-color: rgba(255, 255, 255, 0.8);
+    }
+    .header {
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 48px;
+      color: #ff69b4;
+      animation: bloom 3s infinite alternate;
+    }
+    @keyframes bloom {
+      0% { transform: scale(1); }
+      100% { transform: scale(1.2); }
+    }
+    h1 {
+      font-size: 36px;
+      margin: 10px 0;
+      color: #ff69b4;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      gap: 20px;
+      margin: 20px 0;
+    }
+    .primary-button, .secondary-button {
+      padding: 15px 30px;
+      font-size: 18px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .primary-button {
+      background-color: #ff69b4;
+      color: white;
+    }
+    .secondary-button {
+      background-color: #87CEEB;
+      color: white;
+    }
+    .primary-button:hover, .secondary-button:hover {
+      transform: scale(1.1);
+    }
+    #message {
+      font-size: 24px;
+      margin: 20px 0;
+      font-weight: bold;
+      color: #333;
+    }
+    .theme-name {
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      font-size: 14px;
+      color: #666;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="flowerCanvas"></canvas>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>🌸 Blooming Door Control 🌼</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button onclick="unlock()" class="primary-button">🌺 Unlock Petals 🌺</button>
+      <button onclick="lock()" class="primary-button">🌻 Lock Stem 🌻</button>
+    </div>
+    <div class="secondary-button-container">
+      <button onclick="stop()" class="secondary-button">🌹 E-Stop Growth 🌹</button>
+      <button onclick="safe()" class="secondary-button">🌷 Safe Flower Bed 🌷</button>
+    </div>
+  </div>
+  <div class="theme-name">Theme: Recursive Animated Flowers 🌸🌼🌺</div>
+
+  <script src="/index.js"></script>
+  <script>
+    const canvas = document.getElementById('flowerCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    function drawFlower(x, y, size, depth) {
+      if (depth === 0) return;
+
+      const petalColor = `hsl(${Math.random() * 360}, 70%, 60%)`;
+      ctx.fillStyle = petalColor;
+
+      for (let i = 0; i < 5; i++) {
+        ctx.beginPath();
+        ctx.ellipse(x, y, size, size / 2, (i * Math.PI * 2) / 5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      ctx.fillStyle = 'yellow';
+      ctx.beginPath();
+      ctx.arc(x, y, size / 3, 0, Math.PI * 2);
+      ctx.fill();
+
+      for (let i = 0; i < 5; i++) {
+        const angle = (i * Math.PI * 2) / 5;
+        const newX = x + Math.cos(angle) * size * 1.5;
+        const newY = y + Math.sin(angle) * size * 1.5;
+        drawFlower(newX, newY, size * 0.5, depth - 1);
+      }
+    }
+
+    function drawFlowers() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      const numFlowers = 5;
+      for (let i = 0; i < numFlowers; i++) {
+        const x = Math.random() * canvas.width;
+        const y = Math.random() * canvas.height;
+        drawFlower(x, y, 30, 3);
+      }
+    }
+
+    drawFlowers();
+    setInterval(drawFlowers, 5000);
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      drawFlowers();
+    });
+  </script>
+</body>
+
+</html>

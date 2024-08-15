@@ -1,0 +1,168 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🐠 Aquatic Door Control 🐟</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background-color: #e6f3ff;
+      color: #004080;
+      overflow: hidden;
+    }
+    .maincontainer {
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 20px;
+      background-color: rgba(255, 255, 255, 0.8);
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(0, 64, 128, 0.2);
+      position: relative;
+      z-index: 1;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 48px;
+      color: #0080ff;
+    }
+    h1 {
+      margin: 10px 0;
+      font-size: 28px;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 18px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .primary-button {
+      background-color: #0080ff;
+      color: white;
+    }
+    .primary-button:hover {
+      background-color: #005bb5;
+      transform: scale(1.05);
+    }
+    .secondary-button {
+      background-color: #ff8000;
+      color: white;
+    }
+    .secondary-button:hover {
+      background-color: #b35900;
+      transform: scale(1.05);
+    }
+    #message {
+      text-align: center;
+      font-size: 18px;
+      margin: 20px 0;
+    }
+    #fishtank {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+    .theme-name {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 14px;
+      color: #004080;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="fishtank"></canvas>
+  <div class="maincontainer">
+    <div class="theme-name">Theme: Fish Tank 🐠</div>
+    <div class="header">
+      <i class="fas fa-fish"></i>
+      <h1>🐠 Aquatic Door Control 🐟</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button onclick="unlock()" class="primary-button">🌊 Release the Kraken (Unlock) 🦑</button>
+      <button onclick="lock()" class="primary-button">🔒 Secure the Reef (Lock) 🐙</button>
+    </div>
+    <div class="secondary-button-container">
+      <button onclick="stop()" class="secondary-button">🛑 Jellyfish Sting (E-Stop) 🎐</button>
+      <button onclick="safe()" class="secondary-button">🐚 Clam Up (Safe Actuators) 🦪</button>
+    </div>
+  </div>
+
+  <script src="/index.js"></script>
+  <script>
+    // Fish tank animation
+    const canvas = document.getElementById('fishtank');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    class Fish {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 20 + 10;
+        this.speed = Math.random() * 2 + 1;
+        this.color = `hsl(${Math.random() * 60 + 180}, 100%, 50%)`;
+        this.direction = Math.random() * Math.PI * 2;
+      }
+
+      update() {
+        this.x += Math.cos(this.direction) * this.speed;
+        this.y += Math.sin(this.direction) * this.speed;
+
+        if (this.x < 0 || this.x > canvas.width) this.direction = Math.PI - this.direction;
+        if (this.y < 0 || this.y > canvas.height) this.direction = -this.direction;
+      }
+
+      draw() {
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.moveTo(this.x, this.y);
+        ctx.lineTo(this.x - this.size, this.y - this.size / 2);
+        ctx.lineTo(this.x - this.size, this.y + this.size / 2);
+        ctx.closePath();
+        ctx.fill();
+      }
+    }
+
+    const fishes = Array(20).fill().map(() => new Fish());
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      fishes.forEach(fish => {
+        fish.update();
+        fish.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,180 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🌊 Manatee Door Guardian 🦭</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #87CEEB, #1E90FF);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    .maincontainer {
+      background-color: rgba(255, 255, 255, 0.8);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      max-width: 90%;
+      width: 400px;
+    }
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+    .header i {
+      font-size: 2rem;
+      margin-right: 0.5rem;
+      color: #1E90FF;
+    }
+    h1 {
+      font-size: 2rem;
+      color: #1E90FF;
+      margin: 0;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 1rem;
+    }
+    .primary-button, .secondary-button {
+      background-color: #1E90FF;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: transform 0.3s, background-color 0.3s;
+    }
+    .primary-button:hover, .secondary-button:hover {
+      transform: scale(1.05);
+      background-color: #4169E1;
+    }
+    .secondary-button {
+      background-color: #FF6347;
+    }
+    .secondary-button:hover {
+      background-color: #FF4500;
+    }
+    #message {
+      font-size: 1.2rem;
+      margin: 1rem 0;
+      color: #1E90FF;
+    }
+    #manateeCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: -1;
+    }
+    #booBanner {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      background-color: rgba(30, 144, 255, 0.8);
+      color: white;
+      padding: 0.5rem;
+      text-align: center;
+      font-size: 1.2rem;
+      animation: bounce 2s infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="manateeCanvas"></canvas>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>🌊 Manatee Door Guardian 🦭</h1>
+    </div>
+    <p>Theme: Save the Manatees! 🐋💙</p>
+    <p id="message"></p>
+    <div class="button-container">
+      <button onclick="unlock()" class="primary-button">🔓 Release the Manatees</button>
+      <button onclick="lock()" class="primary-button">🔒 Protect the Manatees</button>
+    </div>
+    <div class="secondary-button-container">
+      <button onclick="stop()" class="secondary-button">🛑 Manatee Emergency</button>
+      <button onclick="safe()" class="secondary-button">🦺 Manatee Safety</button>
+    </div>
+  </div>
+  <div id="booBanner">🌟 Boo Jerome! Save the Manatees! 🌟</div>
+
+  <script src="/index.js"></script>
+  <script>
+    // Manatee animation
+    const canvas = document.getElementById('manateeCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    class Manatee {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = 30 + Math.random() * 20;
+        this.speedX = (Math.random() - 0.5) * 2;
+        this.speedY = (Math.random() - 0.5) * 2;
+      }
+
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+        if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+      }
+
+      draw() {
+        ctx.fillStyle = 'rgba(169, 169, 169, 0.5)';
+        ctx.beginPath();
+        ctx.ellipse(this.x, this.y, this.size, this.size / 2, 0, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    const manatees = [];
+    for (let i = 0; i < 5; i++) {
+      manatees.push(new Manatee());
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      manatees.forEach(manatee => {
+        manatee.update();
+        manatee.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    // Responsive canvas
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
+
+</html>

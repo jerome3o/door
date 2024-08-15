@@ -1,0 +1,225 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🎲 Articulate Door Control 🔐</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive;
+      background: linear-gradient(45deg, #FF6B6B, #4ECDC4, #45B7D1, #FCBE32);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    .maincontainer {
+      background-color: rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      max-width: 90%;
+      width: 400px;
+    }
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+      color: #FF6B6B;
+    }
+    h1 {
+      font-size: 2em;
+      color: #45B7D1;
+      margin: 0;
+    }
+    #message {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+      min-height: 50px;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+    button {
+      font-family: 'Comic Sans MS', cursive;
+      font-size: 1.2em;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+    .primary-button {
+      background-color: #FCBE32;
+      color: #fff;
+    }
+    .secondary-button {
+      background-color: #4ECDC4;
+      color: #fff;
+    }
+    #wheel-container {
+      position: relative;
+      width: 200px;
+      height: 200px;
+      margin: 20px auto;
+    }
+    #wheel {
+      width: 100%;
+      height: 100%;
+    }
+    #spinner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 20px;
+      height: 100px;
+      background-color: #FF6B6B;
+      transform-origin: bottom center;
+      transform: translateX(-50%);
+      clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-dice"></i>
+      <h1>Articulate Door Control 🚪</h1>
+    </div>
+    <p id="message"></p>
+    <div id="wheel-container">
+      <canvas id="wheel"></canvas>
+      <div id="spinner"></div>
+    </div>
+    <div class="button-container">
+      <button onclick="unlock()" class="primary-button">🔓 Describe This: Open Sesame!</button>
+      <button onclick="lock()" class="primary-button">🔒 Act Out: Fort Knox</button>
+    </div>
+    <div class="secondary-button-container">
+      <button onclick="stop()" class="secondary-button">🛑 Quick Fire: Halt!</button>
+      <button onclick="safe()" class="secondary-button">🛡️ All Play: Secure the Castle</button>
+    </div>
+  </div>
+
+  <script src="/index.js"></script>
+  <script>
+    const wheel = document.getElementById('wheel');
+    const ctx = wheel.getContext('2d');
+    const spinner = document.getElementById('spinner');
+    const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FCBE32'];
+    const categories = ['Object', 'Action', 'Nature', 'World'];
+    let spinning = false;
+
+    function resizeWheel() {
+      const container = document.getElementById('wheel-container');
+      wheel.width = container.offsetWidth;
+      wheel.height = container.offsetHeight;
+      drawWheel();
+    }
+
+    function drawWheel() {
+      const centerX = wheel.width / 2;
+      const centerY = wheel.height / 2;
+      const radius = Math.min(centerX, centerY) - 5;
+
+      for (let i = 0; i < colors.length; i++) {
+        const startAngle = i * Math.PI / 2;
+        const endAngle = (i + 1) * Math.PI / 2;
+
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY);
+        ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+        ctx.closePath();
+        ctx.fillStyle = colors[i];
+        ctx.fill();
+
+        ctx.save();
+        ctx.translate(centerX, centerY);
+        ctx.rotate(startAngle + Math.PI / 4);
+        ctx.textAlign = 'right';
+        ctx.fillStyle = '#fff';
+        ctx.font = '14px Comic Sans MS';
+        ctx.fillText(categories[i], radius - 10, 0);
+        ctx.restore();
+      }
+    }
+
+    function spinWheel() {
+      if (spinning) return;
+      spinning = true;
+      const duration = 3000 + Math.random() * 2000;
+      const startTime = Date.now();
+      const startAngle = parseFloat(spinner.style.transform.replace('rotate(', '').replace('deg)', '') || 0);
+      const totalRotation = 720 + Math.random() * 360;
+
+      function animate() {
+        const elapsed = Date.now() - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easeProgress = 1 - Math.pow(1 - progress, 3);
+        const currentRotation = startAngle + totalRotation * easeProgress;
+        spinner.style.transform = `translateX(-50%) rotate(${currentRotation}deg)`;
+
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          spinning = false;
+        }
+      }
+
+      animate();
+    }
+
+    window.addEventListener('resize', resizeWheel);
+    resizeWheel();
+
+    // Add click event to spin the wheel
+    wheel.addEventListener('click', spinWheel);
+
+    // Modify existing functions to spin the wheel
+    const originalUnlock = window.unlock;
+    window.unlock = function() {
+      spinWheel();
+      originalUnlock();
+    };
+
+    const originalLock = window.lock;
+    window.lock = function() {
+      spinWheel();
+      originalLock();
+    };
+
+    const originalStop = window.stop;
+    window.stop = function() {
+      spinWheel();
+      originalStop();
+    };
+
+    const originalSafe = window.safe;
+    window.safe = function() {
+      spinWheel();
+      originalSafe();
+    };
+  </script>
+</body>
+
+</html>

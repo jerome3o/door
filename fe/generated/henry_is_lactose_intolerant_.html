@@ -1,0 +1,170 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🥛 Henry's Lactose Lock 🚽</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f8ff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    .maincontainer {
+      background-color: #ffffff;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
+      max-width: 90%;
+      width: 400px;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+      color: #4CAF50;
+    }
+    h1 {
+      margin: 0;
+      color: #333;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .primary-button {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .secondary-button {
+      background-color: #f44336;
+      color: white;
+    }
+    button:hover {
+      transform: scale(1.05);
+    }
+    #message {
+      margin: 20px 0;
+      font-weight: bold;
+      color: #333;
+    }
+    #theme {
+      font-style: italic;
+      color: #666;
+      margin-top: 20px;
+    }
+    #fartCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="fartCanvas"></canvas>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-toilet"></i>
+      <h1>🥛 Henry's Lactose Lock 🚽</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button onclick="unlock()" class="primary-button">🔓 Unleash the Dairy</button>
+      <button onclick="lock()" class="primary-button">🔒 Seal the Cheese</button>
+    </div>
+    <div class="secondary-button-container">
+      <button onclick="stop()" class="secondary-button">💨 Gas Emergency</button>
+      <button onclick="safe()" class="secondary-button">🧻 TP Resupply</button>
+    </div>
+    <p id="theme">Theme: Henry is lactose intolerant</p>
+  </div>
+
+  <script src="/index.js"></script>
+  <script>
+    const canvas = document.getElementById('fartCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    class FartCloud {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = canvas.height + 50;
+        this.size = Math.random() * 30 + 20;
+        this.speedY = Math.random() * 2 + 1;
+        this.speedX = Math.random() * 4 - 2;
+        this.color = `rgba(${Math.random() * 50 + 100}, ${Math.random() * 50 + 100}, ${Math.random() * 50}, 0.7)`;
+      }
+
+      update() {
+        this.y -= this.speedY;
+        this.x += this.speedX;
+        if (this.size > 0.2) this.size -= 0.1;
+      }
+
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+      }
+    }
+
+    const fartClouds = [];
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      if (Math.random() < 0.1) fartClouds.push(new FartCloud());
+      fartClouds.forEach((cloud, index) => {
+        cloud.update();
+        cloud.draw();
+        if (cloud.y < 0 || cloud.size <= 0.2) fartClouds.splice(index, 1);
+      });
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    const originalUnlock = window.unlock;
+    window.unlock = function() {
+      originalUnlock();
+      for (let i = 0; i < 10; i++) {
+        fartClouds.push(new FartCloud());
+      }
+    };
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
+
+</html>
