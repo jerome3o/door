@@ -5,3 +5,4 @@ __pycache__/
 .keys.db.json
 door_access.log
 .prompts.json
+fe/staging/

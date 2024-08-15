@@ -62,6 +62,7 @@ from server.constants import (
 )
 from server.door_controller import DoorController, ActuatorController, cleanup
 from server.auth import AuthMiddleware, Flatmate, User, AddKeyParams, router as auth_router
+from server.themes import router as theme_generation_router
 
 try:
     with open(PROMPTS_FILE, 'r') as file:
@@ -72,9 +73,6 @@ except FileNotFoundError:
 elevenlabs_client = ElevenLabs(
     api_key=ELEVENLABS_API_KEY,
 )
-
-with open(EXAMPLE_HTML_FILE) as f:
-    EXAMPLE_HTML = f.read()
 
 async def generate_welcome(prompt):
     anthropic_client = anthropic.AsyncAnthropic()
@@ -92,12 +90,7 @@ async def generate_welcome(prompt):
         ]
     )
 
-    if not isinstance(message.content[0], anthropic.types.ContentBlock):
-        raise ValueError("Unexpected content type")
-    if message.content[0].type != "text":
-        raise ValueError(f"Unexpected content type: {message.content[0].type}")
-
-
+    assert message.content[0].type == "text"
     msg = message.content[0].text
     return msg
 
@@ -127,109 +120,13 @@ logging.basicConfig(
 
 _logger = logging.getLogger(__name__)
 
-_SYSTEM_PROMPT = """\
-This is a conversation between a user and Claude, a helpful AI assistant. The user is making a \
-website to control a mechanism that locks and unlocks their apartment door, and would like help \
-styling the website. The user will request a theme and some html for the website, and Claude will \
-then respond with an update html file with the styles inlined.
-
-When generating the html claude should:
-* Use a lot of emojis
-* Not include any images
-* Respond with only the html content, enclosed in triple backticks
-* Use animations and javascript where appropriate to make the website interesting
-* Ensure the websites are mobile friendly
-* Ensure that any existing scripts are loaded and still functional, specifically id "message"
-* Make sure to add the theme name to the door controller website so the user knows what the theme is
-* Try and incorporate the theme in the text on the buttons and title
-* Try and use canvases, javascript, or other interactive elements to make the website more interesting
-* Try an go above and beyond to make the website interesting, fun, novel, and engaging using your knowledge of web development and design
-"""
-
-_MESSAGE_TEMPLATE = """\
-Please generate html for this website:
-```
-{html}
-```
-
-With the following theme: {theme}
-{additional_information}
-
-If it seems appropriate, try and use javascript and canvases (or three.js etc) to make it interesting
-
-Then write out the full html file enclosed in triple backticks.
-"""
-
-_ADDITIONAL_INFO_TEMPLATE = """
-Additional information:
-{additional_information}
-"""
-class Theme(BaseModel):
-    theme: str
-    additional_information: str
-
-
-client = anthropic.AsyncAnthropic()
-
-
-async def generate_theme(theme_spec: Theme) -> str:
-    theme = theme_spec.theme
-    additional_information = theme_spec.additional_information
-
-    additional_content = ""
-    if additional_information != "":
-        additional_content += _ADDITIONAL_INFO_TEMPLATE.format(
-            additional_information=additional_information
-        )
-
-    content = _MESSAGE_TEMPLATE.format(
-        html=EXAMPLE_HTML,
-        theme=theme,
-        additional_information=additional_content,
-    )
-
-    response = await client.messages.create(
-        max_tokens=4096,
-        system=_SYSTEM_PROMPT,
-        model="claude-3-5-sonnet-20240620",
-        messages=[{"role": "user", "content": content}],
-    )
-
-    if not isinstance(response.content[0], anthropic.types.ContentBlock):
-        raise ValueError("Unexpected content type")
-    if response.content[0].type != "text":
-        raise ValueError(f"Unexpected content type: {response.content[0].type}")
-
-    content = response.content[0].text
-
-    # replace all ```html with just ```
-    content = content.replace("```html", "```")
-
-    if "```" not in content:
-        raise ValueError("Response does not contain html content")
-
-    # get content of ```
-    content = content.split("```")[1]
-
-    # make theme file name safe
-    theme_fn = theme.replace(" ", "_").lower()
-    theme_fn = re.sub(r"[^a-zA-Z0-9_]", "", theme_fn)
-    theme_fn += ".html"
-    theme_path = f"{STAGING_DIR}/{theme_fn}"
-
-    # save to fe/generated
-    with open(theme_path, "w") as f:
-        f.write(content)
-
-    return theme_fn
-
-
 app = FastAPI()
 
 
 # Add the middleware to the app
 app.add_middleware(AuthMiddleware)
 app.include_router(auth_router)
+app.include_router(theme_generation_router)
 
 # Login page route
 @app.get("/login", response_class=HTMLResponse)
@@ -293,37 +190,6 @@ async def stop(user: User):
     await door_controller.stop()
     send_message(f"{user} called stop")
     return {"message": "Stopping actuators"}
-
-
-@app.post("/api/generate_theme")
-async def generate_theme_endpoint(theme: Theme, user: User):
-    _logger.info(f"{user} requested theme: {theme.theme}")
-    theme_path = await generate_theme(theme)
-    return {"message": "Theme generated", "theme_path": theme_path}
-
-
-class AcceptThemeParams(BaseModel):
-    theme_path: str
-
-
-@app.post("/api/accept_theme")
-async def accept_theme(accept_theme: AcceptThemeParams, user: User):
-    _logger.info(f"{user} accepted theme: {accept_theme.theme_path}")
-    theme_path = accept_theme.theme_path
-    old_path = Path(f"{STAGING_DIR}/{theme_path}")
-    new_path = Path(f"{GENERATED_DIR}/{theme_path}")
-
-    if not old_path.exists():
-        return {"message": "Theme not found"}
-
-    i = 0
-    while new_path.exists():
-        i = i + 1
-        new_path = new_path.with_name(f"{new_path.stem}_{i}{new_path.suffix}")
-
-    old_path.rename(new_path)
-
-    return {"message": "Theme accepted"}
 
 
 @app.get("/")
