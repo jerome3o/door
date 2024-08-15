@@ -36,20 +36,35 @@ from fastapi.security import APIKeyHeader, APIKeyQuery
 from fastapi.staticfiles import StaticFiles
 from starlette.middleware.base import BaseHTTPMiddleware
 
-
-_NTFY_TOPIC = os.getenv("NTFY_TOPIC")
+from server.constants import (
+    ELEVENLABS_API_KEY,
+    NTFY_TOPIC,
+    SEED_KEY_FILE,
+    KEY_FILE,
+    PROMPTS_FILE,
+    OPEN_ACTUATOR_PIN1,
+    OPEN_ACTUATOR_PIN2,
+    CLOSE_ACTUATOR_PIN1,
+    CLOSE_ACTUATOR_PIN2,
+    DEFAULT_DELAY,
+    ALLOWED_ORIGINS,
+    THEMES_DIR,
+    GENERATED_DIR,
+    STAGING_DIR,
+    COOKIE_EXPIRATION_DAYS,
+    WELCOME_START_TIME,
+    WELCOME_END_TIME,
+    LOG_FILE,
+    EXAMPLE_HTML_FILE,
+    LOGIN_HTML_FILE,
+    API_KEY_HEADER_NAME,
+    API_KEY_QUERY_NAME,
+    API_KEY_COOKIE_NAME
+)
 FLATMATES: set[str] = set(os.environ["FLATMATES"].split(","))
 
-DEFAULT_DELAY = 17
-
-# Key management
-SEED_KEY_FILE = ".keys.json"
-KEY_FILE = ".keys.db.json"
-
-ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY")
-
 try:
-    with open('.prompts.json', 'r') as file:
+    with open(PROMPTS_FILE, 'r') as file:
         _USER_WELCOME_PROMPTS: dict[str, list[str]] = json.load(file)
 except FileNotFoundError:
     _USER_WELCOME_PROMPTS = {}
@@ -57,6 +72,11 @@ except FileNotFoundError:
 elevenlabs_client = ElevenLabs(
     api_key=ELEVENLABS_API_KEY,
 )
+
+
+with open(EXAMPLE_HTML_FILE) as f:
+    EXAMPLE_HTML = f.read()
+
 
 async def generate_welcome(prompt):
     anthropic_client = anthropic.AsyncAnthropic()
@@ -114,24 +134,21 @@ KEYS = load_keys()
 
 # Logging setup
 logging.basicConfig(
-    filename="door_access.log",
+    filename=LOG_FILE,
     level=logging.INFO,
     format="%(asctime)s - %(message)s",
     datefmt="%d-%b-%y %H:%M:%S",
 )
 
 # Security key header
-api_key_header = APIKeyHeader(name="X-API-Key", auto_error=False)
-api_key_query = APIKeyQuery(name="key", auto_error=False)
-
-
+api_key_header = APIKeyHeader(name=API_KEY_HEADER_NAME, auto_error=False)
+api_key_query = APIKeyQuery(name=API_KEY_QUERY_NAME, auto_error=False)
 # Authentication function
 async def get_api_key(
     api_key_header: str = Depends(api_key_header),
-    api_key_cookie: Optional[str] = Cookie(None, alias="api_key"),
+    api_key_cookie: Optional[str] = Cookie(None, alias=API_KEY_COOKIE_NAME),
 ) -> str:
     return api_key_header or api_key_cookie
-
 
 def get_user(request: Request) -> str:
     user = request.state.user
@@ -160,18 +177,18 @@ class AuthMiddleware(BaseHTTPMiddleware):
         # List of paths that don't require authentication
         open_paths = ["/login", "/auth", "/favicon.ico"]
 
-        query_param_key = request.query_params.get("key")
+        query_param_key = request.query_params.get(API_KEY_QUERY_NAME)
         if query_param_key:
             user = next(
                 (name for name, k in KEYS.items() if k == query_param_key), None
             )
             if user:
                 # Set cookie to expire in 10 years
-                expiration = datetime.utcnow() + timedelta(days=365 * 10)
+                expiration = datetime.utcnow() + timedelta(days=COOKIE_EXPIRATION_DAYS)
 
                 # Preserve other query parameters if any
                 query_params = dict(request.query_params)
-                query_params.pop("key", None)
+                query_params.pop(API_KEY_QUERY_NAME, None)
                 if query_params:
                     query_string = f"?{urlencode(query_params)}"
                 else:
@@ -184,7 +201,7 @@ class AuthMiddleware(BaseHTTPMiddleware):
                     status_code=303,
                 )  # 303 See Other
                 response.set_cookie(
-                    key="api_key",
+                    key=API_KEY_COOKIE_NAME,
                     value=query_param_key,
                     expires=expiration.strftime("%a, %d %b %Y %H:%M:%S GMT"),
                     httponly=True,
@@ -200,8 +217,8 @@ class AuthMiddleware(BaseHTTPMiddleware):
             return await call_next(request)
 
         api_key = await get_api_key(
-            api_key_header=request.headers.get("X-API-Key"),
-            api_key_cookie=request.cookies.get("api_key"),
+            api_key_header=request.headers.get(API_KEY_HEADER_NAME),
+            api_key_cookie=request.cookies.get(API_KEY_COOKIE_NAME),
         )
 
         if api_key is None:
@@ -225,10 +242,6 @@ class AuthMiddleware(BaseHTTPMiddleware):
 
 
 _logger = logging.getLogger(__name__)
-
-with open("example_html.html") as f:
-    EXAMPLE_HTML = f.read()
-
 
 _SYSTEM_PROMPT = """\
 This is a conversation between a user and Claude, a helpful AI assistant. The user is making a \
@@ -267,8 +280,6 @@ _ADDITIONAL_INFO_TEMPLATE = """
 Additional information:
 {additional_information}
 """
-
-
 class Theme(BaseModel):
     theme: str
     additional_information: str
@@ -315,7 +326,7 @@ async def generate_theme(theme_spec: Theme) -> str:
     theme_fn = theme.replace(" ", "_").lower()
     theme_fn = re.sub(r"[^a-zA-Z0-9_]", "", theme_fn)
     theme_fn += ".html"
-    theme_path = f"fe/staging/{theme_fn}"
+    theme_path = f"{STAGING_DIR}/{theme_fn}"
 
     # save to fe/generated
     with open(theme_path, "w") as f:
@@ -410,7 +421,7 @@ app.add_middleware(AuthMiddleware)
 @app.get("/login", response_class=HTMLResponse)
 async def login_page(error: str = None):
     # load in the login page from fe/login.html
-    with open("fe/login.html") as f:
+    with open(LOGIN_HTML_FILE) as f:
         login_page = f.read()
 
     return HTMLResponse(content=login_page)
@@ -422,10 +433,10 @@ async def auth(request: Request, key: str = Form(...)):
     user = next((name for name, k in KEYS.items() if k == key), None)
     if user:
         # Set cookie to expire in 10 years
-        expiration = datetime.utcnow() + timedelta(days=365 * 10)
+        expiration = datetime.utcnow() + timedelta(days=COOKIE_EXPIRATION_DAYS)
         response = RedirectResponse(url="/", status_code=303)  # 303 See Other
         response.set_cookie(
-            key="api_key",
+            key=API_KEY_COOKIE_NAME,
             value=key,
             expires=expiration.strftime("%a, %d %b %Y %H:%M:%S GMT"),
             httponly=True,  # Makes the cookie inaccessible to JavaScript
@@ -443,14 +454,13 @@ async def auth(request: Request, key: str = Form(...)):
 gpio.cleanup()
 
 door_controller = DoorController(
-    open_actuator=ActuatorController(23, 24),
-    close_actuator=ActuatorController(17, 22),
+    open_actuator=ActuatorController(OPEN_ACTUATOR_PIN1, OPEN_ACTUATOR_PIN2),
+    close_actuator=ActuatorController(CLOSE_ACTUATOR_PIN1, CLOSE_ACTUATOR_PIN2),
 )
 
-origins = ["*"]
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -461,7 +471,7 @@ def _send_message(msg: str):
     _logger.info(msg)
     try:
         requests.post(
-            f"https://ntfy.sh/{_NTFY_TOPIC}",
+            f"https://ntfy.sh/{NTFY_TOPIC}",
             data=msg,
         )
     except Exception as e:
@@ -483,7 +493,7 @@ async def unlock_door(user: User):
     # Generate and play welcome poem asynchronously
     if user in _USER_WELCOME_PROMPTS:
         current_time = datetime.now().time()
-        if time(9, 0) <= current_time < time(22, 0):
+        if WELCOME_START_TIME <= current_time < WELCOME_END_TIME:
             # If a string, set that as the prompt, if a list, choose a random one
             prompt = _USER_WELCOME_PROMPTS[user]
             if isinstance(prompt, list):
@@ -529,9 +539,8 @@ class AcceptThemeParams(BaseModel):
 async def accept_theme(accept_theme: AcceptThemeParams, user: User):
     _logger.info(f"{user} accepted theme: {accept_theme.theme_path}")
     theme_path = accept_theme.theme_path
-    # move from ./fe/staging/{theme_path} to ./fe/generated/{theme_path}
-    old_path = Path(f"./fe/staging/{theme_path}")
-    new_path = Path(f"./fe/generated/{theme_path}")
+    old_path = Path(f"{STAGING_DIR}/{theme_path}")
+    new_path = Path(f"{GENERATED_DIR}/{theme_path}")
 
     if not old_path.exists():
         return {"message": "Theme not found"}
@@ -548,13 +557,12 @@ async def accept_theme(accept_theme: AcceptThemeParams, user: User):
 
 @app.get("/")
 async def index():
-    # If no key or invalid key, just return the random frontend
     return HTMLResponse(content=get_random_frontend())
 
 
 def get_random_frontend():
-    _FE_OPTIONS = [str(p) for p in Path("./fe/themes").rglob("*") if p.is_file()]
-    _FE_OPTIONS += [str(p) for p in Path("./fe/generated").rglob("*") if p.is_file()]
+    _FE_OPTIONS = [str(p) for p in Path(THEMES_DIR).rglob("*") if p.is_file()]
+    _FE_OPTIONS += [str(p) for p in Path(GENERATED_DIR).rglob("*") if p.is_file()]
     random_frontend = random.choice(_FE_OPTIONS)
     with open(random_frontend) as f:
         return f.read()
@@ -562,14 +570,12 @@ def get_random_frontend():
 
 @app.get("/list")
 def list_themes():
-    # load all files in the ./fe/themes/ directory
     _FE_OPTIONS = [
-        f"/themes/{p.name}" for p in Path("./fe/themes").rglob("*") if p.is_file()
+        f"/themes/{p.name}" for p in Path(THEMES_DIR).rglob("*") if p.is_file()
     ]
 
-    # load all files in the ./fe/generated/ directory
     _FE_OPTIONS += [
-        f"/generated/{p.name}" for p in Path("./fe/generated").rglob("*") if p.is_file()
+        f"/generated/{p.name}" for p in Path(GENERATED_DIR).rglob("*") if p.is_file()
     ]
 
     return HTMLResponse(
@@ -588,7 +594,7 @@ async def favicon():
 @app.get("/logs")
 def logs(user: User):
     _logger.info(f"{user} requested logs")
-    with open("door_access.log") as f:
+    with open(LOG_FILE) as f:
         return HTMLResponse(content=f"<pre>{f.read()}</pre>")
 
 
@@ -615,7 +621,6 @@ def add_keys(
     key = generate_key()
     KEYS[AddKeyParams.name] = key
 
-    # add to key file
     with open(KEY_FILE, "w") as f:
         json.dump(KEYS, f, indent=2)
 
@@ -629,13 +634,12 @@ def delete_keys(
     DeleteKeyParams: DeleteKeyParams,
     flatmate: Flatmate,
 ):
-    # can't delete flatmate keys
+
     if DeleteKeyParams.name in FLATMATES:
         return {"message": "Cannot delete flatmate keys"}
 
     key = KEYS.pop(DeleteKeyParams.name, None)
 
-    # add to key file
     with open(KEY_FILE, "w") as f:
         json.dump(KEYS, f, indent=2)
 
