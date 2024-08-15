@@ -19,8 +19,6 @@ from server.announcements import play_announcement_if_prompt_exists
 from server.telemetry import failed_login, send_message
 
 from server.constants import (
-    ELEVENLABS_API_KEY,
-    NTFY_TOPIC,
     SEED_KEY_FILE,
     KEY_FILE,
     PROMPTS_FILE,
@@ -138,23 +136,6 @@ def get_random_frontend():
     random_frontend = random.choice(_FE_OPTIONS)
     with open(random_frontend) as f:
         return f.read()
-
-
-@app.get("/list")
-def list_themes():
-    _FE_OPTIONS = [
-        f"/themes/{p.name}" for p in Path(THEMES_DIR).rglob("*") if p.is_file()
-    ]
-
-    _FE_OPTIONS += [
-        f"/generated/{p.name}" for p in Path(GENERATED_DIR).rglob("*") if p.is_file()
-    ]
-
-    return HTMLResponse(
-        content="<br>".join(
-            f'<a href="{p}">{p}</a>' for p in _FE_OPTIONS if p.endswith(".html")
-        )
-    )
 
 
 @app.get("/favicon.ico")

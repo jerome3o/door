@@ -9,7 +9,7 @@ from fastapi.responses import HTMLResponse
 from anthropic import AsyncAnthropic
 
 from server.auth import User
-from server.constants import STAGING_DIR, GENERATED_DIR, EXAMPLE_HTML_FILE
+from server.constants import STAGING_DIR, GENERATED_DIR, EXAMPLE_HTML_FILE, THEMES_DIR
 
 client = AsyncAnthropic()
 
@@ -58,6 +58,8 @@ _ADDITIONAL_INFO_TEMPLATE = """
 Additional information:
 {additional_information}
 """
+
+
 class Theme(BaseModel):
     theme: str
     additional_information: str
@@ -141,3 +143,20 @@ async def accept_theme(accept_theme: AcceptThemeParams, user: User):
     old_path.rename(new_path)
 
     return {"message": "Theme accepted"}
+
+
+@router.get("/list")
+def list_themes():
+    _FE_OPTIONS = [
+        f"/themes/{p.name}" for p in Path(THEMES_DIR).rglob("*") if p.is_file()
+    ]
+
+    _FE_OPTIONS += [
+        f"/generated/{p.name}" for p in Path(GENERATED_DIR).rglob("*") if p.is_file()
+    ]
+
+    return HTMLResponse(
+        content="<br>".join(
+            f'<a href="{p}">{p}</a>' for p in _FE_OPTIONS if p.endswith(".html")
+        )
+    )
