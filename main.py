@@ -90,6 +90,12 @@ async def generate_welcome(prompt):
         ]
     )
 
+    if not isinstance(message.content[0], anthropic.types.ContentBlock):
+        raise ValueError("Unexpected content type")
+    if message.content[0].type != "text":
+        raise ValueError(f"Unexpected content type: {message.content[0].type}")
+
+
     msg = message.content[0].text
     return msg
 
@@ -141,9 +147,9 @@ api_key_header = APIKeyHeader(name=API_KEY_HEADER_NAME, auto_error=False)
 api_key_query = APIKeyQuery(name=API_KEY_QUERY_NAME, auto_error=False)
 # Authentication function
 async def get_api_key(
-    api_key_header: str = Depends(api_key_header),
-    api_key_cookie: Optional[str] = Cookie(None, alias=API_KEY_COOKIE_NAME),
-) -> str:
+    api_key_header: str | None = Depends(api_key_header),
+    api_key_cookie: str | None = Cookie(None, alias=API_KEY_COOKIE_NAME),
+) -> str | None:
     return api_key_header or api_key_cookie
 
 def get_user(request: Request) -> str:
@@ -201,7 +207,7 @@ class AuthMiddleware(BaseHTTPMiddleware):
                     value=query_param_key,
                     expires=expiration.strftime("%a, %d %b %Y %H:%M:%S GMT"),
                     httponly=True,
-                    samesite="Lax",
+                    samesite="lax",
                 )
                 return response
 
@@ -307,6 +313,11 @@ async def generate_theme(theme_spec: Theme) -> str:
         messages=[{"role": "user", "content": content}],
     )
 
+    if not isinstance(response.content[0], anthropic.types.ContentBlock):
+        raise ValueError("Unexpected content type")
+    if response.content[0].type != "text":
+        raise ValueError(f"Unexpected content type: {response.content[0].type}")
+
     content = response.content[0].text
 
     # replace all ```html with just ```
@@ -340,7 +351,7 @@ app.add_middleware(AuthMiddleware)
 
 # Login page route
 @app.get("/login", response_class=HTMLResponse)
-async def login_page(error: str = None):
+async def login_page(error: str | None = None):
     # load in the login page from fe/login.html
     with open(LOGIN_HTML_FILE) as f:
         login_page = f.read()
@@ -361,7 +372,7 @@ async def auth(request: Request, key: str = Form(...)):
             value=key,
             expires=expiration.strftime("%a, %d %b %Y %H:%M:%S GMT"),
             httponly=True,  # Makes the cookie inaccessible to JavaScript
-            samesite="Lax",  # Provides some CSRF protection
+            samesite="lax",  # Provides some CSRF protection
         )
         _send_message(f"{user} logged in via /auth")
         return response
