@@ -44,3 +44,6 @@ LOGIN_HTML_FILE = "fe/login.html"
 API_KEY_HEADER_NAME = "X-API-Key"
 API_KEY_QUERY_NAME = "key"
 API_KEY_COOKIE_NAME = "api_key"
+
+
+FLATMATES: set[str] = set(os.environ["FLATMATES"].split(","))
