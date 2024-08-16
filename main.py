@@ -1,50 +1,31 @@
-import asyncio
-import json
 import logging
 import os
-import random
-from pathlib import Path
-from typing import Dict, Annotated, Optional
-from datetime import datetime, time
 
-from fastapi import Cookie, Depends, FastAPI, Form, Request
-from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, RedirectResponse
-from fastapi.exceptions import HTTPException
+from fastapi import FastAPI
+from fastapi.responses import FileResponse, HTMLResponse
 
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from starlette.middleware.base import BaseHTTPMiddleware
 
 from server.announcements import play_announcement_if_prompt_exists
-from server.telemetry import failed_login, send_message
+from server.telemetry import send_message
 
 from server.constants import (
-    SEED_KEY_FILE,
-    KEY_FILE,
-    PROMPTS_FILE,
     OPEN_ACTUATOR_PIN1,
     OPEN_ACTUATOR_PIN2,
     CLOSE_ACTUATOR_PIN1,
     CLOSE_ACTUATOR_PIN2,
-    DEFAULT_DELAY,
     ALLOWED_ORIGINS,
-    THEMES_DIR,
-    GENERATED_DIR,
-    STAGING_DIR,
-    COOKIE_EXPIRATION_DAYS,
-    WELCOME_START_TIME,
-    WELCOME_END_TIME,
     LOG_FILE,
-    EXAMPLE_HTML_FILE,
     LOGIN_HTML_FILE,
-    API_KEY_HEADER_NAME,
-    API_KEY_QUERY_NAME,
-    API_KEY_COOKIE_NAME,
-    FLATMATES
 )
 from server.door_controller import DoorController, ActuatorController, cleanup
-from server.auth import AuthMiddleware, Flatmate, User, AddKeyParams, router as auth_router
-from server.themes import router as theme_generation_router
+from server.auth import (
+    AuthMiddleware,
+    User,
+    router as auth_router,
+)
+from server.themes import router as theme_generation_router, get_random_frontend
 from server.announcements import router as announcements_router
 
 
@@ -67,6 +48,7 @@ app.add_middleware(AuthMiddleware)
 app.include_router(auth_router)
 app.include_router(theme_generation_router)
 app.include_router(announcements_router)
+
 
 # Login page route
 @app.get("/login", response_class=HTMLResponse)
@@ -128,14 +110,6 @@ async def stop(user: User):
 @app.get("/")
 async def index():
     return HTMLResponse(content=get_random_frontend())
-
-
-def get_random_frontend():
-    _FE_OPTIONS = [str(p) for p in Path(THEMES_DIR).rglob("*") if p.is_file()]
-    _FE_OPTIONS += [str(p) for p in Path(GENERATED_DIR).rglob("*") if p.is_file()]
-    random_frontend = random.choice(_FE_OPTIONS)
-    with open(random_frontend) as f:
-        return f.read()
 
 
 @app.get("/favicon.ico")

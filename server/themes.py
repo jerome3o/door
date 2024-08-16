@@ -1,10 +1,9 @@
-import json
 import re
 import logging
+import random
 from pathlib import Path
 from pydantic import BaseModel
-import anthropic
-from fastapi import FastAPI, APIRouter
+from fastapi import APIRouter
 from fastapi.responses import HTMLResponse
 from anthropic import AsyncAnthropic
 
@@ -112,6 +111,13 @@ async def generate_theme(theme_spec: Theme) -> str:
 
     return theme_fn
 
+
+def get_random_frontend():
+    _FE_OPTIONS = [str(p) for p in Path(THEMES_DIR).rglob("*") if p.is_file()]
+    _FE_OPTIONS += [str(p) for p in Path(GENERATED_DIR).rglob("*") if p.is_file()]
+    random_frontend = random.choice(_FE_OPTIONS)
+    with open(random_frontend) as f:
+        return f.read()
 
 
 @router.post("/api/generate_theme")
