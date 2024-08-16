@@ -26,6 +26,7 @@ from server.telemetry import failed_login, send_message
 
 router = APIRouter()
 
+
 def generate_key(length=32):
     alphabet = string.ascii_letters + string.digits
     return "".join(secrets.choice(alphabet) for _ in range(length))
@@ -51,12 +52,15 @@ KEYS = load_keys()
 # Security key header
 api_key_header = APIKeyHeader(name=API_KEY_HEADER_NAME, auto_error=False)
 api_key_query = APIKeyQuery(name=API_KEY_QUERY_NAME, auto_error=False)
+
+
 # Authentication function
 async def get_api_key(
     api_key_header: str | None = Depends(api_key_header),
     api_key_cookie: str | None = Cookie(None, alias=API_KEY_COOKIE_NAME),
 ) -> str | None:
     return api_key_header or api_key_cookie
+
 
 def get_user(request: Request) -> str:
     user = request.state.user
@@ -147,6 +151,7 @@ class AuthMiddleware(BaseHTTPMiddleware):
         request.state.user = user
         response = await call_next(request)
         return response
+
 
 class AddKeyParams(BaseModel):
     name: str

@@ -9,7 +9,7 @@ NTFY_TOPIC = os.getenv("NTFY_TOPIC")
 # File Paths
 SEED_KEY_FILE = ".keys.json"
 KEY_FILE = ".keys.db.json"
-PROMPTS_FILE = '.prompts.json'
+PROMPTS_FILE = ".prompts.json"
 
 # GPIO Pin Configurations
 OPEN_ACTUATOR_PIN1 = 23
