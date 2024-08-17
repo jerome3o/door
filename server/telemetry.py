@@ -5,11 +5,13 @@ from server.constants import NTFY_TOPIC
 
 _logger = logging.getLogger(__name__)
 
-def send_message(msg: str):
+
+def send_message(msg: str, topic: str | None = None):
+    topic = topic or NTFY_TOPIC
     _logger.info(msg)
     try:
         requests.post(
-            f"https://ntfy.sh/{NTFY_TOPIC}",
+            f"https://ntfy.sh/{topic}",
             data=msg,
         )
     except Exception as e:

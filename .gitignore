@@ -6,3 +6,4 @@ __pycache__/
 door_access.log
 .prompts.json
 fe/staging/
+network_log/
