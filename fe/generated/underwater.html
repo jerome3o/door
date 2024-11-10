@@ -1,0 +1,155 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🐠 Underwater Door Control 🐟</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #0077be, #00008b);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .maincontainer {
+      background: rgba(0, 119, 190, 0.6);
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .header {
+      margin-bottom: 20px;
+    }
+    h1 {
+      font-size: 2.5em;
+      margin: 10px 0;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .primary-button {
+      background-color: #00ccff;
+      color: #00008b;
+    }
+    .secondary-button {
+      background-color: #ff6b6b;
+      color: #fff;
+    }
+    button:hover {
+      transform: scale(1.05);
+    }
+    #bubbles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+    #theme-name {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      font-size: 0.8em;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <canvas id="bubbles"></canvas>
+    <div class="header">
+      <i class="fas fa-lock" style="font-size: 2em;"></i>
+      <h1>🌊 Underwater Door Control 🌊</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button onclick="unlock()" class="primary-button">🐙 Release the Kraken</button>
+      <button onclick="lock()" class="primary-button">🦈 Secure the Shark Cage</button>
+    </div>
+    <div class="secondary-button-container">
+      <button onclick="stop()" class="secondary-button">🚨 Submarine Emergency</button>
+      <button onclick="safe()" class="secondary-button">🧜‍♀️ Mermaid Mode</button>
+    </div>
+    <div id="theme-name">Theme: Underwater 🌊</div>
+  </div>
+
+  <script src="/index.js"></script>
+  <script>
+    // Bubble animation
+    const canvas = document.getElementById('bubbles');
+    const ctx = canvas.getContext('2d');
+    const bubbles = [];
+
+    function resizeCanvas() {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    }
+
+    function createBubble() {
+      return {
+        x: Math.random() * canvas.width,
+        y: canvas.height + Math.random() * 20,
+        radius: Math.random() * 5 + 2,
+        speed: Math.random() * 2 + 1
+      };
+    }
+
+    function drawBubbles() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.5)';
+
+      bubbles.forEach((bubble, index) => {
+        ctx.beginPath();
+        ctx.arc(bubble.x, bubble.y, bubble.radius, 0, Math.PI * 2);
+        ctx.fill();
+
+        bubble.y -= bubble.speed;
+
+        if (bubble.y + bubble.radius < 0) {
+          bubbles[index] = createBubble();
+        }
+      });
+
+      requestAnimationFrame(drawBubbles);
+    }
+
+    function init() {
+      resizeCanvas();
+      for (let i = 0; i < 50; i++) {
+        bubbles.push(createBubble());
+      }
+      drawBubbles();
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    init();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,193 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🦨 Stinky Armpit Door Control 🦨</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive;
+      background-color: #a3d39c;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    .maincontainer {
+      background-color: #f0f0f0;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      max-width: 90%;
+      width: 400px;
+      position: relative;
+      z-index: 1;
+    }
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+      color: #4a4a4a;
+    }
+    h1 {
+      font-size: 2em;
+      color: #4a4a4a;
+      margin: 0;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    button {
+      font-family: 'Comic Sans MS', cursive;
+      font-size: 1.2em;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .primary-button {
+      background-color: #ff9999;
+      color: white;
+    }
+    .secondary-button {
+      background-color: #99ff99;
+      color: #4a4a4a;
+    }
+    button:hover {
+      transform: scale(1.1);
+    }
+    #message {
+      font-size: 1.2em;
+      color: #4a4a4a;
+      margin: 20px 0;
+    }
+    #stinky-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="stinky-canvas"></canvas>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>🦨 Stinky Armpit Door Control 🦨</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button onclick="unlock()" class="primary-button">🧼 Deodorize & Unlock 🚪</button>
+      <button onclick="lock()" class="primary-button">🦨 Stink & Lock 🔒</button>
+    </div>
+    <div class="secondary-button-container">
+      <button onclick="stop()" class="secondary-button">🛑 Pit Stop 🛑</button>
+      <button onclick="safe()" class="secondary-button">🧴 Apply Antiperspirant 🧴</button>
+    </div>
+  </div>
+
+  <script src="/index.js"></script>
+  <script>
+    // Stinky particles animation
+    const canvas = document.getElementById('stinky-canvas');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const particles = [];
+    const particleCount = 50;
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = Math.random() * 5 + 1;
+        this.speedX = Math.random() * 3 - 1.5;
+        this.speedY = Math.random() * 3 - 1.5;
+        this.color = `hsl(${Math.random() * 60 + 60}, 100%, ${Math.random() * 30 + 30}%)`;
+      }
+
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        if (this.size > 0.2) this.size -= 0.1;
+      }
+
+      draw() {
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    function init() {
+      for (let i = 0; i < particleCount; i++) {
+        particles.push(new Particle());
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (let i = 0; i < particles.length; i++) {
+        particles[i].update();
+        particles[i].draw();
+
+        if (particles[i].size <= 0.2) {
+          particles.splice(i, 1);
+          i--;
+          particles.push(new Particle());
+        }
+      }
+      requestAnimationFrame(animate);
+    }
+
+    init();
+    animate();
+
+    // Add stinky emoji on click
+    document.addEventListener('click', (event) => {
+      const emoji = document.createElement('div');
+      emoji.innerText = '🦨';
+      emoji.style.position = 'absolute';
+      emoji.style.left = event.clientX + 'px';
+      emoji.style.top = event.clientY + 'px';
+      emoji.style.fontSize = '2em';
+      emoji.style.transition = 'all 1s ease-out';
+      document.body.appendChild(emoji);
+
+      setTimeout(() => {
+        emoji.style.transform = `translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px) rotate(${Math.random() * 360}deg)`;
+        emoji.style.opacity = '0';
+      }, 100);
+
+      setTimeout(() => {
+        document.body.removeChild(emoji);
+      }, 1100);
+    });
+  </script>
+</body>
+
+</html>

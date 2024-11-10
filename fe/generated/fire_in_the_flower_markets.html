@@ -1,0 +1,188 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🔥 Floral Inferno Door Control 🚪</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(45deg, #FF6B6B, #FFD93D);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    .maincontainer {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    .header {
+      margin-bottom: 2rem;
+    }
+    .header i {
+      font-size: 3rem;
+      color: #FF4500;
+      animation: flicker 1s infinite alternate;
+    }
+    h1 {
+      color: #FF4500;
+      margin: 0.5rem 0;
+    }
+    .theme {
+      font-style: italic;
+      color: #FF6B6B;
+      margin-bottom: 1rem;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin: 1rem 0;
+    }
+    button {
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .primary-button {
+      background: #FF4500;
+      color: white;
+    }
+    .primary-button:hover {
+      background: #FF6347;
+      transform: scale(1.05);
+    }
+    .secondary-button {
+      background: #FFD700;
+      color: #FF4500;
+    }
+    .secondary-button:hover {
+      background: #FFA500;
+      transform: scale(1.05);
+    }
+    #message {
+      font-weight: bold;
+      color: #FF4500;
+      margin: 1rem 0;
+    }
+    #flowerCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+    @keyframes flicker {
+      0% {opacity: 1;}
+      100% {opacity: 0.6;}
+    }
+    @media (max-width: 600px) {
+      .maincontainer {
+        width: 90%;
+        padding: 1rem;
+      }
+      button {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="flowerCanvas"></canvas>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-fire"></i>
+      <h1>🔥 Floral Inferno Door Control 🚪</h1>
+    </div>
+    <div class="theme">Theme: Fire in the flower markets 🔥💐</div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button onclick="unlock()" class="primary-button">🌺 Unleash the Floral Fury</button>
+      <button onclick="lock()" class="primary-button">🥀 Contain the Blaze</button>
+    </div>
+    <div class="secondary-button-container">
+      <button onclick="stop()" class="secondary-button">🧯 Extinguish All</button>
+      <button onclick="safe()" class="secondary-button">🌱 Safe Seedlings</button>
+    </div>
+  </div>
+
+  <script src="/index.js"></script>
+  <script>
+    // Flower and fire animation
+    const canvas = document.getElementById('flowerCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    class Particle {
+      constructor(x, y, size, color, speed) {
+        this.x = x;
+        this.y = y;
+        this.size = size;
+        this.color = color;
+        this.speed = speed;
+      }
+
+      update() {
+        this.y -= this.speed;
+        if (this.y < 0) {
+          this.y = canvas.height;
+        }
+      }
+
+      draw() {
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    const particles = [];
+    const flowerColors = ['#FF6B6B', '#FFD93D', '#FF8C00', '#FF69B4', '#FF4500'];
+
+    for (let i = 0; i < 100; i++) {
+      const x = Math.random() * canvas.width;
+      const y = Math.random() * canvas.height;
+      const size = Math.random() * 5 + 1;
+      const color = flowerColors[Math.floor(Math.random() * flowerColors.length)];
+      const speed = Math.random() * 2 + 0.5;
+      particles.push(new Particle(x, y, size, color, speed));
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(particle => {
+        particle.update();
+        particle.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    // Responsive canvas
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
+
+</html>

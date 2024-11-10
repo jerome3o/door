@@ -1,0 +1,177 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🐕 Poopy Pupper Door Control 💩</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0e68c;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    .maincontainer {
+      background-color: #fff;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    .header {
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 48px;
+      color: #8b4513;
+    }
+    h1 {
+      color: #8b4513;
+      margin-top: 10px;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    .primary-button, .secondary-button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+    .primary-button {
+      background-color: #8b4513;
+      color: white;
+    }
+    .secondary-button {
+      background-color: #f0e68c;
+      color: #8b4513;
+    }
+    .primary-button:hover, .secondary-button:hover {
+      transform: scale(1.05);
+    }
+    #message {
+      font-style: italic;
+      color: #8b4513;
+    }
+    #dogCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+    .theme-name {
+      font-size: 12px;
+      color: #8b4513;
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="dogCanvas"></canvas>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-poop"></i>
+      <h1>🐕 Poopy Pupper Door Control 💩</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button onclick="unlock()" class="primary-button">🚽 Unleash the Beast</button>
+      <button onclick="lock()" class="primary-button">🔒 Contain the Chaos</button>
+    </div>
+    <div class="secondary-button-container">
+      <button onclick="stop()" class="secondary-button">🛑 Poop-ergency Stop</button>
+      <button onclick="safe()" class="secondary-button">🦴 Safe Pooptuators</button>
+    </div>
+    <div class="theme-name">Theme: Robbie's Dog Shat in the House</div>
+  </div>
+
+  <script src="/index.js"></script>
+  <script>
+    const canvas = document.getElementById('dogCanvas');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    class Poop {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = -20;
+        this.size = Math.random() * 20 + 10;
+        this.speed = Math.random() * 2 + 1;
+      }
+
+      fall() {
+        this.y += this.speed;
+        if (this.y > canvas.height) {
+          this.y = -20;
+          this.x = Math.random() * canvas.width;
+        }
+      }
+
+      draw() {
+        ctx.fillStyle = '#8b4513';
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    const poops = Array(20).fill().map(() => new Poop());
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      poops.forEach(poop => {
+        poop.fall();
+        poop.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    // Responsive canvas
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+    // Fun messages
+    const funnyMessages = [
+      "Is that a new air freshener or just Robbie's dog? 🌬️",
+      "Robbie's dog: Making every step a surprise! 💩",
+      "Who needs carpet when you have a four-legged poop factory? 🏭",
+      "Robbie's dog: Turning 'Home Sweet Home' into 'Home Stink Home' 🏠",
+      "Why walk the dog when the dog can redecorate your home? 🎨",
+    ];
+
+    function displayRandomMessage() {
+      const messageElement = document.getElementById('message');
+      const randomIndex = Math.floor(Math.random() * funnyMessages.length);
+      messageElement.textContent = funnyMessages[randomIndex];
+    }
+
+    setInterval(displayRandomMessage, 5000);
+    displayRandomMessage(); // Display initial message
+  </script>
+</body>
+
+</html>

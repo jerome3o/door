@@ -1,0 +1,13 @@
+[Unit]
+Description=Tower House Door
+After=network.target
+
+[Service]
+ExecStart=/home/jerome/source/well_actually/run.sh
+WorkingDirectory=/home/jerome/source/well_actually
+User=jerome
+Group=jerome
+Restart=always
+
+[Install]
+WantedBy=multi-user.target

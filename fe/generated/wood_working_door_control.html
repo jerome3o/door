@@ -1,0 +1,180 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🪚 Woodworker's Door Control 🔨</title>
+  <style>
+    body {
+      font-family: 'Courier New', monospace;
+      background-color: #f0e6d2;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    .maincontainer {
+      background-color: #8b4513;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+      max-width: 90%;
+      width: 400px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .header {
+      margin-bottom: 20px;
+    }
+    h1 {
+      color: #f0e6d2;
+      font-size: 24px;
+      margin: 10px 0;
+    }
+    #message {
+      background-color: #f0e6d2;
+      padding: 10px;
+      border-radius: 5px;
+      margin-bottom: 20px;
+      font-weight: bold;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+    button {
+      background-color: #d2b48c;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+    button:hover {
+      background-color: #a0522d;
+      color: #f0e6d2;
+    }
+    .primary-button {
+      background-color: #deb887;
+    }
+    .secondary-button {
+      background-color: #cd853f;
+    }
+    #woodCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+    .theme-name {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      font-size: 12px;
+      color: #f0e6d2;
+      opacity: 0.7;
+    }
+    @keyframes sawDust {
+      0% { transform: translateY(-100%); opacity: 0; }
+      50% { opacity: 1; }
+      100% { transform: translateY(100%); opacity: 0; }
+    }
+    .saw-dust {
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      background-color: #d2b48c;
+      border-radius: 50%;
+      animation: sawDust 2s linear infinite;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <canvas id="woodCanvas"></canvas>
+    <div class="header">
+      <i class="fas fa-door-closed" style="color: #f0e6d2; font-size: 36px;"></i>
+      <h1>🪚 Woodworker's Door Control 🔨</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button onclick="unlock()" class="primary-button">🔓 Plane Open</button>
+      <button onclick="lock()" class="primary-button">🔒 Chisel Shut</button>
+    </div>
+    <div class="secondary-button-container">
+      <button onclick="stop()" class="secondary-button">🛑 Splinter Stop</button>
+      <button onclick="safe()" class="secondary-button">🛡️ Sand Safe</button>
+    </div>
+    <div class="theme-name">Theme: Woodworking Door Control 🪵</div>
+  </div>
+
+  <script src="/index.js"></script>
+  <script>
+    // Wood grain effect
+    const canvas = document.getElementById('woodCanvas');
+    const ctx = canvas.getContext('2d');
+
+    function resizeCanvas() {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+      drawWoodGrain();
+    }
+
+    function drawWoodGrain() {
+      ctx.fillStyle = '#8b4513';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      for (let i = 0; i < 50; i++) {
+        ctx.beginPath();
+        ctx.moveTo(0, Math.random() * canvas.height);
+        ctx.bezierCurveTo(
+          canvas.width / 3, Math.random() * canvas.height,
+          canvas.width * 2 / 3, Math.random() * canvas.height,
+          canvas.width, Math.random() * canvas.height
+        );
+        ctx.strokeStyle = `rgba(139, 69, 19, ${Math.random() * 0.5 + 0.5})`;
+        ctx.lineWidth = Math.random() * 2 + 1;
+        ctx.stroke();
+      }
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+
+    // Saw dust effect
+    function createSawDust() {
+      const dust = document.createElement('div');
+      dust.className = 'saw-dust';
+      dust.style.left = `${Math.random() * 100}%`;
+      dust.style.animationDuration = `${Math.random() * 2 + 1}s`;
+      document.querySelector('.maincontainer').appendChild(dust);
+      setTimeout(() => dust.remove(), 2000);
+    }
+
+    setInterval(createSawDust, 200);
+
+    // Button click effect
+    document.querySelectorAll('button').forEach(button => {
+      button.addEventListener('click', () => {
+        button.style.transform = 'scale(0.95)';
+        setTimeout(() => button.style.transform = 'scale(1)', 100);
+      });
+    });
+  </script>
+</body>
+
+</html>

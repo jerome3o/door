@@ -1,0 +1,164 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Elliot's Hacker Haven 🖥️</title>
+  <style>
+    body {
+      font-family: 'Courier New', monospace;
+      background-color: #0a0a0a;
+      color: #00ff00;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    .maincontainer {
+      background-color: #1a1a1a;
+      border: 2px solid #00ff00;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      max-width: 90%;
+      width: 400px;
+      position: relative;
+      z-index: 1;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+    }
+    h1 {
+      font-size: 1.5em;
+      margin: 0;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    button {
+      background-color: #1a1a1a;
+      color: #00ff00;
+      border: 1px solid #00ff00;
+      padding: 10px 20px;
+      font-family: 'Courier New', monospace;
+      font-size: 1em;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    button:hover {
+      background-color: #00ff00;
+      color: #1a1a1a;
+    }
+    #message {
+      height: 20px;
+      margin: 10px 0;
+    }
+    #canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+    .theme {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 0.8em;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="canvas"></canvas>
+  <div class="maincontainer">
+    <div class="theme">Theme: Elliot is the guy 🤖</div>
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>Elliot's Hacker Haven 🖥️</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button onclick="unlock()" class="primary-button">Hack Open 🔓</button>
+      <button onclick="lock()" class="primary-button">Secure System 🔒</button>
+    </div>
+    <div class="secondary-button-container">
+      <button onclick="stop()" class="secondary-button">Kill Switch ⚠️</button>
+      <button onclick="safe()" class="secondary-button">Stealth Mode 🕵️</button>
+    </div>
+  </div>
+
+  <script src="/index.js"></script>
+  <script>
+    // Matrix rain effect
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const matrix = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%";
+    const matrixArray = matrix.split("");
+
+    const fontSize = 10;
+    const columns = canvas.width / fontSize;
+
+    const drops = [];
+    for (let x = 0; x < columns; x++) {
+      drops[x] = 1;
+    }
+
+    function draw() {
+      ctx.fillStyle = "rgba(0, 0, 0, 0.04)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = "#00ff00";
+      ctx.font = fontSize + "px monospace";
+
+      for (let i = 0; i < drops.length; i++) {
+        const text = matrixArray[Math.floor(Math.random() * matrixArray.length)];
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+          drops[i] = 0;
+        }
+
+        drops[i]++;
+      }
+    }
+
+    setInterval(draw, 35);
+
+    // Glitch effect on hover
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(button => {
+      button.addEventListener('mouseover', () => {
+        const glitchInterval = setInterval(() => {
+          button.style.transform = `translate(${Math.random() * 5 - 2.5}px, ${Math.random() * 5 - 2.5}px)`;
+        }, 50);
+        button.addEventListener('mouseout', () => {
+          clearInterval(glitchInterval);
+          button.style.transform = 'none';
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>

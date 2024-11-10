@@ -1,0 +1,176 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🐶 Pooch Poop Portal 💩</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #8B4513;
+      color: #FFF;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+    .maincontainer {
+      background-color: #654321;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .header {
+      margin-bottom: 20px;
+    }
+    h1 {
+      font-size: 24px;
+      margin: 10px 0;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    .primary-button {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .secondary-button {
+      background-color: #f44336;
+      color: white;
+    }
+    button:hover {
+      opacity: 0.8;
+      transform: scale(1.05);
+    }
+    #message {
+      font-style: italic;
+      margin: 10px 0;
+    }
+    #poop-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+    }
+    .theme-name {
+      font-size: 12px;
+      position: absolute;
+      bottom: 5px;
+      right: 5px;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <canvas id="poop-canvas"></canvas>
+    <div class="header">
+      <i class="fas fa-paw"></i>
+      <h1>🚽 Robbie's Doggy Door 🚪</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button onclick="unlock()" class="primary-button">🐕 Let the Dog Out</button>
+      <button onclick="lock()" class="primary-button">🔒 Contain the Mess</button>
+    </div>
+    <div class="secondary-button-container">
+      <button onclick="stop()" class="secondary-button">🛑 Poop Emergency</button>
+      <button onclick="safe()" class="secondary-button">🧼 Clean Up Time</button>
+    </div>
+    <div class="theme-name">Theme: Robbie's Incontinent Dog Dilemma 🐾💔</div>
+  </div>
+
+  <script src="/index.js"></script>
+  <script>
+    const canvas = document.getElementById('poop-canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    class Poop {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = -20;
+        this.speed = Math.random() * 2 + 1;
+        this.size = Math.random() * 20 + 10;
+      }
+
+      fall() {
+        this.y += this.speed;
+        if (this.y > canvas.height) {
+          this.y = -20;
+          this.x = Math.random() * canvas.width;
+        }
+      }
+
+      draw() {
+        ctx.fillStyle = '#8B4513';
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#654321';
+        ctx.beginPath();
+        ctx.arc(this.x - 2, this.y - 2, this.size * 0.8, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    const poops = Array.from({length: 20}, () => new Poop());
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      poops.forEach(poop => {
+        poop.fall();
+        poop.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    // Dark humor tooltips
+    const buttons = document.querySelectorAll('button');
+    const darkHumor = [
+      "One last walk... to the vet 😢",
+      "Time to clean up... forever 🧹",
+      "Stopping the inevitable 💉",
+      "Making the house safe... from accidents 🏠"
+    ];
+
+    buttons.forEach((button, index) => {
+      button.title = darkHumor[index];
+    });
+
+    // Easter egg
+    let clickCount = 0;
+    document.querySelector('.header').addEventListener('click', () => {
+      clickCount++;
+      if (clickCount === 5) {
+        alert("🎵 How much is that doggy in the window? The one with the waggly... oh wait, it can't move. 🎵");
+        clickCount = 0;
+      }
+    });
+  </script>
+</body>
+
+</html>

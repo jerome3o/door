@@ -1,0 +1,209 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🦁 London Zoo Door Control 🐘</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f8ff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    .maincontainer {
+      background-color: #ffffff;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+      color: #4a4a4a;
+    }
+    h1 {
+      color: #4a4a4a;
+      margin: 0;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .primary-button, .secondary-button {
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .primary-button {
+      background-color: #4caf50;
+      color: white;
+    }
+    .secondary-button {
+      background-color: #f44336;
+      color: white;
+    }
+    .primary-button:hover, .secondary-button:hover {
+      transform: scale(1.05);
+    }
+    #message {
+      margin: 20px 0;
+      font-weight: bold;
+      color: #4a4a4a;
+    }
+    #zoo-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 0;
+    }
+    .theme-name {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 0.8em;
+      color: #4a4a4a;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="zoo-canvas"></canvas>
+  <div class="maincontainer">
+    <div class="theme-name">🎨 Theme: London Zoo</div>
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>🦒 Wild Door Control 🦓</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button onclick="unlock()" class="primary-button">🐒 Release the Monkeys</button>
+      <button onclick="lock()" class="primary-button">🦁 Cage the Lions</button>
+    </div>
+    <div class="secondary-button-container">
+      <button onclick="stop()" class="secondary-button">🚫 Zoo Emergency</button>
+      <button onclick="safe()" class="secondary-button">🦜 Parrot Perch Safe</button>
+    </div>
+  </div>
+
+  <script src="/index.js"></script>
+  <script>
+    // Zoo animal SVG paths
+    const animalPaths = {
+      elephant: "M50,30 Q60,5 70,30 T90,30 L90,70 Q80,80 70,70 L30,70 Q20,80 10,70 L10,30 Q20,20 30,30 Z",
+      giraffe: "M30,90 L30,30 Q30,10 50,10 Q70,10 70,30 L70,90 M40,40 L60,40",
+      penguin: "M50,10 Q70,30 50,50 Q30,30 50,10 M45,25 A5,5 0 0 1 55,25 M50,50 L40,90 L60,90 Z",
+      lion: "M50,20 Q70,0 90,20 Q100,40 80,60 Q90,80 50,90 Q10,80 20,60 Q0,40 10,20 Q30,0 50,20 M40,40 A5,5 0 0 1 60,40"
+    };
+
+    // Create SVG animals
+    function createAnimal(type, x, y, scale) {
+      const ns = "http://www.w3.org/2000/svg";
+      const svg = document.createElementNS(ns, "svg");
+      svg.setAttribute("width", 100 * scale);
+      svg.setAttribute("height", 100 * scale);
+      svg.style.position = "absolute";
+      svg.style.left = x + "px";
+      svg.style.top = y + "px";
+
+      const path = document.createElementNS(ns, "path");
+      path.setAttribute("d", animalPaths[type]);
+      path.setAttribute("fill", getRandomColor());
+      path.setAttribute("transform", `scale(${scale})`);
+
+      svg.appendChild(path);
+      return svg;
+    }
+
+    function getRandomColor() {
+      return "#" + Math.floor(Math.random()*16777215).toString(16);
+    }
+
+    // Animate animals
+    function animateAnimals() {
+      const animals = document.querySelectorAll("svg");
+      animals.forEach(animal => {
+        const x = Math.random() * (window.innerWidth - animal.width.baseVal.value);
+        const y = Math.random() * (window.innerHeight - animal.height.baseVal.value);
+        animal.style.transition = "all 5s ease-in-out";
+        animal.style.left = x + "px";
+        animal.style.top = y + "px";
+      });
+      setTimeout(animateAnimals, 5000);
+    }
+
+    // Initialize zoo
+    function initZoo() {
+      const animals = ["elephant", "giraffe", "penguin", "lion"];
+      for (let i = 0; i < 20; i++) {
+        const animal = createAnimal(
+          animals[Math.floor(Math.random() * animals.length)],
+          Math.random() * window.innerWidth,
+          Math.random() * window.innerHeight,
+          Math.random() * 0.5 + 0.5
+        );
+        document.body.appendChild(animal);
+      }
+      animateAnimals();
+    }
+
+    // Canvas background
+    const canvas = document.getElementById("zoo-canvas");
+    const ctx = canvas.getContext("2d");
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    function drawBackground() {
+      ctx.fillStyle = "#e6f7ff";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      for (let i = 0; i < 100; i++) {
+        ctx.beginPath();
+        ctx.arc(
+          Math.random() * canvas.width,
+          Math.random() * canvas.height,
+          Math.random() * 5,
+          0,
+          Math.PI * 2
+        );
+        ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+        ctx.fill();
+      }
+    }
+
+    window.addEventListener("resize", resizeCanvas);
+    resizeCanvas();
+    drawBackground();
+    initZoo();
+  </script>
+</body>
+
+</html>

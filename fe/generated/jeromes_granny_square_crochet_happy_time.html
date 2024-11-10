@@ -1,0 +1,169 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🧶 Jerome's Granny Square Crochet Happy Time Door Control 🚪</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive;
+      background-color: #f5e5d3;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    .maincontainer {
+      background-color: #fff;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      max-width: 90%;
+      width: 400px;
+      position: relative;
+      z-index: 1;
+    }
+    .header {
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 48px;
+      color: #ff69b4;
+      animation: bounce 2s infinite;
+    }
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+      40% {transform: translateY(-20px);}
+      60% {transform: translateY(-10px);}
+    }
+    h1 {
+      font-size: 24px;
+      color: #ff69b4;
+      margin-top: 10px;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    .primary-button, .secondary-button {
+      border: none;
+      padding: 10px 20px;
+      border-radius: 50px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Comic Sans MS', cursive;
+    }
+    .primary-button {
+      background-color: #ff69b4;
+      color: white;
+    }
+    .secondary-button {
+      background-color: #87ceeb;
+      color: white;
+    }
+    .primary-button:hover, .secondary-button:hover {
+      transform: scale(1.1);
+    }
+    #message {
+      font-size: 18px;
+      margin: 20px 0;
+      color: #333;
+    }
+    #granny-square-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="granny-square-canvas"></canvas>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>🧶 Jerome's Granny Square Crochet Happy Time Door Control 🚪</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button onclick="unlock()" class="primary-button">🧶 Unravel Lock</button>
+      <button onclick="lock()" class="primary-button">🔒 Crochet Lock</button>
+    </div>
+    <div class="secondary-button-container">
+      <button onclick="stop()" class="secondary-button">🛑 Yarn Emergency</button>
+      <button onclick="safe()" class="secondary-button">🧺 Yarn Basket Safe</button>
+    </div>
+  </div>
+
+  <script src="/index.js"></script>
+  <script>
+    // Granny Square animation
+    const canvas = document.getElementById('granny-square-canvas');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const colors = ['#ff69b4', '#87ceeb', '#ffa500', '#32cd32', '#9370db'];
+
+    class GrannySquare {
+      constructor() {
+        this.size = Math.random() * 30 + 20;
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.speed = Math.random() * 2 + 1;
+        this.color = colors[Math.floor(Math.random() * colors.length)];
+      }
+
+      draw() {
+        ctx.fillStyle = this.color;
+        ctx.fillRect(this.x, this.y, this.size, this.size);
+        ctx.strokeStyle = '#fff';
+        ctx.strokeRect(this.x, this.y, this.size, this.size);
+      }
+
+      update() {
+        this.y += this.speed;
+        if (this.y > canvas.height) {
+          this.y = -this.size;
+          this.x = Math.random() * canvas.width;
+        }
+      }
+    }
+
+    const grannySquares = [];
+    for (let i = 0; i < 50; i++) {
+      grannySquares.push(new GrannySquare());
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      grannySquares.forEach(square => {
+        square.draw();
+        square.update();
+      });
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    // Resize canvas when window is resized
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
+
+</html>

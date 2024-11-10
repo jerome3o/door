@@ -1,0 +1,196 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Elliot's Berlin Beer Bunker 🍺</title>
+  <style>
+    body {
+      font-family: 'Comic Sans MS', cursive;
+      background-color: #ffd700;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    .maincontainer {
+      background-color: #ffffff;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      max-width: 90%;
+      width: 400px;
+      position: relative;
+      z-index: 1;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+      color: #ffa500;
+    }
+    h1 {
+      font-size: 2em;
+      color: #ffa500;
+      margin: 0;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    .primary-button, .secondary-button {
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: transform 0.3s, background-color 0.3s;
+    }
+    .primary-button {
+      background-color: #ffa500;
+      color: white;
+    }
+    .secondary-button {
+      background-color: #f0f0f0;
+      color: #333;
+    }
+    .primary-button:hover, .secondary-button:hover {
+      transform: scale(1.05);
+    }
+    .primary-button:active, .secondary-button:active {
+      transform: scale(0.95);
+    }
+    #message {
+      font-weight: bold;
+      margin: 10px 0;
+    }
+    #beerCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+    .theme-name {
+      font-size: 0.8em;
+      color: #888;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="beerCanvas"></canvas>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-beer"></i>
+      <h1>Elliot's Berlin Beer Bunker 🍺</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button onclick="unlock()" class="primary-button">Unlock the Keg 🔓</button>
+      <button onclick="lock()" class="primary-button">Lock the Stein 🔒</button>
+    </div>
+    <div class="secondary-button-container">
+      <button onclick="stop()" class="secondary-button">Emergency Chug ⚠️</button>
+      <button onclick="safe()" class="secondary-button">Sober Up 🧊</button>
+    </div>
+    <p class="theme-name">Theme: Elliot is the guy</p>
+  </div>
+
+  <script src="/index.js"></script>
+  <script>
+    // Beer animation
+    const canvas = document.getElementById('beerCanvas');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    class BeerBubble {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = canvas.height + Math.random() * 20;
+        this.size = Math.random() * 5 + 2;
+        this.speed = Math.random() * 3 + 1;
+      }
+
+      rise() {
+        this.y -= this.speed;
+        if (this.y < -this.size) {
+          this.y = canvas.height + Math.random() * 20;
+        }
+      }
+
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+        ctx.fill();
+      }
+    }
+
+    const bubbles = Array.from({ length: 50 }, () => new BeerBubble());
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      bubbles.forEach(bubble => {
+        bubble.rise();
+        bubble.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    // Responsive canvas
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+    // Fun messages
+    const funMessages = [
+      "Jerome and Henry are buying the next round! 🎉",
+      "Elliot, watch out for sneaky beer tricks! 👀",
+      "Berlin's best brew is waiting for you! 🍻",
+      "Don't forget your wallet this time, Elliot! 💸",
+      "Time for a German beer adventure! 🇩🇪"
+    ];
+
+    function showFunMessage() {
+      const messageElement = document.getElementById('message');
+      const randomMessage = funMessages[Math.floor(Math.random() * funMessages.length)];
+      messageElement.textContent = randomMessage;
+      messageElement.style.animation = 'none';
+      messageElement.offsetHeight; // Trigger reflow
+      messageElement.style.animation = 'bounce 0.5s';
+    }
+
+    // Show a fun message every 10 seconds
+    setInterval(showFunMessage, 10000);
+    showFunMessage(); // Show initial message
+
+    // Add this to your existing style block
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+      40% {transform: translateY(-20px);}
+      60% {transform: translateY(-10px);}
+    }
+  </script>
+</body>
+
+</html>

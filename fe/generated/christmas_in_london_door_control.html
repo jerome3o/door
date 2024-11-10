@@ -1,0 +1,193 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🎄 London Christmas Door Control 🚪</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #0a1f44;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    .maincontainer {
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      padding: 20px;
+      text-align: center;
+      max-width: 90%;
+      width: 400px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+      position: relative;
+      z-index: 1;
+    }
+    .header {
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 48px;
+      color: #ff0000;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+    h1 {
+      color: #ffffff;
+      font-size: 24px;
+      margin-top: 10px;
+    }
+    #message {
+      color: #ffffff;
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 15px;
+    }
+    .primary-button, .secondary-button {
+      background-color: #ff0000;
+      color: #ffffff;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 25px;
+      transition: all 0.3s ease;
+      box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+    }
+    .primary-button:hover, .secondary-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
+    }
+    .secondary-button {
+      background-color: #00ff00;
+      box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    }
+    .secondary-button:hover {
+      box-shadow: 0 0 15px rgba(0, 255, 0, 0.8);
+    }
+    #snowCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+    #theme-name {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #ffffff;
+      font-size: 12px;
+      opacity: 0.7;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="snowCanvas"></canvas>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>🎅 Jolly London Door Control 🎄</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button onclick="unlock()" class="primary-button">🎁 Open Presents</button>
+      <button onclick="lock()" class="primary-button">🔒 Secure Sleigh</button>
+    </div>
+    <div class="secondary-button-container">
+      <button onclick="stop()" class="secondary-button">❄️ Freeze Elves</button>
+      <button onclick="safe()" class="secondary-button">🦌 Park Reindeer</button>
+    </div>
+    <div id="theme-name">Theme: Christmas in London 🇬🇧</div>
+  </div>
+
+  <script src="/index.js"></script>
+  <script>
+    // Snow animation
+    const canvas = document.getElementById('snowCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const snowflakes = [];
+
+    function createSnowflake() {
+      return {
+        x: Math.random() * canvas.width,
+        y: 0,
+        radius: Math.random() * 3 + 1,
+        speed: Math.random() * 3 + 1,
+        wind: Math.random() * 0.5 - 0.25
+      };
+    }
+
+    function drawSnowflake(snowflake) {
+      ctx.beginPath();
+      ctx.arc(snowflake.x, snowflake.y, snowflake.radius, 0, Math.PI * 2);
+      ctx.fillStyle = 'white';
+      ctx.fill();
+    }
+
+    function moveSnowflake(snowflake) {
+      snowflake.y += snowflake.speed;
+      snowflake.x += snowflake.wind;
+
+      if (snowflake.y > canvas.height) {
+        Object.assign(snowflake, createSnowflake());
+      }
+    }
+
+    function animateSnow() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      for (let snowflake of snowflakes) {
+        drawSnowflake(snowflake);
+        moveSnowflake(snowflake);
+      }
+
+      requestAnimationFrame(animateSnow);
+    }
+
+    // Create initial snowflakes
+    for (let i = 0; i < 100; i++) {
+      snowflakes.push(createSnowflake());
+    }
+
+    animateSnow();
+
+    // London skyline
+    const skyline = new Image();
+    skyline.src = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAwIDIwMCI+PHBhdGggZD0iTTAsMjAwIEwwLDE1MCBMNTAsMTUwIEw3NSwxMDAgTDEwMCwxNTAgTDE1MCwxMDAgTDIwMCwxNTAgTDI1MCwxMjUgTDMwMCwxNTAgTDM1MCwxMjUgTDQwMCwxNTAgTDQ1MCwxMDAgTDUwMCwxNTAgTDU1MCwxMjUgTDYwMCwxNTAgTDY1MCwxMDAgTDcwMCwxNTAgTDc1MCwxMjUgTDgwMCwxNTAgTDg1MCwxMDAgTDkwMCwxNTAgTDk1MCwxMjUgTDEwMDAsMTUwIEwxMDAwLDIwMCBaIiBmaWxsPSIjMDAwMDAwIi8+PC9zdmc+';
+
+    skyline.onload = function() {
+      ctx.globalAlpha = 0.2;
+      ctx.drawImage(skyline, 0, canvas.height - 100, canvas.width, 100);
+      ctx.globalAlpha = 1;
+    };
+
+    // Resize canvas on window resize
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,123 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🎭 Thematic Door Control 🎭</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+    .maincontainer {
+      background-color: #ffffff;
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      max-width: 90%;
+      width: 400px;
+    }
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2.5em;
+      margin-right: 10px;
+      color: #4a4a4a;
+    }
+    h1 {
+      font-size: 2em;
+      color: #4a4a4a;
+      margin: 0;
+    }
+    #message {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+      min-height: 1.5em;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+    button {
+      font-size: 1.2em;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: transform 0.3s, background-color 0.3s;
+    }
+    button:hover {
+      transform: scale(1.05);
+    }
+    .primary-button {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .secondary-button {
+      background-color: #f44336;
+      color: white;
+    }
+    #theme-name {
+      font-style: italic;
+      margin-top: 20px;
+      color: #888;
+    }
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+    .pulse {
+      animation: pulse 2s infinite;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-theater-masks pulse"></i>
+      <h1>🎭 Thematic Door Control 🎭</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">🎭 Open Curtain 🎭</button>
+      <button id="lockbutton" class="primary-button">🎭 Close Curtain 🎭</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">🛑 Drama Stop 🛑</button>
+      <button id="safebutton" class="secondary-button">🎬 Act Safe 🎬</button>
+    </div>
+    <p id="theme-name">Theme: Theatrical Theme 🎭</p>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    document.querySelectorAll('button').forEach(button => {
+      button.addEventListener('mouseover', () => {
+        button.classList.add('pulse');
+      });
+      button.addEventListener('mouseout', () => {
+        button.classList.remove('pulse');
+      });
+    });
+  </script>
+</body>
+
+</html>

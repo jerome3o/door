@@ -1,0 +1,177 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🚨 Hacker Alert: Defend the Door! 🚨</title>
+  <style>
+    body {
+      font-family: 'Courier New', monospace;
+      background-color: #000;
+      color: #0f0;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    .maincontainer {
+      background-color: rgba(0, 30, 0, 0.8);
+      border: 2px solid #0f0;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+    }
+    h1 {
+      font-size: 2em;
+      margin: 0;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    button {
+      background-color: #0f0;
+      color: #000;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1em;
+      cursor: pointer;
+      transition: all 0.3s;
+      border-radius: 5px;
+    }
+    button:hover {
+      background-color: #000;
+      color: #0f0;
+      box-shadow: 0 0 10px #0f0;
+    }
+    #message {
+      font-size: 1.2em;
+      margin: 20px 0;
+    }
+    #hacker-canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+    .theme-name {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 0.8em;
+      color: #0f0;
+    }
+    @keyframes glitch {
+      0% {
+        transform: translate(0);
+      }
+      20% {
+        transform: translate(-5px, 5px);
+      }
+      40% {
+        transform: translate(-5px, -5px);
+      }
+      60% {
+        transform: translate(5px, 5px);
+      }
+      80% {
+        transform: translate(5px, -5px);
+      }
+      100% {
+        transform: translate(0);
+      }
+    }
+    .glitch {
+      animation: glitch 0.5s infinite;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="hacker-canvas"></canvas>
+  <div class="maincontainer">
+    <div class="theme-name">🕵️‍♂️ Theme: Ivan and Andrew's Hacking Attempt 🕵️‍♂️</div>
+    <div class="header">
+      <i class="fas fa-shield-alt"></i>
+      <h1 class="glitch">🚫 Anti-Hacker Door Control 🚫</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button onclick="unlock()" class="primary-button">🔓 Authorize Access</button>
+      <button onclick="lock()" class="primary-button">🔒 Engage Firewall</button>
+    </div>
+    <div class="secondary-button-container">
+      <button onclick="stop()" class="secondary-button">🛑 Terminate Hack</button>
+      <button onclick="safe()" class="secondary-button">🛡️ Activate Cyber Shield</button>
+    </div>
+  </div>
+
+  <script src="/index.js"></script>
+  <script>
+    const canvas = document.getElementById('hacker-canvas');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const hackerText = ['Ivan', 'Andrew', 'Hack', 'Attempt', 'Denied', 'Access', 'Blocked'];
+
+    function drawHackerText() {
+      ctx.fillStyle = 'rgba(0, 255, 0, 0.1)';
+      ctx.font = '20px Courier New';
+      
+      for (let i = 0; i < 100; i++) {
+        const x = Math.random() * canvas.width;
+        const y = Math.random() * canvas.height;
+        const text = hackerText[Math.floor(Math.random() * hackerText.length)];
+        ctx.fillText(text, x, y);
+      }
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawHackerText();
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+    // Glitch effect on buttons
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(button => {
+      button.addEventListener('mouseover', () => {
+        button.classList.add('glitch');
+      });
+      button.addEventListener('mouseout', () => {
+        button.classList.remove('glitch');
+      });
+    });
+  </script>
+</body>
+
+</html>

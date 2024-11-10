@@ -1,0 +1,144 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🦘 Aussie vs Kiwi Door Control 🥝</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(45deg, #00843D, #FFCD00);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      color: #fff;
+    }
+    .maincontainer {
+      background: rgba(0, 0, 0, 0.7);
+      border-radius: 15px;
+      padding: 20px;
+      text-align: center;
+      max-width: 90%;
+      width: 400px;
+    }
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+    }
+    h1 {
+      font-size: 1.8em;
+      margin: 0;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin: 20px 0;
+    }
+    button {
+      font-size: 1em;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: transform 0.3s, background-color 0.3s;
+    }
+    button:hover {
+      transform: scale(1.05);
+    }
+    .primary-button {
+      background-color: #00843D;
+      color: #fff;
+    }
+    .secondary-button {
+      background-color: #FFCD00;
+      color: #000;
+    }
+    #canvas {
+      margin-top: 20px;
+      border-radius: 10px;
+    }
+    #message {
+      font-weight: bold;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>🦘 Aussie vs Kiwi Door Control 🥝</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button onclick="unlock()" class="primary-button">Unlock the Outback 🌄</button>
+      <button onclick="lock()" class="primary-button">Lock the Sheep Pen 🐑</button>
+    </div>
+    <div class="secondary-button-container">
+      <button onclick="stop()" class="secondary-button">Crikey! E-Stop 🚫</button>
+      <button onclick="safe()" class="secondary-button">Safe as Pavlova 🥧</button>
+    </div>
+    <canvas id="canvas" width="300" height="150"></canvas>
+  </div>
+
+  <script src="/index.js"></script>
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    let isAussie = true;
+
+    function drawScene() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Draw background
+      ctx.fillStyle = isAussie ? '#00843D' : '#000000';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // Draw emoji
+      ctx.font = '80px Arial';
+      ctx.fillStyle = '#FFFFFF';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(isAussie ? '🦘' : '🥝', canvas.width / 2, canvas.height / 2);
+
+      // Draw text
+      ctx.font = '20px Arial';
+      ctx.fillStyle = '#FFFFFF';
+      ctx.fillText(isAussie ? 'Vegemite' : 'Marmite', canvas.width / 2, canvas.height - 20);
+
+      isAussie = !isAussie;
+    }
+
+    setInterval(drawScene, 2000);
+    drawScene();
+
+    // Modify existing functions
+    const originalUnlock = window.unlock;
+    window.unlock = function() {
+      originalUnlock();
+      alert('G'day mate! The door is now as open as the Outback! 🦘');
+    };
+
+    const originalLock = window.lock;
+    window.lock = function() {
+      originalLock();
+      alert('Sweet as, bro! The door is locked tighter than a Kiwi\'s grip on a rugby ball! 🥝');
+    };
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,148 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🤔 Forgotten Door Gizmo 🚪</title>
+  <style>
+    body {
+      font-family: 'Courier New', monospace;
+      background-color: #f0f0f0;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background-image: linear-gradient(45deg, #f0f0f0 25%, transparent 25%, transparent 75%, #f0f0f0 75%, #f0f0f0),
+                        linear-gradient(45deg, #f0f0f0 25%, transparent 25%, transparent 75%, #f0f0f0 75%, #f0f0f0);
+      background-size: 60px 60px;
+      background-position: 0 0, 30px 30px;
+      animation: amnesia-bg 10s linear infinite;
+    }
+    @keyframes amnesia-bg {
+      0% { background-position: 0 0, 30px 30px; }
+      100% { background-position: 60px 60px, 90px 90px; }
+    }
+    .maincontainer {
+      background-color: rgba(255, 255, 255, 0.8);
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      max-width: 90%;
+      width: 350px;
+    }
+    .header {
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 48px;
+      color: #666;
+      animation: spin 5s linear infinite;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    h1 {
+      font-size: 24px;
+      margin: 10px 0;
+      color: #444;
+    }
+    #message {
+      font-style: italic;
+      margin-bottom: 20px;
+      min-height: 20px;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .primary-button {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .primary-button:hover {
+      background-color: #45a049;
+      transform: scale(1.05);
+    }
+    .secondary-button {
+      background-color: #f44336;
+      color: white;
+    }
+    .secondary-button:hover {
+      background-color: #da190b;
+      transform: scale(1.05);
+    }
+    .theme-name {
+      font-size: 12px;
+      color: #888;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-question-circle"></i>
+      <h1>🤔 What's This Thingy? 🚪</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button id="unlockbutton" class="primary-button">🔓 Open Sesame?</button>
+      <button id="lockbutton" class="primary-button">🔒 Close... Something?</button>
+    </div>
+    <div class="secondary-button-container">
+      <button id="stopbutton" class="secondary-button">🛑 Panic Button!</button>
+      <button id="safebutton" class="secondary-button">🦺 Make Safe... I Think?</button>
+    </div>
+    <div class="theme-name">🧠 Theme: Amnesia</div>
+  </div>
+
+  <script type="module" src="/index.js"></script>
+  <script>
+    const buttons = document.querySelectorAll('button');
+    const message = document.getElementById('message');
+    const forgetfulMessages = [
+      "What was I doing again? 🤔",
+      "I feel like I've been here before... 🌀",
+      "Did I lock the door? Or unlock it? 🚪",
+      "Who am I and why am I pressing buttons? 🤷‍♂️",
+      "I have a strange feeling of déjà vu... 👀"
+    ];
+
+    buttons.forEach(button => {
+      button.addEventListener('click', () => {
+        message.textContent = forgetfulMessages[Math.floor(Math.random() * forgetfulMessages.length)];
+        button.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+          button.style.transform = 'scale(1)';
+        }, 100);
+      });
+    });
+
+    setInterval(() => {
+      buttons.forEach(button => {
+        button.style.order = Math.floor(Math.random() * 4);
+      });
+    }, 10000);
+  </script>
+</body>
+
+</html>

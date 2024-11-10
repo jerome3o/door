@@ -1,0 +1,198 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Jerome's Daily Essentials Door Lock 🔐</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    .maincontainer {
+      background-color: #ffffff;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    .header {
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 48px;
+      color: #4CAF50;
+    }
+    h1 {
+      margin: 10px 0;
+      color: #333;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+    .primary-button, .secondary-button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      border: none;
+      border-radius: 5px;
+      transition: transform 0.3s, background-color 0.3s;
+    }
+    .primary-button {
+      background-color: #4CAF50;
+      color: white;
+    }
+    .secondary-button {
+      background-color: #f44336;
+      color: white;
+    }
+    .primary-button:hover, .secondary-button:hover {
+      transform: scale(1.05);
+    }
+    #message {
+      margin: 20px 0;
+      font-weight: bold;
+      color: #333;
+    }
+    #theme {
+      font-size: 12px;
+      color: #777;
+      margin-top: 20px;
+    }
+    #canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="canvas"></canvas>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-store"></i>
+      <h1>Jerome's Daily Essentials Door Lock 🔐</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button onclick="unlock()" class="primary-button">Unlock (Open Store) 🛒</button>
+      <button onclick="lock()" class="primary-button">Lock (Close Store) 🚫</button>
+    </div>
+    <div class="secondary-button-container">
+      <button onclick="stop()" class="secondary-button">E-Stop (Weekend Closure) 🛑</button>
+      <button onclick="safe()" class="secondary-button">Safe Actuators (Restock) 📦</button>
+    </div>
+    <p id="theme">Theme: Why is Daily Essentials closed on weekends!?!?!?!? 😭</p>
+  </div>
+
+  <script src="/index.js"></script>
+  <script>
+    // Falling items animation
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const items = ['🍞', '🥛', '🧻', '🧼', '🥫', '📰'];
+    const fallingItems = [];
+
+    class FallingItem {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = -50;
+        this.speed = 1 + Math.random() * 3;
+        this.item = items[Math.floor(Math.random() * items.length)];
+      }
+
+      update() {
+        this.y += this.speed;
+        if (this.y > canvas.height) {
+          this.y = -50;
+          this.x = Math.random() * canvas.width;
+        }
+      }
+
+      draw() {
+        ctx.font = '30px Arial';
+        ctx.fillText(this.item, this.x, this.y);
+      }
+    }
+
+    for (let i = 0; i < 20; i++) {
+      fallingItems.push(new FallingItem());
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      fallingItems.forEach(item => {
+        item.update();
+        item.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    // Jerome's frustration meter
+    let frustration = 0;
+    const maxFrustration = 100;
+
+    function updateFrustration() {
+      frustration = Math.min(frustration + 1, maxFrustration);
+      const jeromeMessage = document.getElementById('message');
+      jeromeMessage.innerHTML = `Jerome's Weekend Frustration: ${'😠'.repeat(Math.floor(frustration / 10))}`;
+      
+      if (frustration === maxFrustration) {
+        jeromeMessage.innerHTML += '<br>Jerome has reached maximum frustration! 🤯';
+      }
+    }
+
+    setInterval(updateFrustration, 1000);
+
+    // Override original functions
+    const originalUnlock = window.unlock;
+    const originalLock = window.lock;
+    const originalStop = window.stop;
+    const originalSafe = window.safe;
+
+    window.unlock = function() {
+      originalUnlock();
+      frustration = Math.max(0, frustration - 20);
+    }
+
+    window.lock = function() {
+      originalLock();
+      frustration = Math.min(maxFrustration, frustration + 10);
+    }
+
+    window.stop = function() {
+      originalStop();
+      frustration = maxFrustration;
+    }
+
+    window.safe = function() {
+      originalSafe();
+      frustration = Math.max(0, frustration - 5);
+    }
+  </script>
+</body>
+
+</html>

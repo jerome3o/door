@@ -1,0 +1,195 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Revolutionary Door Control 🚪👑❌</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #b22222;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .maincontainer {
+      background-color: #800000;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+    }
+
+    h1 {
+      font-size: 2em;
+      margin: 0;
+    }
+
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+
+    .primary-button, .secondary-button {
+      background-color: #ffd700;
+      color: #800000;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1em;
+      cursor: pointer;
+      border-radius: 5px;
+      transition: all 0.3s ease;
+    }
+
+    .primary-button:hover, .secondary-button:hover {
+      background-color: #fff;
+      transform: scale(1.1);
+    }
+
+    .secondary-button {
+      background-color: #c0c0c0;
+    }
+
+    #message {
+      font-size: 1.2em;
+      margin: 20px 0;
+    }
+
+    #theme {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 0.8em;
+      color: #ffd700;
+    }
+
+    #canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .crown {
+      font-size: 3em;
+      position: absolute;
+      opacity: 0.2;
+      animation: spin 10s linear infinite;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="canvas"></canvas>
+  <div class="maincontainer">
+    <div id="theme">Theme: Down with the monarchy 👑❌</div>
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>Revolutionary Door Control 🚪✊</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button onclick="unlock()" class="primary-button">Liberate Entrance 🔓</button>
+      <button onclick="lock()" class="primary-button">Secure the Republic 🔒</button>
+    </div>
+    <div class="secondary-button-container">
+      <button onclick="stop()" class="secondary-button">People's E-Stop 🛑</button>
+      <button onclick="safe()" class="secondary-button">Protect the Commons 🛡️</button>
+    </div>
+  </div>
+
+  <script src="/index.js"></script>
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const crowns = [];
+    const crownChars = ['👑', '💎', '🏰', '🤴', '👸'];
+
+    for (let i = 0; i < 20; i++) {
+      crowns.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 30 + 20,
+        speed: Math.random() * 2 + 1,
+        char: crownChars[Math.floor(Math.random() * crownChars.length)]
+      });
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      crowns.forEach(crown => {
+        ctx.font = `${crown.size}px Arial`;
+        ctx.fillStyle = 'rgba(255, 0, 0, 0.2)';
+        ctx.fillText(crown.char, crown.x, crown.y);
+        
+        crown.y += crown.speed;
+        if (crown.y > canvas.height) {
+          crown.y = -crown.size;
+          crown.x = Math.random() * canvas.width;
+        }
+      });
+      
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    // Add interactive crown destruction
+    canvas.addEventListener('click', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      crowns.forEach((crown, index) => {
+        if (x > crown.x && x < crown.x + crown.size &&
+            y > crown.y && y < crown.y + crown.size) {
+          crowns.splice(index, 1);
+          const explosion = document.createElement('div');
+          explosion.textContent = '💥';
+          explosion.style.position = 'absolute';
+          explosion.style.left = `${e.clientX}px`;
+          explosion.style.top = `${e.clientY}px`;
+          explosion.style.fontSize = '2em';
+          document.body.appendChild(explosion);
+          setTimeout(() => explosion.remove(), 1000);
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,174 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🐻 Jerome's Norwegian Bear-y Door 🇳🇴</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #2c3e50;
+      color: #ecf0f1;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+    .maincontainer {
+      background-color: #34495e;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+    .header {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+      animation: shake 0.5s infinite;
+    }
+    @keyframes shake {
+      0% { transform: rotate(0deg); }
+      25% { transform: rotate(5deg); }
+      75% { transform: rotate(-5deg); }
+      100% { transform: rotate(0deg); }
+    }
+    h1 {
+      font-size: 2em;
+      margin: 0;
+    }
+    .button-container, .secondary-button-container {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 20px;
+    }
+    button {
+      font-size: 1.2em;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    .primary-button {
+      background-color: #e74c3c;
+      color: white;
+    }
+    .secondary-button {
+      background-color: #3498db;
+      color: white;
+    }
+    button:hover {
+      transform: scale(1.1);
+    }
+    #message {
+      font-size: 1.2em;
+      margin: 20px 0;
+    }
+    #bearCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+    #theme {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 0.8em;
+      color: #bdc3c7;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="bearCanvas"></canvas>
+  <div class="maincontainer">
+    <div id="theme">Theme: Jerome gets eaten by a bear in Norway 🇳🇴</div>
+    <div class="header">
+      <i class="fas fa-paw"></i>
+      <h1>🐻 Bear-y Secure Door 🚪</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button onclick="unlock()" class="primary-button">🔓 Un-bear the Door</button>
+      <button onclick="lock()" class="primary-button">🔒 Bear-icade</button>
+    </div>
+    <div class="secondary-button-container">
+      <button onclick="stop()" class="secondary-button">🛑 Bear-mergency Stop</button>
+      <button onclick="safe()" class="secondary-button">🦺 Safe Bear-tuators</button>
+    </div>
+  </div>
+
+  <script src="/index.js"></script>
+  <script>
+    const canvas = document.getElementById('bearCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    class Bear {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = 30;
+        this.speed = 2;
+      }
+
+      draw() {
+        ctx.fillStyle = '#8B4513';
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#4A2500';
+        ctx.beginPath();
+        ctx.arc(this.x - 10, this.y - 10, 5, 0, Math.PI * 2);
+        ctx.arc(this.x + 10, this.y - 10, 5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      move() {
+        this.x += (Math.random() - 0.5) * this.speed;
+        this.y += (Math.random() - 0.5) * this.speed;
+        if (this.x < 0) this.x = canvas.width;
+        if (this.x > canvas.width) this.x = 0;
+        if (this.y < 0) this.y = canvas.height;
+        if (this.y > canvas.height) this.y = 0;
+      }
+    }
+
+    const bears = Array(5).fill().map(() => new Bear());
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      bears.forEach(bear => {
+        bear.move();
+        bear.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
+
+</html>
