@@ -97,21 +97,8 @@ class AuthMiddleware(BaseHTTPMiddleware):
             if user:
                 # Set cookie to expire in 10 years
                 expiration = datetime.utcnow() + timedelta(days=COOKIE_EXPIRATION_DAYS)
-
-                # Preserve other query parameters if any
-                query_params = dict(request.query_params)
-                query_params.pop(API_KEY_QUERY_NAME, None)
-                if query_params:
-                    query_string = f"?{urlencode(query_params)}"
-                else:
-                    query_string = ""
-
-                response = RedirectResponse(
-                    # redirect to the same page to avoid the key being in the
-                    #   url bar
-                    url=f"{request.url.path}{query_string}",
-                    status_code=303,
-                )  # 303 See Other
+                request.state.user = user
+                response = await call_next(request)
                 response.set_cookie(
                     key=API_KEY_COOKIE_NAME,
                     value=query_param_key,
@@ -120,7 +107,6 @@ class AuthMiddleware(BaseHTTPMiddleware):
                     samesite="lax",
                 )
                 return response
-
             else:
                 failed_login(request, query_param_key)
                 return RedirectResponse(url="/login?error=invalid_key", status_code=303)
