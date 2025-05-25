@@ -1,0 +1,268 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <title>🎰 Poker Door Control 🃏</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            background: #0c4a1c;
+            font-family: 'Arial', sans-serif;
+            color: #fff;
+        }
+
+        .maincontainer {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #0a3816;
+            border-radius: 15px;
+            border: 8px solid #4b2810;
+            box-shadow: 0 0 20px rgba(0,0,0,0.5);
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #4b2810;
+            padding-bottom: 10px;
+        }
+
+        .header h1 {
+            color: #ffd700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            font-size: 2.5em;
+            margin: 10px 0;
+        }
+
+        .poker-table {
+            background: #0c4a1c;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .player-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .player {
+            text-align: center;
+            background: rgba(0,0,0,0.3);
+            padding: 10px;
+            border-radius: 5px;
+            min-width: 150px;
+        }
+
+        .button-container, .secondary-button-container {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin: 15px 0;
+        }
+
+        .primary-button, .secondary-button {
+            padding: 15px 30px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-transform: uppercase;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .primary-button {
+            background: #ffd700;
+            color: #000;
+        }
+
+        .secondary-button {
+            background: #dc3545;
+            color: white;
+        }
+
+        .primary-button:hover, .secondary-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        #message {
+            text-align: center;
+            font-size: 1.2em;
+            margin: 20px 0;
+            padding: 10px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 5px;
+        }
+
+        #poker-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 0;
+        }
+
+        .chip-animation {
+            position: absolute;
+            pointer-events: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg) translateY(0); opacity: 1; }
+            100% { transform: rotate(720deg) translateY(-100vh); opacity: 0; }
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="poker-canvas"></canvas>
+    <div class="maincontainer">
+        <div class="header">
+            <i class="fas fa-lock"></i>
+            <h1>🎰 High Stakes Door Control 🃏</h1>
+            <p>Theme: Texas Hold'em Poker Room</p>
+        </div>
+        
+        <div class="poker-table">
+            <div class="player-info">
+                <div class="player" id="henry">
+                    <h3>🤵 Henry</h3>
+                    <p>Stack: $<span id="henry-stack">1000</span></p>
+                    <p>Hand: <span id="henry-hand">🂡 🂮</span></p>
+                </div>
+                <div class="player" id="jerome">
+                    <h3>🤵 Jerome</h3>
+                    <p>Stack: $<span id="jerome-stack">1000</span></p>
+                    <p>Hand: <span id="jerome-hand">🂫 🂭</span></p>
+                </div>
+            </div>
+            <div id="community-cards" style="text-align: center; font-size: 2em;">
+                🂠 🂠 🂠 🂠 🂠
+            </div>
+        </div>
+
+        <p id="message"></p>
+        
+        <div class="button-container">
+            <button onclick="unlock()" class="primary-button">🔓 All In (Unlock)</button>
+            <button onclick="lock()" class="primary-button">🔒 Fold (Lock)</button>
+        </div>
+        <div class="secondary-button-container">
+            <button onclick="stop()" class="secondary-button">⚠️ Cash Out (E-Stop)</button>
+            <button onclick="safe()" class="secondary-button">🛡️ Check (Safe)</button>
+        </div>
+    </div>
+
+    <script src="/index.js"></script>
+    <script>
+        // Poker game simulation
+        const cards = ['♠️', '♥️', '♦️', '♣️'];
+        const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+        let henryStack = 1000;
+        let jeromeStack = 1000;
+
+        function getRandomCard() {
+            const card = values[Math.floor(Math.random() * values.length)] + 
+                        cards[Math.floor(Math.random() * cards.length)];
+            return card;
+        }
+
+        function playHand() {
+            const pot = Math.floor(Math.random() * 200) + 50;
+            const winner = Math.random() > 0.5 ? 'Henry' : 'Jerome';
+            
+            if(winner === 'Henry') {
+                henryStack += pot;
+                jeromeStack -= pot;
+            } else {
+                jeromeStack += pot;
+                henryStack -= pot;
+            }
+
+            document.getElementById('henry-stack').textContent = henryStack;
+            document.getElementById('jerome-stack').textContent = jeromeStack;
+            document.getElementById('henry-hand').textContent = `${getRandomCard()} ${getRandomCard()}`;
+            document.getElementById('jerome-hand').textContent = `${getRandomCard()} ${getRandomCard()}`;
+            
+            // Update community cards
+            const communityCards = Array(5).fill(0).map(() => getRandomCard());
+            document.getElementById('community-cards').textContent = communityCards.join(' ');
+
+            createChipAnimation(winner === 'Henry' ? 'right' : 'left');
+        }
+
+        function createChipAnimation(direction) {
+            const chip = document.createElement('div');
+            chip.className = 'chip-animation';
+            chip.style.cssText = `
+                position: absolute;
+                top: 50%;
+                ${direction === 'right' ? 'left' : 'right'}: 50%;
+                width: 30px;
+                height: 30px;
+                background: #ffd700;
+                border-radius: 50%;
+                animation: spin 1s forwards;
+            `;
+            document.body.appendChild(chip);
+            setTimeout(() => chip.remove(), 1000);
+        }
+
+        // Canvas background
+        const canvas = document.getElementById('poker-canvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        function drawBackground() {
+            ctx.fillStyle = '#0c4a1c';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw decorative patterns
+            for(let i = 0; i < 100; i++) {
+                ctx.fillStyle = `rgba(255, 215, 0, ${Math.random() * 0.1})`;
+                ctx.beginPath();
+                ctx.arc(
+                    Math.random() * canvas.width,
+                    Math.random() * canvas.height,
+                    Math.random() * 50,
+                    0,
+                    Math.PI * 2
+                );
+                ctx.fill();
+            }
+        }
+
+        // Animation loop
+        function animate() {
+            drawBackground();
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        // Play hands automatically
+        setInterval(playHand, 5000);
+    </script>
+</body>
+</html>

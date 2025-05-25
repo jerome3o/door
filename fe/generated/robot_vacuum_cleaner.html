@@ -1,0 +1,227 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <title>Roomba Door Control 🤖</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            font-family: 'Arial', sans-serif;
+            background: #1a1a1a;
+            color: #00ff00;
+            display: flex;
+            justify-content: center;
+            overflow-x: hidden;
+        }
+
+        .maincontainer {
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .header {
+            margin-bottom: 2rem;
+            animation: hover 2s infinite ease-in-out;
+        }
+
+        .header i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: spin 4s linear infinite;
+        }
+
+        .theme-name {
+            font-size: 0.8rem;
+            color: #888;
+            margin-bottom: 2rem;
+        }
+
+        #message {
+            background: rgba(0, 255, 0, 0.1);
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            min-height: 50px;
+        }
+
+        .button-container, .secondary-button-container {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .primary-button {
+            background: #00ff00;
+            color: #000;
+        }
+
+        .secondary-button {
+            background: #ff0000;
+            color: #fff;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        button::after {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: rotate(45deg);
+            transition: all 0.3s;
+            opacity: 0;
+        }
+
+        button:hover::after {
+            opacity: 1;
+            transform: rotate(45deg) translate(50%, 50%);
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes hover {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        #vacuum-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            opacity: 0.3;
+        }
+
+        h1::after {
+            content: " 🤖";
+            animation: wave 1s infinite;
+        }
+
+        @keyframes wave {
+            0%, 100% { transform: rotate(0); }
+            50% { transform: rotate(15deg); }
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="vacuum-canvas"></canvas>
+    <div class="maincontainer">
+        <div class="header">
+            <i class="fas fa-robot"></i>
+            <h1>Robo-Door Control</h1>
+        </div>
+        <div class="theme-name">🧹 Theme: Robot Vacuum Cleaner (My Electronic Love) 🧹</div>
+        <p id="message"></p>
+        <div class="button-container">
+            <button onclick="unlock()" class="primary-button">🤖 Initiate Entry Protocol</button>
+            <button onclick="lock()" class="primary-button">🔒 Secure Cleaning Zone</button>
+        </div>
+        <div class="secondary-button-container">
+            <button onclick="stop()" class="secondary-button">⚡ Emergency Override</button>
+            <button onclick="safe()" class="secondary-button">🛡️ Protect My Roomba</button>
+        </div>
+    </div>
+
+    <script src="/index.js"></script>
+    <script>
+        // Vacuum simulation
+        const canvas = document.getElementById('vacuum-canvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        class VacuumBot {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = 30;
+                this.speedX = (Math.random() - 0.5) * 4;
+                this.speedY = (Math.random() - 0.5) * 4;
+                this.trail = [];
+            }
+
+            update() {
+                this.trail.push({x: this.x, y: this.y});
+                if (this.trail.length > 20) this.trail.shift();
+
+                this.x += this.speedX;
+                this.y += this.speedY;
+
+                if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.strokeStyle = '#00ff00';
+                ctx.stroke();
+
+                // Draw trail
+                ctx.beginPath();
+                this.trail.forEach((pos, i) => {
+                    ctx.lineTo(pos.x, pos.y);
+                });
+                ctx.strokeStyle = `rgba(0, 255, 0, 0.2)`;
+                ctx.stroke();
+            }
+        }
+
+        const vacuums = Array(5).fill().map(() => new VacuumBot());
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            vacuums.forEach(vacuum => {
+                vacuum.update();
+                vacuum.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+
+</html>

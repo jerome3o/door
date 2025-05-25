@@ -1,0 +1,221 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <title>🐦 Birdie Door Control 🐦</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #87CEEB, #E0FFFF);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .maincontainer {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .header h1 {
+            color: #2c3e50;
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        .theme-name {
+            font-size: 0.8rem;
+            color: #666;
+            text-align: center;
+            margin-bottom: 1rem;
+        }
+
+        #message {
+            text-align: center;
+            margin: 1rem 0;
+            color: #2c3e50;
+            font-weight: bold;
+        }
+
+        .button-container, .secondary-button-container {
+            display: flex;
+            gap: 1rem;
+            margin: 1rem 0;
+            justify-content: center;
+        }
+
+        button {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .primary-button {
+            background: #3498db;
+            color: white;
+        }
+
+        .primary-button:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+        }
+
+        .secondary-button {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .secondary-button:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+        }
+
+        #birdCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="maincontainer">
+        <canvas id="birdCanvas"></canvas>
+        <div class="content">
+            <div class="header">
+                <i class="fas fa-lock"></i>
+                <h1>🐦 Nest Security Control 🐦</h1>
+            </div>
+            <div class="theme-name">Theme: SVG Bird Drawing Animation</div>
+            <p id="message"></p>
+            <div class="button-container">
+                <button onclick="unlock()" class="primary-button">🪽 Open Nest</button>
+                <button onclick="lock()" class="primary-button">🪽 Close Nest</button>
+            </div>
+            <div class="secondary-button-container">
+                <button onclick="stop()" class="secondary-button">🚫 Emergency Perch</button>
+                <button onclick="safe()" class="secondary-button">🛡️ Secure Wings</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Bird animation
+        const canvas = document.getElementById('birdCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        function drawBird(x, y, scale, wingAngle) {
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.scale(scale, scale);
+
+            // Body
+            ctx.beginPath();
+            ctx.fillStyle = '#3498db';
+            ctx.ellipse(0, 0, 20, 15, 0, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Wings
+            ctx.beginPath();
+            ctx.fillStyle = '#2980b9';
+            ctx.moveTo(0, -5);
+            ctx.quadraticCurveTo(30 * Math.cos(wingAngle), -20, 40, -5);
+            ctx.quadraticCurveTo(30, 0, 0, 5);
+            ctx.fill();
+
+            // Head
+            ctx.beginPath();
+            ctx.fillStyle = '#3498db';
+            ctx.arc(15, -8, 8, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Beak
+            ctx.beginPath();
+            ctx.fillStyle = '#e67e22';
+            ctx.moveTo(22, -10);
+            ctx.lineTo(30, -8);
+            ctx.lineTo(22, -6);
+            ctx.fill();
+
+            ctx.restore();
+        }
+
+        let birds = Array(5).fill().map(() => ({
+            x: Math.random() * canvas.width,
+            y: Math.random() * canvas.height,
+            scale: 0.5 + Math.random() * 0.5,
+            speed: 1 + Math.random() * 2,
+            wingAngle: 0,
+            wingSpeed: 0.1 + Math.random() * 0.1
+        }));
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            birds.forEach(bird => {
+                bird.x += bird.speed;
+                if (bird.x > canvas.width + 50) {
+                    bird.x = -50;
+                    bird.y = Math.random() * canvas.height;
+                }
+
+                bird.wingAngle += bird.wingSpeed;
+                if (bird.wingAngle > 0.5 || bird.wingAngle < -0.5) {
+                    bird.wingSpeed *= -1;
+                }
+
+                drawBird(bird.x, bird.y, bird.scale, bird.wingAngle);
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+    <script src="/index.js"></script>
+</body>
+
+</html>

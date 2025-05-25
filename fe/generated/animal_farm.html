@@ -1,0 +1,213 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <title>Barn Door Control 🐮</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Comic Sans MS', cursive;
+            background: #87CEEB;
+            color: #4a2810;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .theme-name {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.8);
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-size: 0.8em;
+        }
+
+        .maincontainer {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #cd8b62;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+            border: 10px solid #8b4513;
+            position: relative;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            background: #8b4513;
+            padding: 20px;
+            border-radius: 10px;
+            color: #fff;
+        }
+
+        .header i {
+            font-size: 2em;
+            margin-bottom: 10px;
+            animation: bounce 2s infinite;
+        }
+
+        #farmCanvas {
+            width: 100%;
+            height: 150px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+        }
+
+        .button-container, .secondary-button-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            justify-content: center;
+        }
+
+        button {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: transform 0.3s, background 0.3s;
+            font-family: 'Comic Sans MS', cursive;
+            position: relative;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        .primary-button {
+            background: #4CAF50;
+            color: white;
+            width: 150px;
+        }
+
+        .secondary-button {
+            background: #f44336;
+            color: white;
+            width: 150px;
+        }
+
+        #message {
+            text-align: center;
+            margin: 20px 0;
+            padding: 10px;
+            background: rgba(255,255,255,0.8);
+            border-radius: 10px;
+            font-size: 1.2em;
+        }
+
+        /* Animals animation */
+        .animal {
+            position: absolute;
+            font-size: 2em;
+            animation: walk 20s linear infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        @keyframes walk {
+            from { transform: translateX(-100vw); }
+            to { transform: translateX(100vw); }
+        }
+
+        @media (max-width: 600px) {
+            .button-container, .secondary-button-container {
+                flex-direction: column;
+            }
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="theme-name">🎨 Theme: Animal Farm</div>
+    <div class="maincontainer">
+        <div class="header">
+            <i class="fas fa-lock"></i>
+            <h1>Barn Door Control 🚪</h1>
+        </div>
+        <canvas id="farmCanvas"></canvas>
+        <p id="message"></p>
+        <div class="button-container">
+            <button onclick="unlock()" class="primary-button">Open Barn 🐄</button>
+            <button onclick="lock()" class="primary-button">Close Barn 🐖</button>
+        </div>
+        <div class="secondary-button-container">
+            <button onclick="stop()" class="secondary-button">Farmhand Stop 🚫</button>
+            <button onclick="safe()" class="secondary-button">Protect Animals 🛡️</button>
+        </div>
+    </div>
+
+    <script>
+        // Add random walking animals
+        const animals = ['🐮', '🐷', '🐑', '🐔', '🐎'];
+        setInterval(() => {
+            const animal = document.createElement('div');
+            animal.className = 'animal';
+            animal.textContent = animals[Math.floor(Math.random() * animals.length)];
+            animal.style.top = Math.random() * window.innerHeight + 'px';
+            document.body.appendChild(animal);
+            setTimeout(() => animal.remove(), 20000);
+        }, 3000);
+
+        // Canvas animation
+        const canvas = document.getElementById('farmCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = canvas.offsetWidth;
+        canvas.height = canvas.offsetHeight;
+
+        function drawFarm() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw sky
+            ctx.fillStyle = '#87CEEB';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Draw grass
+            ctx.fillStyle = '#90EE90';
+            ctx.fillRect(0, canvas.height - 40, canvas.width, 40);
+            
+            // Draw barn
+            ctx.fillStyle = '#FF0000';
+            ctx.fillRect(canvas.width/2 - 40, canvas.height - 80, 80, 60);
+            
+            // Draw roof
+            ctx.beginPath();
+            ctx.moveTo(canvas.width/2 - 50, canvas.height - 80);
+            ctx.lineTo(canvas.width/2, canvas.height - 120);
+            ctx.lineTo(canvas.width/2 + 50, canvas.height - 80);
+            ctx.fillStyle = '#8B4513';
+            ctx.fill();
+            
+            // Draw sun
+            ctx.beginPath();
+            ctx.arc(50, 50, 30, 0, Math.PI * 2);
+            ctx.fillStyle = '#FFD700';
+            ctx.fill();
+        }
+
+        drawFarm();
+        window.addEventListener('resize', () => {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+            drawFarm();
+        });
+    </script>
+    <script src="/index.js"></script>
+</body>
+
+</html>

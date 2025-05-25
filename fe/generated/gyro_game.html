@@ -1,0 +1,248 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/matter-js/0.18.0/matter.min.js"></script>
+  <title>🎮 Maze Door Control 🎮</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      background: #1a1a1a;
+      color: #fff;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .theme-name {
+      color: #00ff00;
+      font-style: italic;
+      margin-bottom: 20px;
+    }
+
+    .maincontainer {
+      text-align: center;
+      max-width: 800px;
+      width: 100%;
+    }
+
+    .header {
+      margin-bottom: 20px;
+      animation: glow 2s infinite alternate;
+    }
+
+    @keyframes glow {
+      from {
+        text-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00;
+      }
+      to {
+        text-shadow: 0 0 20px #00ff00, 0 0 30px #00ff00;
+      }
+    }
+
+    .header i {
+      font-size: 2em;
+      margin-right: 10px;
+      color: #00ff00;
+    }
+
+    .game-container {
+      width: 100%;
+      max-width: 500px;
+      height: 500px;
+      margin: 20px auto;
+      border: 3px solid #00ff00;
+      position: relative;
+    }
+
+    canvas {
+      background: #000;
+    }
+
+    button {
+      padding: 15px 30px;
+      margin: 10px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1.1em;
+      transition: all 0.3s ease;
+    }
+
+    .primary-button {
+      background: #00ff00;
+      color: #000;
+    }
+
+    .primary-button:hover {
+      background: #00cc00;
+      transform: scale(1.05);
+    }
+
+    .secondary-button {
+      background: #ff0000;
+      color: #fff;
+    }
+
+    .secondary-button:hover {
+      background: #cc0000;
+      transform: scale(1.05);
+    }
+
+    #message {
+      color: #00ff00;
+      font-size: 1.2em;
+      margin: 20px 0;
+      min-height: 1.2em;
+    }
+
+    .instructions {
+      color: #888;
+      margin: 20px 0;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="theme-name">🎮 Theme: Gyro Maze Game 🎮</div>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>🎯 Maze Master Door Control 🎯</h1>
+    </div>
+    <p class="instructions">🎮 Tilt your device or use arrow keys to guide the ball to the green goal! Win to unlock the door! 🎮</p>
+    <div class="game-container" id="game-container"></div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button onclick="unlock()" class="primary-button">🔓 Complete Maze to Unlock</button>
+      <button onclick="lock()" class="primary-button">🔒 Reset Maze & Lock</button>
+    </div>
+    <div class="secondary-button-container">
+      <button onclick="stop()" class="secondary-button">⚠️ Emergency Stop</button>
+      <button onclick="safe()" class="secondary-button">🛡️ Safe Mode</button>
+    </div>
+  </div>
+
+  <script src="/index.js"></script>
+  <script>
+    // Matter.js setup
+    const Engine = Matter.Engine,
+          Render = Matter.Render,
+          World = Matter.World,
+          Bodies = Matter.Bodies,
+          Body = Matter.Body;
+
+    const engine = Engine.create();
+    const render = Render.create({
+      element: document.getElementById('game-container'),
+      engine: engine,
+      options: {
+        width: 500,
+        height: 500,
+        wireframes: false,
+        background: '#000'
+      }
+    });
+
+    // Create walls
+    const walls = [
+      Bodies.rectangle(250, 0, 500, 20, { isStatic: true }),
+      Bodies.rectangle(250, 500, 500, 20, { isStatic: true }),
+      Bodies.rectangle(0, 250, 20, 500, { isStatic: true }),
+      Bodies.rectangle(500, 250, 20, 500, { isStatic: true })
+    ];
+
+    // Generate random maze
+    function generateMaze() {
+      const maze = [];
+      for(let i = 0; i < 8; i++) {
+        const wall = Bodies.rectangle(
+          Math.random() * 400 + 50,
+          Math.random() * 400 + 50,
+          Math.random() > 0.5 ? 200 : 20,
+          Math.random() > 0.5 ? 20 : 200,
+          { 
+            isStatic: true,
+            render: {
+              fillStyle: '#00ff00'
+            }
+          }
+        );
+        maze.push(wall);
+      }
+      return maze;
+    }
+
+    // Create ball and goal
+    const ball = Bodies.circle(50, 50, 10, {
+      render: {
+        fillStyle: '#fff'
+      },
+      friction: 0.005,
+      restitution: 0.5
+    });
+
+    const goal = Bodies.rectangle(450, 450, 30, 30, {
+      isStatic: true,
+      isSensor: true,
+      render: {
+        fillStyle: '#00ff00'
+      }
+    });
+
+    // Add all objects to world
+    World.add(engine.world, [...walls, ...generateMaze(), ball, goal]);
+
+    // Start the engine
+    Engine.run(engine);
+    Render.run(render);
+
+    // Device orientation controls
+    window.addEventListener('deviceorientation', (event) => {
+      const gravity = engine.world.gravity;
+      gravity.x = event.gamma * 0.001;
+      gravity.y = event.beta * 0.001;
+    });
+
+    // Keyboard controls
+    document.addEventListener('keydown', (event) => {
+      const force = 0.001;
+      switch(event.key) {
+        case 'ArrowUp':
+          Body.applyForce(ball, ball.position, {x: 0, y: -force});
+          break;
+        case 'ArrowDown':
+          Body.applyForce(ball, ball.position, {x: 0, y: force});
+          break;
+        case 'ArrowLeft':
+          Body.applyForce(ball, ball.position, {x: -force, y: 0});
+          break;
+        case 'ArrowRight':
+          Body.applyForce(ball, ball.position, {x: force, y: 0});
+          break;
+      }
+    });
+
+    // Check for win condition
+    Matter.Events.on(engine, 'collisionStart', (event) => {
+      event.pairs.forEach((pair) => {
+        if ((pair.bodyA === ball && pair.bodyB === goal) ||
+            (pair.bodyA === goal && pair.bodyB === ball)) {
+          document.getElementById('message').textContent = '🎉 You won! Door can now be unlocked! 🎉';
+          // Enable unlock button here
+        }
+      });
+    });
+  </script>
+</body>
+
+</html>

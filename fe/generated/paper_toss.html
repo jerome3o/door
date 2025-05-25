@@ -1,0 +1,266 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <title>🗑️ Paper Toss Door Control</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background: #f0f0f0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .theme-name {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        #gameCanvas {
+            background: #fff;
+            touch-action: none;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .header {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .header h1 {
+            font-size: 1.5em;
+            margin: 0;
+        }
+
+        .button-container, .secondary-button-container {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            font-weight: bold;
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .primary-button {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .secondary-button {
+            background: #ff4444;
+            color: white;
+        }
+
+        #message {
+            text-align: center;
+            color: #333;
+            margin: 5px 0;
+        }
+
+        #score {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="theme-name">Theme: Paper Toss 🗑️</div>
+    <canvas id="gameCanvas"></canvas>
+    <div id="score">Score: 0</div>
+    
+    <div class="controls">
+        <div class="header">
+            <i class="fas fa-lock"></i>
+            <h1>🚪 Toss Paper & Control Door 🗑️</h1>
+        </div>
+        <p id="message"></p>
+        <div class="button-container">
+            <button onclick="unlock()" class="primary-button">🔓 Unlock Like a Paper Plane</button>
+            <button onclick="lock()" class="primary-button">🔒 Crumple & Lock</button>
+        </div>
+        <div class="secondary-button-container">
+            <button onclick="stop()" class="secondary-button">📄 Emergency Paper Jam</button>
+            <button onclick="safe()" class="secondary-button">📎 Paper Safe Mode</button>
+        </div>
+    </div>
+
+    <script src="/index.js"></script>
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreElement = document.getElementById('score');
+        
+        let score = 0;
+        let papers = [];
+        let basket = {x: 0, y: 0, width: 50, height: 50};
+        let isDragging = false;
+        let dragStart = {x: 0, y: 0};
+        let dragEnd = {x: 0, y: 0};
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight - 150;
+            basket.x = canvas.width - 100;
+            basket.y = canvas.height - 100;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        class Paper {
+            constructor(x, y, vx, vy) {
+                this.x = x;
+                this.y = y;
+                this.vx = vx;
+                this.vy = vy;
+                this.size = 20;
+                this.gravity = 0.5;
+                this.bounce = 0.6;
+                this.friction = 0.99;
+            }
+
+            update() {
+                this.vy += this.gravity;
+                this.x += this.vx;
+                this.y += this.vy;
+                this.vx *= this.friction;
+
+                if (this.y + this.size > canvas.height) {
+                    this.y = canvas.height - this.size;
+                    this.vy = -this.vy * this.bounce;
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.fillStyle = '#fff';
+                ctx.strokeStyle = '#000';
+                ctx.lineWidth = 2;
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.stroke();
+            }
+        }
+
+        function drawBasket() {
+            ctx.fillStyle = '#333';
+            ctx.fillRect(basket.x, basket.y, basket.width, basket.height);
+        }
+
+        function checkCollision(paper) {
+            return paper.x > basket.x && 
+                   paper.x < basket.x + basket.width &&
+                   paper.y > basket.y &&
+                   paper.y < basket.y + basket.height;
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            drawBasket();
+
+            papers = papers.filter(paper => {
+                paper.update();
+                paper.draw();
+                
+                if (checkCollision(paper)) {
+                    score++;
+                    scoreElement.textContent = `Score: ${score}`;
+                    return false;
+                }
+                
+                return paper.y < canvas.height + 100;
+            });
+
+            if (isDragging) {
+                ctx.beginPath();
+                ctx.strokeStyle = '#666';
+                ctx.moveTo(dragStart.x, dragStart.y);
+                ctx.lineTo(dragEnd.x, dragEnd.y);
+                ctx.stroke();
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        function handleStart(e) {
+            const pos = e.touches ? e.touches[0] : e;
+            const rect = canvas.getBoundingClientRect();
+            dragStart.x = pos.clientX - rect.left;
+            dragStart.y = pos.clientY - rect.top;
+            dragEnd.x = dragStart.x;
+            dragEnd.y = dragStart.y;
+            isDragging = true;
+        }
+
+        function handleMove(e) {
+            if (!isDragging) return;
+            const pos = e.touches ? e.touches[0] : e;
+            const rect = canvas.getBoundingClientRect();
+            dragEnd.x = pos.clientX - rect.left;
+            dragEnd.y = pos.clientY - rect.top;
+        }
+
+        function handleEnd() {
+            if (!isDragging) return;
+            isDragging = false;
+            
+            const dx = dragStart.x - dragEnd.x;
+            const dy = dragStart.y - dragEnd.y;
+            const speed = Math.sqrt(dx * dx + dy * dy) * 0.1;
+            
+            papers.push(new Paper(
+                dragStart.x,
+                dragStart.y,
+                (dragStart.x - dragEnd.x) * 0.1,
+                (dragStart.y - dragEnd.y) * 0.1
+            ));
+        }
+
+        canvas.addEventListener('mousedown', handleStart);
+        canvas.addEventListener('mousemove', handleMove);
+        canvas.addEventListener('mouseup', handleEnd);
+        canvas.addEventListener('touchstart', handleStart);
+        canvas.addEventListener('touchmove', handleMove);
+        canvas.addEventListener('touchend', handleEnd);
+
+        animate();
+    </script>
+</body>
+</html>

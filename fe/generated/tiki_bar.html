@@ -1,0 +1,240 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <title>Tiki Door Control 🗿</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            font-family: 'Trebuchet MS', sans-serif;
+            background: linear-gradient(45deg, #ff6b6b, #ff9f43);
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .maincontainer {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+            background: rgba(0,0,0,0.2);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .maincontainer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            z-index: -1;
+        }
+
+        .header {
+            margin-bottom: 30px;
+            animation: sway 3s ease-in-out infinite;
+        }
+
+        @keyframes sway {
+            0%, 100% { transform: rotate(-2deg); }
+            50% { transform: rotate(2deg); }
+        }
+
+        .header i {
+            font-size: 3em;
+            margin-bottom: 10px;
+            color: #ffd700;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin: 10px 0;
+        }
+
+        #message {
+            background: rgba(255,255,255,0.2);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .button-container, .secondary-button-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        button {
+            min-width: 150px;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            font-weight: bold;
+            text-transform: uppercase;
+            position: relative;
+            overflow: hidden;
+        }
+
+        button::before {
+            content: '🌺';
+            position: absolute;
+            left: -30px;
+            opacity: 0;
+            transition: all 0.3s;
+        }
+
+        button:hover::before {
+            left: 10px;
+            opacity: 1;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            padding-left: 45px;
+        }
+
+        .primary-button {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .primary-button:nth-child(1)::after {
+            content: " 🗝️";
+        }
+
+        .primary-button:nth-child(2)::after {
+            content: " 🔒";
+        }
+
+        .secondary-button {
+            background: #ff4757;
+            color: white;
+        }
+
+        #tikiCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .theme-name {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.2);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="tikiCanvas"></canvas>
+    <div class="maincontainer">
+        <div class="theme-name">🌺 Tiki Theme 🌺</div>
+        <div class="header">
+            <i class="fas fa-lock"></i>
+            <h1>Tiki Door Control 🗿</h1>
+        </div>
+        <p id="message"></p>
+        <div class="button-container">
+            <button onclick="unlock()" class="primary-button">Paradise Awaits</button>
+            <button onclick="lock()" class="primary-button">Seal the Hut</button>
+        </div>
+        <div class="secondary-button-container">
+            <button onclick="stop()" class="secondary-button">Volcano Stop 🌋</button>
+            <button onclick="safe()" class="secondary-button">Safe Harbor ⚓</button>
+        </div>
+    </div>
+
+    <script src="/index.js"></script>
+    <script>
+        // Tiki torch flame effect
+        const canvas = document.getElementById('tikiCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        const particles = [];
+        const particleCount = 50;
+
+        class Particle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = canvas.height + 10;
+                this.speed = 1 + Math.random() * 3;
+                this.radius = 2 + Math.random() * 3;
+                this.life = 0;
+                this.maxLife = 100 + Math.random() * 100;
+            }
+
+            update() {
+                this.y -= this.speed;
+                this.x += Math.sin(this.life * 0.1) * 0.5;
+                this.life++;
+
+                if (this.life >= this.maxLife) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                const alpha = (this.maxLife - this.life) / this.maxLife;
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                ctx.fillStyle = `rgba(255, ${150 + Math.random() * 100}, 0, ${alpha * 0.5})`;
+                ctx.fill();
+            }
+        }
+
+        for (let i = 0; i < particleCount; i++) {
+            particles.push(new Particle());
+        }
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+
+</html>

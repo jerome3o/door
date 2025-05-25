@@ -1,0 +1,226 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <title>✨ Pink Pony Door Control ✨</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(45deg, #ff69b4, #9370db);
+            font-family: 'Arial', sans-serif;
+            color: white;
+            overflow: hidden;
+        }
+
+        #sparkleCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .maincontainer {
+            position: relative;
+            z-index: 2;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .theme-name {
+            font-size: 0.8em;
+            color: #ffd700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .header i {
+            font-size: 2.5em;
+            animation: heartbeat 1.5s infinite;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin: 0;
+            background: linear-gradient(45deg, #ff69b4, #ffd700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        #message {
+            font-size: 1.2em;
+            margin: 20px 0;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+        }
+
+        .button-container, .secondary-button-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        button {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .primary-button {
+            background: linear-gradient(45deg, #ff69b4, #9370db);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 105, 180, 0.3);
+        }
+
+        .secondary-button {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            backdrop-filter: blur(5px);
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(255, 105, 180, 0.4);
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        @media (max-width: 600px) {
+            .maincontainer {
+                margin: 10px;
+            }
+            
+            .button-container, .secondary-button-container {
+                flex-direction: column;
+            }
+            
+            button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="sparkleCanvas"></canvas>
+    <div class="maincontainer">
+        <div class="theme-name">🎸 Chappel Roan Theme 🎸</div>
+        <div class="header">
+            <i class="fas fa-lock"></i>
+            <h1>Pink Pony Door Control</h1>
+        </div>
+        <p id="message"></p>
+        <div class="button-container">
+            <button onclick="unlock()" class="primary-button">💫 Femme Fatale Unlock 💫</button>
+            <button onclick="lock()" class="primary-button">💝 Pink Pony Lock 💝</button>
+        </div>
+        <div class="secondary-button-container">
+            <button onclick="stop()" class="secondary-button">🛑 California Stop 🛑</button>
+            <button onclick="safe()" class="secondary-button">✨ My Safe Heaven ✨</button>
+        </div>
+    </div>
+
+    <script src="/index.js"></script>
+    <script>
+        // Sparkle effect
+        const canvas = document.getElementById('sparkleCanvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        class Sparkle {
+            constructor() {
+                this.reset();
+            }
+
+            reset() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.velocity = Math.random() * 2 + 1;
+                this.opacity = Math.random();
+                this.color = Math.random() > 0.5 ? '#ff69b4' : '#ffd700';
+            }
+
+            update() {
+                this.y -= this.velocity;
+                this.opacity -= 0.01;
+
+                if (this.opacity <= 0) {
+                    this.reset();
+                }
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.fillStyle = this.color;
+                ctx.globalAlpha = this.opacity;
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        const sparkles = Array(100).fill().map(() => new Sparkle());
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            sparkles.forEach(sparkle => {
+                sparkle.update();
+                sparkle.draw();
+            });
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+
+</html>

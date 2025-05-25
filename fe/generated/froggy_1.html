@@ -1,0 +1,203 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🐸 Froggy Door Control 🐸</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      background: linear-gradient(180deg, #97d459 0%, #4a8f29 100%);
+      font-family: 'Arial Rounded MT Bold', Arial, sans-serif;
+      color: white;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+    }
+
+    .maincontainer {
+      text-align: center;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .header {
+      margin-bottom: 20px;
+    }
+
+    .header i {
+      font-size: 2em;
+      color: #2d5518;
+    }
+
+    h1 {
+      font-size: 2.5em;
+      margin: 10px 0;
+      color: #2d5518;
+    }
+
+    #game-container {
+      position: relative;
+      width: 100%;
+      height: 400px;
+      background: #78b846;
+      border-radius: 15px;
+      margin: 20px 0;
+      overflow: hidden;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    }
+
+    #frog {
+      position: absolute;
+      font-size: 40px;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .target {
+      position: absolute;
+      padding: 20px;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2em;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    #message {
+      font-size: 1.2em;
+      margin: 20px 0;
+      padding: 10px;
+      background: rgba(255,255,255,0.2);
+      border-radius: 10px;
+    }
+
+    .theme-name {
+      font-size: 1.2em;
+      color: #2d5518;
+      margin-top: 20px;
+    }
+
+    .lily-pad {
+      position: absolute;
+      font-size: 30px;
+      color: #5aa832;
+      animation: float 3s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>🐸 Hoppy Door Control 🐸</h1>
+    </div>
+    <p class="theme-name">Theme: Froggy Crossing! 🌿</p>
+    <p id="message"></p>
+    <div id="game-container">
+      <div id="frog">🐸</div>
+    </div>
+  </div>
+
+  <script src="/index.js"></script>
+  <script>
+    const gameContainer = document.getElementById('game-container');
+    const frog = document.getElementById('frog');
+    let currentY = gameContainer.offsetHeight - 50;
+    let currentX = 20;
+    
+    // Create targets
+    const targets = [
+      { x: 20, y: gameContainer.offsetHeight - 50, text: "Start 🌟" },
+      { x: 20, y: gameContainer.offsetHeight * 0.6, text: "Unlock 🔓" },
+      { x: gameContainer.offsetWidth - 150, y: gameContainer.offsetHeight * 0.6, text: "Lock 🔒" },
+      { x: 20, y: gameContainer.offsetHeight * 0.2, text: "E-Stop ⚠️" },
+      { x: gameContainer.offsetWidth - 150, y: gameContainer.offsetHeight * 0.2, text: "Safe 🛡️" }
+    ];
+
+    // Add lily pads randomly
+    for(let i = 0; i < 10; i++) {
+      const lilyPad = document.createElement('div');
+      lilyPad.className = 'lily-pad';
+      lilyPad.textContent = '🌿';
+      lilyPad.style.left = Math.random() * (gameContainer.offsetWidth - 40) + 'px';
+      lilyPad.style.top = Math.random() * (gameContainer.offsetHeight - 40) + 'px';
+      lilyPad.style.animationDelay = (Math.random() * 2) + 's';
+      gameContainer.appendChild(lilyPad);
+    }
+
+    // Create target elements
+    targets.forEach(target => {
+      const targetEl = document.createElement('div');
+      targetEl.className = 'target';
+      targetEl.textContent = target.text;
+      targetEl.style.left = target.x + 'px';
+      targetEl.style.top = target.y + 'px';
+      gameContainer.appendChild(targetEl);
+    });
+
+    // Position frog initially
+    frog.style.left = currentX + 'px';
+    frog.style.top = currentY + 'px';
+
+    gameContainer.addEventListener('click', (e) => {
+      const rect = gameContainer.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+
+      // Move frog
+      currentX = x - 20;
+      currentY = y - 20;
+      frog.style.left = currentX + 'px';
+      frog.style.top = currentY + 'px';
+
+      // Check if frog is near any target
+      targets.forEach(target => {
+        const distance = Math.sqrt(
+          Math.pow(currentX - target.x, 2) + 
+          Math.pow(currentY - target.y, 2)
+        );
+
+        if(distance < 50) {
+          switch(target.text) {
+            case "Unlock 🔓":
+              unlock();
+              break;
+            case "Lock 🔒":
+              lock();
+              break;
+            case "E-Stop ⚠️":
+              stop();
+              break;
+            case "Safe 🛡️":
+              safe();
+              break;
+          }
+        }
+      });
+    });
+
+    // Add jumping animation
+    setInterval(() => {
+      frog.style.transform = 'translateY(-5px)';
+      setTimeout(() => {
+        frog.style.transform = 'translateY(0)';
+      }, 150);
+    }, 2000);
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,224 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🎪 Pendulum Door Control 🎪</title>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1a1a2e, #16213e);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #e94560;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .maincontainer {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(233, 69, 96, 0.2);
+      z-index: 10;
+      text-align: center;
+      max-width: 90vw;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .header i {
+      font-size: 2rem;
+      animation: swing 2s infinite ease-in-out;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+
+    .theme-name {
+      font-style: italic;
+      color: #ff6b6b;
+      margin-bottom: 1rem;
+    }
+
+    .button-container, .secondary-button-container {
+      display: flex;
+      gap: 1rem;
+      margin: 1rem 0;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 1.1rem;
+      transition: all 0.3s ease;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .primary-button {
+      background: #e94560;
+      color: white;
+      box-shadow: 0 5px 15px rgba(233, 69, 96, 0.3);
+    }
+
+    .secondary-button {
+      background: #0f3460;
+      color: white;
+      box-shadow: 0 5px 15px rgba(15, 52, 96, 0.3);
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      filter: brightness(1.1);
+    }
+
+    #message {
+      color: #ff6b6b;
+      font-size: 1.2rem;
+      min-height: 1.5em;
+    }
+
+    #pendulum-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1;
+    }
+
+    @keyframes swing {
+      0%, 100% { transform: rotate(-10deg); }
+      50% { transform: rotate(10deg); }
+    }
+
+    @media (max-width: 600px) {
+      .maincontainer {
+        padding: 1rem;
+      }
+      
+      button {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="pendulum-canvas"></canvas>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-key"></i>
+      <h1>🎪 Pendulum Portal Control 🎪</h1>
+    </div>
+    <div class="theme-name">Theme: Hypnotic Pendulum 🌀</div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button onclick="unlock()" class="primary-button">🔓 Swing Open</button>
+      <button onclick="lock()" class="primary-button">🔒 Swing Shut</button>
+    </div>
+    <div class="secondary-button-container">
+      <button onclick="stop()" class="secondary-button">⚠️ Halt Swing</button>
+      <button onclick="safe()" class="secondary-button">🎯 Balance Point</button>
+    </div>
+  </div>
+
+  <script src="/index.js"></script>
+  <script>
+    const canvas = document.getElementById('pendulum-canvas');
+    const ctx = canvas.getContext('2d');
+
+    // Set canvas size
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    // Pendulum parameters
+    const pendulums = [];
+    const numPendulums = 5;
+
+    class Pendulum {
+      constructor(x, y, length, angle, color) {
+        this.x = x;
+        this.y = y;
+        this.length = length;
+        this.angle = angle;
+        this.velocity = 0;
+        this.acceleration = 0;
+        this.damping = 0.995;
+        this.color = color;
+      }
+
+      update() {
+        const gravity = 0.3;
+        this.acceleration = (-gravity / this.length) * Math.sin(this.angle);
+        this.velocity += this.acceleration;
+        this.velocity *= this.damping;
+        this.angle += this.velocity;
+      }
+
+      draw() {
+        const bobX = this.x + Math.sin(this.angle) * this.length;
+        const bobY = this.y + Math.cos(this.angle) * this.length;
+
+        ctx.beginPath();
+        ctx.moveTo(this.x, this.y);
+        ctx.lineTo(bobX, bobY);
+        ctx.strokeStyle = this.color;
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        ctx.beginPath();
+        ctx.arc(bobX, bobY, 10, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+      }
+    }
+
+    // Create pendulums
+    for (let i = 0; i < numPendulums; i++) {
+      const length = 100 + i * 20;
+      const angle = (Math.PI / 4) * (i % 2 ? 1 : -1);
+      const color = `hsl(${(360 / numPendulums) * i}, 70%, 60%)`;
+      pendulums.push(new Pendulum(canvas.width / 2, 0, length, angle, color));
+    }
+
+    function animate() {
+      ctx.fillStyle = 'rgba(26, 26, 46, 0.1)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      pendulums.forEach(pendulum => {
+        pendulum.update();
+        pendulum.draw();
+      });
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  </script>
+</body>
+
+</html>

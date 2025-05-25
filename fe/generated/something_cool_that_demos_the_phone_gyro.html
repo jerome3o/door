@@ -1,0 +1,221 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <title>🌀 Gyro Door Control</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: #fff;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .theme-name {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            font-size: 0.8em;
+            opacity: 0.7;
+        }
+
+        #gyroCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            opacity: 0.3;
+        }
+
+        .maincontainer {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .header {
+            margin-bottom: 30px;
+            transform-style: preserve-3d;
+            transition: transform 0.3s ease;
+        }
+
+        .header i {
+            font-size: 3em;
+            color: #00ff88;
+            text-shadow: 0 0 10px #00ff8855;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin: 10px 0;
+            background: linear-gradient(45deg, #00ff88, #00ffee);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .button-container, .secondary-button-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        button {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 15px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .primary-button {
+            background: rgba(0, 255, 136, 0.2);
+            color: #00ff88;
+            border: 2px solid #00ff88;
+        }
+
+        .secondary-button {
+            background: rgba(255, 59, 59, 0.2);
+            color: #ff3b3b;
+            border: 2px solid #ff3b3b;
+        }
+
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        #message {
+            font-size: 1.2em;
+            margin: 20px 0;
+            padding: 10px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="theme-name">🌀 Gyro Theme</div>
+    <canvas id="gyroCanvas"></canvas>
+    <div class="maincontainer">
+        <div class="header">
+            <i class="fas fa-lock"></i>
+            <h1>🌀 Gyro Door Control</h1>
+        </div>
+        <p id="message"></p>
+        <div class="button-container">
+            <button onclick="unlock()" class="primary-button">🔓 Tilt to Unlock</button>
+            <button onclick="lock()" class="primary-button">🔒 Tilt to Lock</button>
+        </div>
+        <div class="secondary-button-container">
+            <button onclick="stop()" class="secondary-button">⚠️ Motion Stop</button>
+            <button onclick="safe()" class="secondary-button">🛡️ Stabilize</button>
+        </div>
+    </div>
+
+    <script src="/index.js"></script>
+    <script>
+        const canvas = document.getElementById('gyroCanvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        let gyroData = { x: 0, y: 0, z: 0 };
+
+        // Set canvas size
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Particle class
+        class Particle {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 3 + 1;
+                this.speedX = Math.random() * 2 - 1;
+                this.speedY = Math.random() * 2 - 1;
+            }
+
+            update() {
+                this.x += this.speedX + gyroData.y * 0.1;
+                this.y += this.speedY - gyroData.x * 0.1;
+
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
+            }
+
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = '#00ff88';
+                ctx.fill();
+            }
+        }
+
+        // Create particles
+        function init() {
+            particles = [];
+            for (let i = 0; i < 100; i++) {
+                particles.push(new Particle());
+            }
+        }
+
+        // Animation loop
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            particles.forEach(particle => {
+                particle.update();
+                particle.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        // Handle device orientation
+        if (window.DeviceOrientationEvent) {
+            window.addEventListener('deviceorientation', (event) => {
+                gyroData.x = event.beta || 0;  // X-axis rotation
+                gyroData.y = event.gamma || 0; // Y-axis rotation
+                gyroData.z = event.alpha || 0; // Z-axis rotation
+
+                // Update header tilt based on gyro data
+                const header = document.querySelector('.header');
+                header.style.transform = `rotateX(${gyroData.x * 0.5}deg) rotateY(${gyroData.y * 0.5}deg)`;
+            });
+        }
+
+        // Initialize and start animation
+        init();
+        animate();
+    </script>
+</body>
+
+</html>

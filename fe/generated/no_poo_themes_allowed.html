@@ -1,0 +1,214 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <title>🚀 Airlock Control System</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0a192f 0%, #112240 100%);
+            color: #64ffda;
+            font-family: 'Courier New', monospace;
+        }
+
+        .theme-name {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            font-size: 0.8em;
+            opacity: 0.7;
+        }
+
+        .maincontainer {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .header {
+            margin-bottom: 30px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .header i {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin: 0;
+            text-shadow: 0 0 10px #64ffda;
+        }
+
+        #message {
+            background: rgba(100, 255, 218, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            min-height: 50px;
+        }
+
+        .button-container, .secondary-button-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: 'Courier New', monospace;
+            font-size: 1.2em;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .primary-button {
+            background: #64ffda;
+            color: #0a192f;
+        }
+
+        .secondary-button {
+            background: transparent;
+            border: 2px solid #64ffda;
+            color: #64ffda;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 20px #64ffda;
+        }
+
+        button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                90deg,
+                transparent,
+                rgba(255, 255, 255, 0.2),
+                transparent
+            );
+            transition: 0.5s;
+        }
+
+        button:hover::before {
+            left: 100%;
+        }
+
+        #starfield {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+
+        @media (max-width: 480px) {
+            .button-container, .secondary-button-container {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="starfield"></canvas>
+    <div class="theme-name">🌌 Theme: Space Station Control Interface</div>
+    <div class="maincontainer">
+        <div class="header">
+            <i class="fas fa-lock"></i>
+            <h1>🚀 Airlock Control Interface</h1>
+        </div>
+        <p id="message"></p>
+        <div class="button-container">
+            <button onclick="unlock()" class="primary-button">🔓 Open Airlock</button>
+            <button onclick="lock()" class="primary-button">🔒 Seal Airlock</button>
+        </div>
+        <div class="secondary-button-container">
+            <button onclick="stop()" class="secondary-button">🚫 Emergency Override</button>
+            <button onclick="safe()" class="secondary-button">🛡️ Stabilize Systems</button>
+        </div>
+    </div>
+
+    <script src="/index.js"></script>
+    <script>
+        // Starfield animation
+        const canvas = document.getElementById('starfield');
+        const ctx = canvas.getContext('2d');
+
+        // Set canvas size
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Star properties
+        const stars = [];
+        const numStars = 200;
+        const speed = 0.5;
+
+        // Create stars
+        for (let i = 0; i < numStars; i++) {
+            stars.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height,
+                size: Math.random() * 2,
+                speed: Math.random() * speed + 0.1
+            });
+        }
+
+        // Animation loop
+        function animate() {
+            ctx.fillStyle = 'rgba(10, 25, 47, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            stars.forEach(star => {
+                ctx.fillStyle = '#64ffda';
+                ctx.beginPath();
+                ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+                ctx.fill();
+                
+                star.y += star.speed;
+                
+                if (star.y > canvas.height) {
+                    star.y = 0;
+                    star.x = Math.random() * canvas.width;
+                }
+            });
+            
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+
+</html>

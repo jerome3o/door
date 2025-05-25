@@ -1,0 +1,196 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🎨 Colorful Door Control</title>
+  <style>
+    :root {
+      --primary-color: #4CAF50;
+      --secondary-color: #2196F3;
+      --background-color: #ffffff;
+      --text-color: #333333;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--background-color);
+      color: var(--text-color);
+      transition: all 0.3s ease;
+    }
+
+    .theme-name {
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      font-size: 0.8em;
+      opacity: 0.7;
+    }
+
+    .maincontainer {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .header {
+      margin-bottom: 30px;
+      animation: rainbow 10s linear infinite;
+    }
+
+    .header i {
+      font-size: 3em;
+      margin-bottom: 10px;
+    }
+
+    .color-picker-container {
+      margin: 20px 0;
+      padding: 20px;
+      border-radius: 10px;
+      background: rgba(0,0,0,0.05);
+    }
+
+    .button-container, .secondary-button-container {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin: 20px 0;
+    }
+
+    .primary-button, .secondary-button {
+      padding: 15px 30px;
+      border: none;
+      border-radius: 25px;
+      font-size: 1.1em;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .primary-button {
+      background: var(--primary-color);
+      color: white;
+    }
+
+    .secondary-button {
+      background: var(--secondary-color);
+      color: white;
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    #message {
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 5px;
+      background: rgba(0,0,0,0.05);
+    }
+
+    #colorWheel {
+      border-radius: 50%;
+      cursor: pointer;
+    }
+
+    @keyframes rainbow {
+      0% { color: red; }
+      16% { color: orange; }
+      32% { color: yellow; }
+      48% { color: green; }
+      64% { color: blue; }
+      80% { color: indigo; }
+      100% { color: red; }
+    }
+
+    @media (max-width: 480px) {
+      .button-container, .secondary-button-container {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="theme-name">🎨 Theme: Color Picker</div>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>🌈 Chromatic Door Control 🎨</h1>
+    </div>
+    <div class="color-picker-container">
+      <canvas id="colorWheel" width="200" height="200"></canvas>
+      <p>🎨 Click to choose your color theme!</p>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button onclick="unlock()" class="primary-button">🔓 Paint it Unlocked</button>
+      <button onclick="lock()" class="primary-button">🔒 Color it Locked</button>
+    </div>
+    <div class="secondary-button-container">
+      <button onclick="stop()" class="secondary-button">🛑 Emergency Palette</button>
+      <button onclick="safe()" class="secondary-button">✨ Safe Color Mode</button>
+    </div>
+  </div>
+
+  <script src="/index.js"></script>
+  <script>
+    // Color wheel implementation
+    const canvas = document.getElementById('colorWheel');
+    const ctx = canvas.getContext('2d');
+    
+    function drawColorWheel() {
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      const radius = canvas.width / 2;
+
+      for(let angle = 0; angle < 360; angle++) {
+        const startAngle = (angle - 2) * Math.PI / 180;
+        const endAngle = (angle + 2) * Math.PI / 180;
+
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY);
+        ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+        ctx.closePath();
+
+        const hue = angle;
+        ctx.fillStyle = `hsl(${hue}, 100%, 50%)`;
+        ctx.fill();
+      }
+
+      // Add white center
+      ctx.beginPath();
+      ctx.arc(centerX, centerY, radius * 0.2, 0, Math.PI * 2);
+      ctx.fillStyle = 'white';
+      ctx.fill();
+    }
+
+    drawColorWheel();
+
+    // Handle color selection
+    canvas.addEventListener('click', (e) => {
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const imageData = ctx.getImageData(x, y, 1, 1).data;
+      const color = `rgb(${imageData[0]}, ${imageData[1]}, ${imageData[2]})`;
+      
+      document.documentElement.style.setProperty('--primary-color', color);
+      document.documentElement.style.setProperty('--secondary-color', 
+        `rgb(${imageData[0]*0.8}, ${imageData[1]*0.8}, ${imageData[2]*0.8})`);
+      
+      // Adjust text color based on brightness
+      const brightness = (imageData[0] + imageData[1] + imageData[2]) / 3;
+      document.documentElement.style.setProperty('--text-color', 
+        brightness > 128 ? '#333333' : '#ffffff');
+    });
+  </script>
+</body>
+
+</html>

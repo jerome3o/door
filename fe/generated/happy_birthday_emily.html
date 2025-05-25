@@ -1,0 +1,209 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Emily's Birthday Door! 🎂</title>
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #ff69b4, #ff1493);
+      font-family: 'Arial', sans-serif;
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .maincontainer {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      text-align: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .header {
+      animation: bounce 2s infinite;
+    }
+
+    .header i {
+      font-size: 3rem;
+      color: #FFD700;
+    }
+
+    h1 {
+      margin: 10px 0;
+      font-size: 2.5rem;
+      background: linear-gradient(to right, #FFD700, #FFA500);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .button-container, .secondary-button-container {
+      display: flex;
+      gap: 1rem;
+      margin: 1rem 0;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    button {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .primary-button {
+      background: linear-gradient(45deg, #FFD700, #FFA500);
+      color: white;
+    }
+
+    .secondary-button {
+      background: linear-gradient(45deg, #ff69b4, #ff1493);
+      color: white;
+    }
+
+    #message {
+      font-size: 1.2rem;
+      margin: 1rem 0;
+      padding: 10px;
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    #confetti-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    @media (max-width: 600px) {
+      .maincontainer {
+        margin: 1rem;
+        padding: 1rem;
+      }
+      
+      button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="confetti-canvas"></canvas>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>🎉 Emily's Birthday Door! 🎈</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button onclick="unlock()" class="primary-button">🎁 Open for Presents!</button>
+      <button onclick="lock()" class="primary-button">🎊 Secure the Party!</button>
+    </div>
+    <div class="secondary-button-container">
+      <button onclick="stop()" class="secondary-button">🛑 Party Pause!</button>
+      <button onclick="safe()" class="secondary-button">🎯 Safety Dance!</button>
+    </div>
+  </div>
+
+  <script src="/index.js"></script>
+  <script>
+    // Confetti animation
+    const canvas = document.getElementById('confetti-canvas');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const ctx = canvas.getContext('2d');
+    const confetti = [];
+
+    class Particle {
+      constructor() {
+        this.reset();
+      }
+
+      reset() {
+        this.x = Math.random() * canvas.width;
+        this.y = -10;
+        this.velocity = {
+          x: Math.random() * 6 - 3,
+          y: Math.random() * 3 + 2
+        };
+        this.rotation = Math.random() * 360;
+        this.rotationSpeed = Math.random() * 10 - 5;
+        this.size = Math.random() * 10 + 5;
+        this.color = ['#FFD700', '#FFA500', '#ff69b4', '#ff1493'][Math.floor(Math.random() * 4)];
+      }
+
+      update() {
+        this.y += this.velocity.y;
+        this.x += this.velocity.x;
+        this.rotation += this.rotationSpeed;
+
+        if (this.y > canvas.height) {
+          this.reset();
+        }
+      }
+
+      draw() {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.rotation * Math.PI / 180);
+        ctx.fillStyle = this.color;
+        ctx.fillRect(-this.size / 2, -this.size / 2, this.size, this.size);
+        ctx.restore();
+      }
+    }
+
+    // Create initial confetti
+    for (let i = 0; i < 100; i++) {
+      confetti.push(new Particle());
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      confetti.forEach(particle => {
+        particle.update();
+        particle.draw();
+      });
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+</body>
+
+</html>

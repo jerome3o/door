@@ -1,0 +1,255 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <title>🚇 Elizabeth Line Door Control</title>
+    <style>
+        :root {
+            --elizabeth-purple: #6950a1;
+            --elizabeth-light: #f4f2f7;
+        }
+        
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Johnston ITC', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--elizabeth-light);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .maincontainer {
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+        }
+
+        .header {
+            background: var(--elizabeth-purple);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            to {
+                left: 100%;
+            }
+        }
+
+        .tube-line {
+            height: 10px;
+            background: var(--elizabeth-purple);
+            position: relative;
+            margin: 20px 0;
+        }
+
+        .tube-train {
+            width: 60px;
+            height: 20px;
+            background: #fff;
+            position: absolute;
+            top: -5px;
+            left: 0;
+            border-radius: 5px;
+            animation: moveTrain 4s infinite linear;
+        }
+
+        @keyframes moveTrain {
+            from { left: -60px; }
+            to { left: 100%; }
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 2em;
+        }
+
+        .button-container, .secondary-button-container {
+            display: grid;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .button-container {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .secondary-button-container {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        button {
+            font-family: inherit;
+            border: none;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .primary-button {
+            background: var(--elizabeth-purple);
+            color: white;
+            font-weight: bold;
+        }
+
+        .primary-button:hover {
+            box-shadow: 0 0 15px rgba(105, 80, 161, 0.5);
+        }
+
+        .secondary-button {
+            background: #e63946;
+            color: white;
+        }
+
+        .secondary-button:hover {
+            box-shadow: 0 0 15px rgba(230, 57, 70, 0.5);
+        }
+
+        #message {
+            background: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        #canvas-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .theme-label {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--elizabeth-purple);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas-container"></canvas>
+    <div class="maincontainer">
+        <div class="header">
+            <i class="fas fa-subway"></i>
+            <h1>🚇 Elizabeth Line Door Control 🚪</h1>
+        </div>
+        <div class="tube-line">
+            <div class="tube-train"></div>
+        </div>
+        <p id="message"></p>
+        <div class="button-container">
+            <button onclick="unlock()" class="primary-button">🔓 Platform Open</button>
+            <button onclick="lock()" class="primary-button">🔒 Mind The Doors</button>
+        </div>
+        <div class="secondary-button-container">
+            <button onclick="stop()" class="secondary-button">🚫 Emergency Stop</button>
+            <button onclick="safe()" class="secondary-button">🛡️ Safe Mode</button>
+        </div>
+    </div>
+    <div class="theme-label">🚇 Elizabeth Line Theme</div>
+
+    <script src="/index.js"></script>
+    <script>
+        // Animated background
+        const canvas = document.getElementById('canvas-container');
+        const ctx = canvas.getContext('2d');
+
+        // Set canvas size
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Create TfL roundel pattern
+        class Roundel {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 30 + 20;
+                this.speed = Math.random() * 0.5 + 0.2;
+            }
+
+            draw() {
+                ctx.strokeStyle = '#6950a1';
+                ctx.lineWidth = 2;
+                
+                // Circle
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.stroke();
+                
+                // Bar
+                ctx.fillStyle = '#6950a1';
+                ctx.fillRect(this.x - this.size * 1.2, this.y - this.size/6, this.size * 2.4, this.size/3);
+            }
+
+            update() {
+                this.y += this.speed;
+                if (this.y > canvas.height + this.size) {
+                    this.y = -this.size;
+                    this.x = Math.random() * canvas.width;
+                }
+            }
+        }
+
+        const roundels = Array(15).fill().map(() => new Roundel());
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            roundels.forEach(roundel => {
+                roundel.update();
+                roundel.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+
+</html>

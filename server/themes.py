@@ -83,7 +83,7 @@ async def generate_theme(theme_spec: Theme) -> str:
     response = await client.messages.create(
         max_tokens=4096,
         system=_SYSTEM_PROMPT,
-        model="claude-3-5-sonnet-20240620",
+        model="claude-opus-4-20250514",
         messages=[{"role": "user", "content": content}],
     )
 

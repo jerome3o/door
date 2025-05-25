@@ -1,0 +1,177 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <title>💩 Door Control - Bristol Style 💩</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: 'Comic Sans MS', cursive;
+            background: #f4e4bc;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            color: #654321;
+        }
+
+        .maincontainer {
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            position: relative;
+        }
+
+        .header {
+            background: #8b4513;
+            padding: 20px;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            color: #f4e4bc;
+            box-shadow: 0 4px 8px rgba(139, 69, 19, 0.3);
+            animation: wiggle 2s infinite;
+        }
+
+        @keyframes wiggle {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(1deg); }
+            75% { transform: rotate(-1deg); }
+            100% { transform: rotate(0deg); }
+        }
+
+        #message {
+            font-size: 1.2em;
+            margin: 20px;
+            padding: 10px;
+            border-radius: 10px;
+            background: rgba(139, 69, 19, 0.1);
+        }
+
+        .button-container, .secondary-button-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: transform 0.3s, background 0.3s;
+            font-family: 'Comic Sans MS', cursive;
+        }
+
+        button:hover {
+            transform: scale(1.1);
+        }
+
+        .primary-button {
+            background: #8b4513;
+            color: #f4e4bc;
+        }
+
+        .secondary-button {
+            background: #654321;
+            color: #f4e4bc;
+        }
+
+        #poopCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .theme-name {
+            font-size: 0.8em;
+            color: #8b4513;
+            margin-top: 20px;
+            font-style: italic;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="poopCanvas"></canvas>
+    <div class="maincontainer">
+        <div class="header">
+            <i class="fas fa-toilet"></i>
+            <h1>💩 Door Control 💩</h1>
+        </div>
+        <p id="message"></p>
+        <div class="button-container">
+            <button onclick="unlock()" class="primary-button">💩 Release The Flow 💩</button>
+            <button onclick="lock()" class="primary-button">🚽 Seal The Deal 🚽</button>
+        </div>
+        <div class="secondary-button-container">
+            <button onclick="stop()" class="secondary-button">🛑 Emergency Flush 🛑</button>
+            <button onclick="safe()" class="secondary-button">🧻 Clean Up 🧻</button>
+        </div>
+        <div class="theme-name">Theme: Bristol Stool Chart Edition</div>
+    </div>
+
+    <script src="/index.js"></script>
+    <script>
+        // Falling poop emoji animation
+        const canvas = document.getElementById('poopCanvas');
+        const ctx = canvas.getContext('2d');
+
+        // Set canvas size
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        resizeCanvas();
+        window.addEventListener('resize', resizeCanvas);
+
+        class PoopEmoji {
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = -30;
+                this.speed = 1 + Math.random() * 2;
+                this.opacity = Math.random() * 0.3;
+                this.size = 20 + Math.random() * 20;
+            }
+
+            update() {
+                this.y += this.speed;
+                if (this.y > canvas.height) {
+                    this.y = -30;
+                    this.x = Math.random() * canvas.width;
+                }
+            }
+
+            draw() {
+                ctx.font = `${this.size}px Arial`;
+                ctx.globalAlpha = this.opacity;
+                ctx.fillText('💩', this.x, this.y);
+                ctx.globalAlpha = 1;
+            }
+        }
+
+        const poopEmojis = Array(15).fill().map(() => new PoopEmoji());
+
+        function animate() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            poopEmojis.forEach(poop => {
+                poop.update();
+                poop.draw();
+            });
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+
+</html>

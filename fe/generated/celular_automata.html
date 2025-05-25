@@ -1,0 +1,210 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>Cellular Automata Door Control 🦠</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: monospace;
+      color: white;
+      background: black;
+      overflow: hidden;
+    }
+
+    #canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+    }
+
+    .maincontainer {
+      position: relative;
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      background: rgba(0,0,0,0.7);
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 1.5rem;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .button-container, .secondary-button-container {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    button {
+      font-family: monospace;
+      padding: 15px 30px;
+      border: 2px solid white;
+      background: transparent;
+      color: white;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    button:hover {
+      background: white;
+      color: black;
+    }
+
+    button::before {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(255,255,255,0.2);
+      transition: all 0.3s;
+    }
+
+    button:hover::before {
+      top: 0;
+    }
+
+    #message {
+      font-size: 1.2rem;
+      text-align: center;
+      min-height: 2rem;
+    }
+
+    .theme-name {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      font-size: 0.8rem;
+      opacity: 0.5;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="canvas"></canvas>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>🧬 Cellular Access Control 🧬</h1>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button onclick="unlock()" class="primary-button">◻️ Evolve Open ◻️</button>
+      <button onclick="lock()" class="primary-button">⬛ Evolve Closed ⬛</button>
+    </div>
+    <div class="secondary-button-container">
+      <button onclick="stop()" class="secondary-button">🛑 Halt Evolution 🛑</button>
+      <button onclick="safe()" class="secondary-button">🧪 Reset Cells 🧪</button>
+    </div>
+  </div>
+  <div class="theme-name">Theme: Cellular Automata</div>
+
+  <script src="/index.js"></script>
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+
+    // Set canvas size
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    // Cellular automata implementation
+    const CELL_SIZE = 4;
+    const RULES = [30, 54, 60, 90, 110, 182]; // interesting rules
+    let currentRule = 0;
+    
+    class CellularAutomata {
+      constructor() {
+        this.width = Math.ceil(canvas.width / CELL_SIZE);
+        this.cells = new Array(this.width).fill(0);
+        this.cells[Math.floor(this.width / 2)] = 1;
+        this.generation = 0;
+      }
+
+      nextGeneration() {
+        const newCells = new Array(this.width).fill(0);
+        for(let i = 0; i < this.width; i++) {
+          const left = this.cells[(i - 1 + this.width) % this.width];
+          const center = this.cells[i];
+          const right = this.cells[(i + 1) % this.width];
+          const pattern = (left << 2) | (center << 1) | right;
+          newCells[i] = (RULES[currentRule] >> pattern) & 1;
+        }
+        this.cells = newCells;
+        this.generation++;
+      }
+
+      draw() {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        ctx.fillStyle = 'white';
+        for(let i = 0; i < this.width; i++) {
+          if(this.cells[i]) {
+            ctx.fillRect(
+              i * CELL_SIZE, 
+              (this.generation * CELL_SIZE) % canvas.height,
+              CELL_SIZE - 1,
+              CELL_SIZE - 1
+            );
+          }
+        }
+      }
+    }
+
+    let automata = new CellularAutomata();
+
+    function animate() {
+      automata.nextGeneration();
+      automata.draw();
+
+      if(automata.generation * CELL_SIZE > canvas.height) {
+        currentRule = (currentRule + 1) % RULES.length;
+        automata = new CellularAutomata();
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  </script>
+</body>
+
+</html>

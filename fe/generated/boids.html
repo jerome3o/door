@@ -1,0 +1,370 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <title>🦅 Flock Door Control 🦅</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            background: #1a1a2e;
+            color: #fff;
+        }
+
+        #boidCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1;
+        }
+
+        .maincontainer {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .theme-name {
+            font-size: 0.8em;
+            color: #64dfdf;
+            margin-bottom: 20px;
+            font-style: italic;
+        }
+
+        .header {
+            margin-bottom: 30px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .header i {
+            font-size: 2.5em;
+            color: #64dfdf;
+            margin-bottom: 10px;
+        }
+
+        .header h1 {
+            margin: 0;
+            color: #64dfdf;
+            text-shadow: 0 0 10px rgba(100, 223, 223, 0.5);
+        }
+
+        #message {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .button-container, .secondary-button-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+
+        button {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .primary-button {
+            background: #64dfdf;
+            color: #1a1a2e;
+        }
+
+        .secondary-button {
+            background: #ff6b6b;
+            color: white;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(100, 223, 223, 0.4);
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @media (max-width: 480px) {
+            .button-container, .secondary-button-container {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="boidCanvas"></canvas>
+    <div class="maincontainer">
+        <div class="theme-name">🦅 Theme: Boids Flocking Simulation 🦅</div>
+        <div class="header">
+            <i class="fas fa-lock"></i>
+            <h1>Flock Door Control</h1>
+        </div>
+        <p id="message"></p>
+        <div class="button-container">
+            <button onclick="unlock()" class="primary-button">🦅 Release The Flock</button>
+            <button onclick="lock()" class="primary-button">🔒 Gather The Flock</button>
+        </div>
+        <div class="secondary-button-container">
+            <button onclick="stop()" class="secondary-button">🛑 Scatter Flock</button>
+            <button onclick="safe()" class="secondary-button">🏠 Nest Safety</button>
+        </div>
+    </div>
+
+    <script>
+        class Boid {
+            constructor(x, y) {
+                this.position = new Vector(x, y);
+                this.velocity = Vector.random();
+                this.velocity.setMagnitude(3);
+                this.acceleration = new Vector(0, 0);
+                this.maxForce = 0.2;
+                this.maxSpeed = 4;
+            }
+
+            edges(width, height) {
+                if (this.position.x > width) this.position.x = 0;
+                if (this.position.x < 0) this.position.x = width;
+                if (this.position.y > height) this.position.y = 0;
+                if (this.position.y < 0) this.position.y = height;
+            }
+
+            align(boids) {
+                let perceptionRadius = 50;
+                let steering = new Vector(0, 0);
+                let total = 0;
+                for (let other of boids) {
+                    let d = this.position.dist(other.position);
+                    if (other != this && d < perceptionRadius) {
+                        steering.add(other.velocity);
+                        total++;
+                    }
+                }
+                if (total > 0) {
+                    steering.divide(total);
+                    steering.setMagnitude(this.maxSpeed);
+                    steering.subtract(this.velocity);
+                    steering.limit(this.maxForce);
+                }
+                return steering;
+            }
+
+            cohesion(boids) {
+                let perceptionRadius = 100;
+                let steering = new Vector(0, 0);
+                let total = 0;
+                for (let other of boids) {
+                    let d = this.position.dist(other.position);
+                    if (other != this && d < perceptionRadius) {
+                        steering.add(other.position);
+                        total++;
+                    }
+                }
+                if (total > 0) {
+                    steering.divide(total);
+                    steering.subtract(this.position);
+                    steering.setMagnitude(this.maxSpeed);
+                    steering.subtract(this.velocity);
+                    steering.limit(this.maxForce);
+                }
+                return steering;
+            }
+
+            separation(boids) {
+                let perceptionRadius = 50;
+                let steering = new Vector(0, 0);
+                let total = 0;
+                for (let other of boids) {
+                    let d = this.position.dist(other.position);
+                    if (other != this && d < perceptionRadius) {
+                        let diff = Vector.subtract(this.position, other.position);
+                        diff.divide(d * d);
+                        steering.add(diff);
+                        total++;
+                    }
+                }
+                if (total > 0) {
+                    steering.divide(total);
+                    steering.setMagnitude(this.maxSpeed);
+                    steering.subtract(this.velocity);
+                    steering.limit(this.maxForce);
+                }
+                return steering;
+            }
+
+            flock(boids) {
+                let alignment = this.align(boids);
+                let cohesion = this.cohesion(boids);
+                let separation = this.separation(boids);
+
+                alignment.multiply(1.5);
+                cohesion.multiply(1.0);
+                separation.multiply(2.0);
+
+                this.acceleration.add(alignment);
+                this.acceleration.add(cohesion);
+                this.acceleration.add(separation);
+            }
+
+            update() {
+                this.position.add(this.velocity);
+                this.velocity.add(this.acceleration);
+                this.velocity.limit(this.maxSpeed);
+                this.acceleration.multiply(0);
+            }
+
+            show(ctx) {
+                let angle = Math.atan2(this.velocity.y, this.velocity.x);
+                ctx.save();
+                ctx.translate(this.position.x, this.position.y);
+                ctx.rotate(angle);
+                ctx.beginPath();
+                ctx.moveTo(10, 0);
+                ctx.lineTo(-10, 5);
+                ctx.lineTo(-10, -5);
+                ctx.closePath();
+                ctx.fillStyle = '#64dfdf';
+                ctx.fill();
+                ctx.restore();
+            }
+        }
+
+        class Vector {
+            constructor(x, y) {
+                this.x = x;
+                this.y = y;
+            }
+
+            add(v) {
+                this.x += v.x;
+                this.y += v.y;
+            }
+
+            subtract(v) {
+                this.x -= v.x;
+                this.y -= v.y;
+            }
+
+            multiply(n) {
+                this.x *= n;
+                this.y *= n;
+            }
+
+            divide(n) {
+                this.x /= n;
+                this.y /= n;
+            }
+
+            magnitude() {
+                return Math.sqrt(this.x * this.x + this.y * this.y);
+            }
+
+            setMagnitude(n) {
+                let m = this.magnitude();
+                if (m !== 0) {
+                    this.multiply(n / m);
+                }
+            }
+
+            limit(n) {
+                let m = this.magnitude();
+                if (m > n) {
+                    this.setMagnitude(n);
+                }
+            }
+
+            static subtract(v1, v2) {
+                return new Vector(v1.x - v2.x, v1.y - v2.y);
+            }
+
+            static random() {
+                return new Vector(Math.random() * 2 - 1, Math.random() * 2 - 1);
+            }
+
+            dist(v) {
+                let dx = this.x - v.x;
+                let dy = this.y - v.y;
+                return Math.sqrt(dx * dx + dy * dy);
+            }
+        }
+
+        const canvas = document.getElementById('boidCanvas');
+        const ctx = canvas.getContext('2d');
+        let flock = [];
+        let target = null;
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        for (let i = 0; i < 100; i++) {
+            flock.push(new Boid(Math.random() * canvas.width, Math.random() * canvas.height));
+        }
+
+        function animate() {
+            ctx.fillStyle = 'rgba(26, 26, 46, 0.1)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            for (let boid of flock) {
+                boid.edges(canvas.width, canvas.height);
+                boid.flock(flock);
+                boid.update();
+                boid.show(ctx);
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        // Override the original functions to add boid effects
+        const originalUnlock = window.unlock;
+        window.unlock = function() {
+            if (originalUnlock) originalUnlock();
+            for (let boid of flock) {
+                boid.maxSpeed = 8;
+                setTimeout(() => boid.maxSpeed = 4, 1000);
+            }
+        };
+
+        const originalLock = window.lock;
+        window.lock = function() {
+            if (originalLock) originalLock();
+            for (let boid of flock) {
+                boid.maxSpeed = 1;
+                setTimeout(() => boid.maxSpeed = 4, 1000);
+            }
+        };
+
+        animate();
+    </script>
+    <script src="/index.js"></script>
+</body>
+</html>

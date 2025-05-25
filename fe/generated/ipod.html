@@ -1,0 +1,187 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>iPod Door Control 🎵</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      background: linear-gradient(145deg, #a3a3a3, #ffffff);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .maincontainer {
+      background: white;
+      width: 320px;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      position: relative;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .header h1 {
+      font-size: 24px;
+      margin: 10px 0;
+    }
+
+    .screen {
+      background: #c6c6c6;
+      border-radius: 10px;
+      padding: 15px;
+      margin-bottom: 20px;
+      min-height: 100px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #message {
+      color: #1a1a1a;
+      font-family: "Chicago", monospace;
+      text-align: center;
+      margin: 10px 0;
+    }
+
+    .click-wheel {
+      width: 220px;
+      height: 220px;
+      background: #e6e6e6;
+      border-radius: 50%;
+      margin: 20px auto;
+      position: relative;
+      cursor: pointer;
+    }
+
+    .center-button {
+      width: 80px;
+      height: 80px;
+      background: #fff;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .center-button:hover {
+      background: #f0f0f0;
+    }
+
+    .wheel-button {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      background: transparent;
+      border: none;
+      color: #666;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .wheel-button:hover {
+      color: #000;
+    }
+
+    #unlock-btn { top: 20px; left: 50%; transform: translateX(-50%); }
+    #lock-btn { bottom: 20px; left: 50%; transform: translateX(-50%); }
+    #stop-btn { left: 20px; top: 50%; transform: translateY(-50%); }
+    #safe-btn { right: 20px; top: 50%; transform: translateY(-50%); }
+
+    .theme-name {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      font-size: 12px;
+      color: #999;
+    }
+
+  </style>
+</head>
+
+<body>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>iPod Door Control 🎵</h1>
+    </div>
+    <div class="screen">
+      <p id="message"></p>
+    </div>
+    <div class="click-wheel">
+      <button onclick="unlock()" class="wheel-button" id="unlock-btn">▶️ Unlock</button>
+      <button onclick="lock()" class="wheel-button" id="lock-btn">⏸️ Lock</button>
+      <button onclick="stop()" class="wheel-button" id="stop-btn">⏹️ Stop</button>
+      <button onclick="safe()" class="wheel-button" id="safe-btn">⚡ Safe</button>
+      <div class="center-button"></div>
+    </div>
+    <div class="theme-name">Theme: Classic iPod 📱</div>
+  </div>
+
+  <script src="/index.js"></script>
+  <script>
+    // Add click wheel rotation animation
+    const wheel = document.querySelector('.click-wheel');
+    let rotation = 0;
+    
+    wheel.addEventListener('mousemove', (e) => {
+      const rect = wheel.getBoundingClientRect();
+      const x = e.clientX - rect.left - rect.width/2;
+      const y = e.clientY - rect.top - rect.height/2;
+      const angle = Math.atan2(y, x) * 180 / Math.PI;
+      
+      if(Math.abs(angle - rotation) < 90) {
+        rotation = angle;
+        wheel.style.transform = `rotate(${rotation}deg)`;
+      }
+    });
+
+    // Add hover effect for center button
+    const centerButton = document.querySelector('.center-button');
+    centerButton.addEventListener('mousedown', () => {
+      centerButton.style.transform = 'translate(-50%, -50%) scale(0.95)';
+    });
+    
+    centerButton.addEventListener('mouseup', () => {
+      centerButton.style.transform = 'translate(-50%, -50%) scale(1)';
+    });
+
+    // Add click sound effect
+    function playClickSound() {
+      const click = new Audio('data:audio/mp3;base64,SUQzBAAAAAAAI1RTU0UAAAAPAAADTGF2ZjU4LjI5LjEwMAAAAAAAAAAAAAAA//tQwAAAAAAAAAAAAAAAAAAAAAAASW5mbwAAAA8AAAACAAABhgC1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1tbW1//////////////////////////////////////////////////////////////////8AAAAATGF2YzU4LjU0AAAAAAAAAAAAAAAAJAAAAAAAAAAAAYYxquvPAAAAAAAAAAAAAAAAAAAA//tQxAAB8AAAf4AAAAwAAA/wAAABAZAAAA6g577+vvv+vvnPc+IEAnG4t9AgEAm4EAt9+WvgQHBwcBAcHBwcHBwADg4OCAgICAgIMBAQEBB3/+gg7/gg7/wQd//BA7/4IAAABxLj///xLi4uLicS4uLi4uLi4uLi4uJxLi4uLi4uLi4uLi4nEuLi4uLi4uLi4uLicS4uLi4uLi4uLi4uA==');
+      click.play();
+    }
+
+    const buttons = document.querySelectorAll('button');
+    buttons.forEach(btn => {
+      btn.addEventListener('click', playClickSound);
+    });
+  </script>
+</body>
+
+</html>

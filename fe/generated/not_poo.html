@@ -1,0 +1,216 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>NO POO ALLOWED! 🚫💩</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Comic Sans MS', cursive; /* Using Comic Sans ironically */
+    }
+
+    body {
+      background: linear-gradient(45deg, #ff69b4, #87ceeb);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    .maincontainer {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(0,0,0,0.1);
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      max-width: 90%;
+      width: 400px;
+    }
+
+    .theme-name {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      font-size: 0.8rem;
+      color: #666;
+    }
+
+    .header {
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    .header h1 {
+      font-size: 2.5rem;
+      color: #ff1493;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+      animation: bounce 2s infinite;
+    }
+
+    .crossed-poo {
+      font-size: 2rem;
+      margin: 1rem 0;
+    }
+
+    .button-container, .secondary-button-container {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin: 1rem 0;
+    }
+
+    .primary-button, .secondary-button {
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 50px;
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: transform 0.3s, box-shadow 0.3s;
+      background: linear-gradient(45deg, #ff69b4, #ff1493);
+      color: white;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .primary-button:hover, .secondary-button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+
+    .secondary-button {
+      background: linear-gradient(45deg, #87ceeb, #4169e1);
+    }
+
+    #message {
+      margin: 1rem 0;
+      padding: 1rem;
+      border-radius: 10px;
+      background: rgba(255,255,255,0.8);
+      min-height: 50px;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    #floating-emojis {
+      position: fixed;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .no-poo-banner {
+      background: #ff1493;
+      color: white;
+      padding: 0.5rem;
+      margin-bottom: 1rem;
+      border-radius: 10px;
+      font-weight: bold;
+      animation: flash 2s infinite;
+    }
+
+    @keyframes flash {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="floating-emojis"></canvas>
+  <div class="maincontainer">
+    <div class="theme-name">Theme: Not Poo! (Liv's Revenge)</div>
+    <div class="no-poo-banner">🚫 STRICTLY NO POO ZONE! 🚫</div>
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>Clean Door Control ✨</h1>
+    </div>
+    <div class="crossed-poo">💩❌</div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button onclick="unlock()" class="primary-button">🌺 Unlock Cleanly 🌺</button>
+      <button onclick="lock()" class="primary-button">🌸 Lock Pristinely 🌸</button>
+    </div>
+    <div class="secondary-button-container">
+      <button onclick="stop()" class="secondary-button">🛑 Clean Stop 🛑</button>
+      <button onclick="safe()" class="secondary-button">✨ Sanitize Actuators ✨</button>
+    </div>
+  </div>
+
+  <script src="/index.js"></script>
+  <script>
+    // Floating anti-poo emoji animation
+    const canvas = document.getElementById('floating-emojis');
+    const ctx = canvas.getContext('2d');
+
+    // Set canvas size
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    const emojis = ['🚫', '❌', '✨', '🌺', '🌸', '🧼', '🧴', '🧽'];
+    const particles = [];
+
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height;
+        this.size = 20 + Math.random() * 20;
+        this.speedX = (Math.random() - 0.5) * 2;
+        this.speedY = (Math.random() - 0.5) * 2;
+        this.emoji = emojis[Math.floor(Math.random() * emojis.length)];
+      }
+
+      update() {
+        this.x += this.speedX;
+        this.y += this.speedY;
+
+        if (this.x > canvas.width) this.x = 0;
+        if (this.x < 0) this.x = canvas.width;
+        if (this.y > canvas.height) this.y = 0;
+        if (this.y < 0) this.y = canvas.height;
+      }
+
+      draw() {
+        ctx.font = `${this.size}px Arial`;
+        ctx.fillText(this.emoji, this.x, this.y);
+      }
+    }
+
+    // Create particles
+    for (let i = 0; i < 20; i++) {
+      particles.push(new Particle());
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      particles.forEach(particle => {
+        particle.update();
+        particle.draw();
+      });
+
+      requestAnimationFrame(animate);
+    }
+
+    animate();
+  </script>
+</body>
+
+</html>
