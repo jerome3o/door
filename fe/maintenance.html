@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notice of Works — Tower House Building Management</title>
+  <style>
+    :root {
+      --paper: #f4f0e6;
+      --ink: #23201a;
+      --faded: #6b6455;
+      --stamp: #b02a1f;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 20% 10%, #3a4a3f 0%, #222a26 60%, #141815 100%);
+      font-family: Georgia, 'Times New Roman', serif;
+      color: var(--ink);
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 40px 16px 80px;
+    }
+
+    .letter {
+      position: relative;
+      max-width: 680px;
+      width: 100%;
+      background: var(--paper);
+      background-image:
+        repeating-linear-gradient(0deg, rgba(0, 0, 0, 0.015) 0 1px, transparent 1px 3px);
+      padding: 56px 56px 48px;
+      box-shadow:
+        0 2px 4px rgba(0, 0, 0, 0.3),
+        0 24px 60px rgba(0, 0, 0, 0.55);
+      transform: rotate(-0.6deg);
+      border-radius: 2px;
+    }
+
+    .letter::before {
+      /* coffee ring, because of course */
+      content: "";
+      position: absolute;
+      top: 24px;
+      right: 40px;
+      width: 74px;
+      height: 74px;
+      border-radius: 50%;
+      border: 6px solid rgba(120, 85, 40, 0.18);
+      box-shadow: inset 0 0 0 3px rgba(120, 85, 40, 0.07);
+      transform: rotate(12deg);
+      pointer-events: none;
+    }
+
+    .letterhead {
+      border-bottom: 3px double var(--ink);
+      padding-bottom: 14px;
+      margin-bottom: 8px;
+    }
+
+    .letterhead h1 {
+      font-variant: small-caps;
+      letter-spacing: 2px;
+      font-size: 22px;
+      margin: 0;
+    }
+
+    .letterhead .sub {
+      font-size: 12px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--faded);
+      margin-top: 4px;
+    }
+
+    .meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      color: var(--faded);
+      margin: 10px 0 26px;
+    }
+
+    .stamp {
+      position: absolute;
+      top: 120px;
+      right: 30px;
+      color: var(--stamp);
+      border: 4px solid var(--stamp);
+      border-radius: 6px;
+      padding: 6px 14px;
+      font-family: 'Courier New', monospace;
+      font-weight: bold;
+      font-size: 20px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      transform: rotate(9deg);
+      opacity: 0.82;
+      text-align: center;
+      line-height: 1.15;
+      box-shadow: 0 0 0 2px rgba(176, 42, 31, 0.15);
+    }
+
+    .stamp small {
+      display: block;
+      font-size: 10px;
+      letter-spacing: 1px;
+      font-weight: normal;
+    }
+
+    .ref {
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      color: var(--faded);
+      margin-bottom: 20px;
+    }
+
+    p {
+      line-height: 1.7;
+      font-size: 16px;
+      margin: 0 0 16px;
+    }
+
+    .salutation {
+      margin-bottom: 20px;
+    }
+
+    strong {
+      color: #000;
+    }
+
+    .redact {
+      background: #23201a;
+      color: #23201a;
+      border-radius: 2px;
+      padding: 0 4px;
+      user-select: none;
+    }
+
+    ul.list {
+      margin: 0 0 18px;
+      padding-left: 22px;
+      line-height: 1.7;
+    }
+
+    .callout {
+      border-left: 4px solid var(--stamp);
+      background: rgba(176, 42, 31, 0.06);
+      padding: 12px 16px;
+      margin: 22px 0;
+      font-size: 15px;
+    }
+
+    .signoff {
+      margin-top: 30px;
+    }
+
+    .signature {
+      font-family: 'Segoe Script', 'Brush Script MT', cursive;
+      font-size: 30px;
+      color: #1a2a6c;
+      margin: 6px 0 2px;
+      transform: rotate(-2deg);
+    }
+
+    .sig-name {
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .sig-title {
+      font-size: 12px;
+      color: var(--faded);
+    }
+
+    .footer-note {
+      margin-top: 34px;
+      padding-top: 14px;
+      border-top: 1px solid rgba(0, 0, 0, 0.18);
+      font-size: 11px;
+      color: var(--faded);
+      font-style: italic;
+    }
+
+    @media (max-width: 560px) {
+      .letter {
+        padding: 40px 26px 36px;
+      }
+
+      .stamp {
+        top: 96px;
+        right: 12px;
+        font-size: 16px;
+      }
+
+      .letter::before {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="letter">
+    <div class="stamp">Notice<br>of Works<small>please retain</small></div>
+
+    <div class="letterhead">
+      <h1>Tower House Building Management</h1>
+      <div class="sub">Facilities · Compliance · Health &amp; Safety</div>
+    </div>
+
+    <div class="meta">
+      <span>Ref: TH/DOOR/2024/☝️</span>
+      <span>Re: The Front Door, Flat &amp; Associated Wiring</span>
+    </div>
+
+    <p class="salutation">Dear Valued Resident (and any Visiting Officials),</p>
+
+    <p>
+      We write to inform you that the door entry system at this property is currently
+      <strong>undergoing scheduled maintenance</strong> and is temporarily out of service.
+      There is absolutely nothing to see here.
+    </p>
+
+    <p>
+      It has come to our attention that the door was, at some earlier point, adorned with
+      <em>a modest quantity of cables, actuators, and general electronic enthusiasm</em>.
+      These have been fully and voluntarily removed as part of a routine
+      <span class="redact">totally-normal-and-not-at-all-suspicious</span> tidy-up. The door
+      now performs its ancient and traditional function of simply being a door.
+    </p>
+
+    <div class="callout">
+      <strong>⚠️ For the attention of inspecting personnel:</strong> This is a completely
+      ordinary door. It does not open by itself. It has never opened by itself. Any rumours of
+      a door that unlocks via a website are, we are confident, greatly exaggerated.
+    </div>
+
+    <p>Works currently in progress include, but are not limited to:</p>
+    <ul class="list">
+      <li>Removal of "a bunch of cables and shit" (technical term)</li>
+      <li>Restoration of the door to Factory Door Settings™</li>
+      <li>Vigorous nodding whenever the word "security" is mentioned</li>
+    </ul>
+
+    <p>
+      We anticipate normal service resuming shortly after the relevant person has left the
+      building and had a nice cup of tea.
+    </p>
+
+    <div class="callout">
+      🔑 <strong>Need to actually get in?</strong> This is a resident matter — please
+      message one of the flatmates directly ({{FLATMATES}}) and they will let you in the
+      old-fashioned way.
+    </div>
+
+    <div class="signoff">
+      <p style="margin-bottom:2px;">Yours in compliance,</p>
+      <div class="signature">B. Maintenance</div>
+      <div class="sig-name">B. Maintenance</div>
+      <div class="sig-title">Head of Doors, Tower House Building Management</div>
+    </div>
+
+    <div class="footer-note">
+      This notice was printed on 100% recycled excuses. Tower House Building Management is a
+      wholly fictional department and accepts no liability for suspiciously smart doors. 🚪✨
+    </div>
+  </div>
+</body>
+
+</html>
