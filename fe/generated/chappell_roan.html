@@ -1,0 +1,411 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>HOT TO GO! Door Control 🌟</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial Black', sans-serif;
+      background: linear-gradient(45deg, #ff006e, #ff4500, #ff006e, #ff1493);
+      background-size: 400% 400%;
+      animation: gradientShift 3s ease infinite;
+      min-height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .sparkle {
+      position: absolute;
+      width: 4px;
+      height: 4px;
+      background: white;
+      border-radius: 50%;
+      animation: sparkleAnim 3s linear infinite;
+    }
+
+    @keyframes sparkleAnim {
+      0% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-100vh) scale(0);
+        opacity: 0;
+      }
+    }
+
+    .maincontainer {
+      position: relative;
+      z-index: 10;
+      padding: 20px;
+      max-width: 500px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .header {
+      background: linear-gradient(90deg, #ff006e, #ff1493, #ff69b4, #ff1493, #ff006e);
+      background-size: 200% 100%;
+      animation: shimmer 2s linear infinite;
+      padding: 30px;
+      border-radius: 20px;
+      margin-bottom: 30px;
+      box-shadow: 0 0 30px rgba(255, 0, 110, 0.8);
+      transform: perspective(500px) rotateX(10deg);
+      transition: transform 0.3s;
+    }
+
+    .header:hover {
+      transform: perspective(500px) rotateX(0deg) scale(1.05);
+    }
+
+    @keyframes shimmer {
+      0% { background-position: 0% 50%; }
+      100% { background-position: 200% 50%; }
+    }
+
+    .header i {
+      font-size: 60px;
+      color: white;
+      animation: bounce 1s ease-in-out infinite;
+      text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(360deg); }
+    }
+
+    h1 {
+      color: white;
+      font-size: 3em;
+      text-transform: uppercase;
+      letter-spacing: 3px;
+      margin-top: 20px;
+      text-shadow: 3px 3px 0px #ff006e, 6px 6px 0px #ff1493;
+      animation: textPulse 1s ease-in-out infinite;
+    }
+
+    @keyframes textPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    .theme-name {
+      font-size: 1.2em;
+      color: white;
+      margin: 10px 0;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+      animation: rainbow 3s linear infinite;
+    }
+
+    @keyframes rainbow {
+      0% { color: #ff006e; }
+      25% { color: #ff1493; }
+      50% { color: #ff69b4; }
+      75% { color: #ff1493; }
+      100% { color: #ff006e; }
+    }
+
+    #message {
+      color: white;
+      font-size: 1.2em;
+      margin: 20px 0;
+      min-height: 30px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+      background: rgba(255,255,255,0.1);
+      padding: 10px;
+      border-radius: 10px;
+      backdrop-filter: blur(10px);
+    }
+
+    .button-container, .secondary-button-container {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+
+    .primary-button {
+      background: linear-gradient(45deg, #ff006e, #ff1493);
+      color: white;
+      border: none;
+      padding: 20px 40px;
+      font-size: 1.5em;
+      font-weight: bold;
+      border-radius: 50px;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      box-shadow: 0 10px 30px rgba(255, 0, 110, 0.5);
+      transition: all 0.3s;
+      animation: buttonFloat 3s ease-in-out infinite;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .primary-button::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255,255,255,0.3), transparent);
+      transform: rotate(45deg);
+      animation: buttonShine 3s linear infinite;
+    }
+
+    @keyframes buttonShine {
+      0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+      100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+    }
+
+    @keyframes buttonFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .primary-button:hover {
+      transform: scale(1.1) rotate(5deg);
+      box-shadow: 0 15px 40px rgba(255, 0, 110, 0.7);
+    }
+
+    .primary-button:active {
+      transform: scale(0.95);
+    }
+
+    .secondary-button {
+      background: linear-gradient(45deg, #8b008b, #ff1493);
+      color: white;
+      border: 3px solid white;
+      padding: 15px 30px;
+      font-size: 1.2em;
+      font-weight: bold;
+      border-radius: 30px;
+      cursor: pointer;
+      text-transform: uppercase;
+      transition: all 0.3s;
+      animation: secondaryPulse 2s ease-in-out infinite;
+    }
+
+    @keyframes secondaryPulse {
+      0%, 100% { box-shadow: 0 0 20px rgba(255, 20, 147, 0.8); }
+      50% { box-shadow: 0 0 40px rgba(255, 20, 147, 1); }
+    }
+
+    .secondary-button:hover {
+      transform: scale(1.1);
+      background: linear-gradient(45deg, #ff1493, #8b008b);
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .emoji-burst {
+      position: absolute;
+      font-size: 2em;
+      animation: emojiFloat 4s ease-out forwards;
+      pointer-events: none;
+      z-index: 100;
+    }
+
+    @keyframes emojiFloat {
+      0% {
+        transform: translateY(0) rotate(0deg) scale(0);
+        opacity: 1;
+      }
+      50% {
+        transform: translateY(-100px) rotate(180deg) scale(1);
+      }
+      100% {
+        transform: translateY(-200px) rotate(360deg) scale(0);
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 2em;
+      }
+      .primary-button {
+        font-size: 1.2em;
+        padding: 15px 30px;
+      }
+      .secondary-button {
+        font-size: 1em;
+        padding: 12px 25px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="confettiCanvas"></canvas>
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>🎀 PINK PONY CLUB 🎀<br>Door Control</h1>
+      <div class="theme-name">✨ Chappell Roan Theme - HOT TO GO! ✨</div>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button onclick="unlock()" class="primary-button">🔓 UNLOCK & PARTY! 🎉</button>
+      <button onclick="lock()" class="primary-button">🔒 LOCK IT UP! 💅</button>
+    </div>
+    <div class="secondary-button-container">
+      <button onclick="stop()" class="secondary-button">🛑 E-STOP EMERGENCY! 🚨</button>
+      <button onclick="safe()" class="secondary-button">🦺 SAFE MODE SLAY! ✨</button>
+    </div>
+  </div>
+
+  <script src="/index.js"></script>
+  <script>
+    // Sparkle effect
+    function createSparkle() {
+      const sparkle = document.createElement('div');
+      sparkle.className = 'sparkle';
+      sparkle.style.left = Math.random() * window.innerWidth + 'px';
+      sparkle.style.animationDelay = Math.random() * 3 + 's';
+      sparkle.style.animationDuration = (Math.random() * 3 + 2) + 's';
+      document.body.appendChild(sparkle);
+      
+      setTimeout(() => sparkle.remove(), 5000);
+    }
+
+    setInterval(createSparkle, 100);
+
+    // Confetti Canvas
+    const canvas = document.getElementById('confettiCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const confetti = [];
+    const colors = ['#ff006e', '#ff1493', '#ff69b4', '#ff4500', '#ffd700', '#00ff00', '#00ffff'];
+
+    class Confetto {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height - canvas.height;
+        this.size = Math.random() * 8 + 5;
+        this.speedY = Math.random() * 3 + 2;
+        this.speedX = Math.random() * 6 - 3;
+        this.color = colors[Math.floor(Math.random() * colors.length)];
+        this.angle = Math.random() * 360;
+        this.angleSpeed = Math.random() * 6 - 3;
+      }
+
+      update() {
+        this.y += this.speedY;
+        this.x += this.speedX;
+        this.angle += this.angleSpeed;
+        
+        if (this.y > canvas.height) {
+          this.y = -20;
+          this.x = Math.random() * canvas.width;
+        }
+      }
+
+      draw() {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.angle * Math.PI / 180);
+        ctx.fillStyle = this.color;
+        ctx.fillRect(-this.size/2, -this.size/2, this.size, this.size);
+        ctx.restore();
+      }
+    }
+
+    for (let i = 0; i < 50; i++) {
+      confetti.push(new Confetto());
+    }
+
+    function animateConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      confetti.forEach(c => {
+        c.update();
+        c.draw();
+      });
+      requestAnimationFrame(animateConfetti);
+    }
+
+    animateConfetti();
+
+    // Emoji burst on button click
+    function createEmojiBurst(e) {
+      const emojis = ['💖', '✨', '🎉', '🌟', '💕', '🎀', '🦄', '🌈', '💅', '👑'];
+      for (let i = 0; i < 10; i++) {
+        const emoji = document.createElement('div');
+        emoji.className = 'emoji-burst';
+        emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+        emoji.style.left = e.clientX + (Math.random() * 100 - 50) + 'px';
+        emoji.style.top = e.clientY + 'px';
+        emoji.style.animationDelay = Math.random() * 0.5 + 's';
+        document.body.appendChild(emoji);
+        
+        setTimeout(() => emoji.remove(), 4000);
+      }
+    }
+
+    document.querySelectorAll('button').forEach(btn => {
+      btn.addEventListener('click', createEmojiBurst);
+    });
+
+    // Window resize handler
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+
+    // Add some random floating text
+    const floatingTexts = ['FEMININOMENON', 'HOT TO GO!', 'PINK PONY CLUB', 'CASUAL', 'RED WINE SUPERNOVA'];
+    
+    function createFloatingText() {
+      const text = document.createElement('div');
+      text.style.position = 'absolute';
+      text.style.color = colors[Math.floor(Math.random() * colors.length)];
+      text.style.fontSize = Math.random() * 20 + 15 + 'px';
+      text.style.fontWeight = 'bold';
+      text.style.left = '-200px';
+      text.style.top = Math.random() * window.innerHeight + 'px';
+      text.style.zIndex = '5';
+      text.style.textShadow = '2px 2px 4px rgba(0,0,0,0.5)';
+      text.style.animation = `floatAcross ${Math.random() * 10 + 10}s linear`;
+      text.textContent = floatingTexts[Math.floor(Math.random() * floatingTexts.length)];
+      document.body.appendChild(text);
+      
+      setTimeout(() => text.remove(), 20000);
+    }
+
+    setInterval(createFloatingText, 3000);
+
+    // Add floating across animation
+    const style = document.createElement('style');
+    style.textContent = `
+      @keyframes floatAcross {
+        from { transform: translateX(0); }
+        to { transform: translateX(

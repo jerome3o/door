@@ -1,0 +1,365 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>¡Control de Puerta Mexicano! 🌮</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Bungee&family=Fredoka:wght@400;600&display=swap');
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Fredoka', cursive;
+      background: linear-gradient(135deg, #ff6b6b 0%, #ffd93d 50%, #6bcf7f 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+    }
+    
+    .maincontainer {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      position: relative;
+      z-index: 10;
+      max-width: 400px;
+      width: 90%;
+      border: 3px solid #ff6b6b;
+      animation: float 3s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    .header {
+      margin-bottom: 1.5rem;
+      position: relative;
+    }
+    
+    .header i {
+      font-size: 3rem;
+      color: #ff6b6b;
+      animation: spin 10s linear infinite;
+    }
+    
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    
+    h1 {
+      font-family: 'Bungee', cursive;
+      color: #2c3e50;
+      font-size: 2rem;
+      margin: 1rem 0;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    .theme-name {
+      font-size: 1.2rem;
+      color: #ff6b6b;
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+    
+    #message {
+      min-height: 30px;
+      font-size: 1.1rem;
+      color: #2c3e50;
+      margin-bottom: 1rem;
+      font-weight: 500;
+    }
+    
+    .button-container {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+    
+    .primary-button {
+      background: linear-gradient(135deg, #ff6b6b, #ff8787);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      font-size: 1.2rem;
+      border-radius: 50px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 5px 15px rgba(255, 107, 107, 0.4);
+      position: relative;
+      overflow: hidden;
+      font-family: 'Fredoka', cursive;
+    }
+    
+    .primary-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(255, 107, 107, 0.5);
+    }
+    
+    .primary-button:active {
+      transform: translateY(0);
+    }
+    
+    .primary-button:nth-child(2) {
+      background: linear-gradient(135deg, #6bcf7f, #4ecdc4);
+      box-shadow: 0 5px 15px rgba(107, 207, 127, 0.4);
+    }
+    
+    .primary-button:nth-child(2):hover {
+      box-shadow: 0 8px 20px rgba(107, 207, 127, 0.5);
+    }
+    
+    .secondary-button-container {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    
+    .secondary-button {
+      background: #ffd93d;
+      color: #2c3e50;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      border-radius: 30px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      box-shadow: 0 3px 10px rgba(255, 217, 61, 0.4);
+      font-family: 'Fredoka', cursive;
+    }
+    
+    .secondary-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(255, 217, 61, 0.5);
+    }
+    
+    .cactus {
+      position: absolute;
+      z-index: 1;
+      opacity: 0.8;
+    }
+    
+    .cactus-1 {
+      bottom: 10px;
+      left: 10px;
+      width: 60px;
+      height: 80px;
+      animation: sway 3s ease-in-out infinite;
+    }
+    
+    .cactus-2 {
+      bottom: 10px;
+      right: 10px;
+      width: 50px;
+      height: 70px;
+      animation: sway 3s ease-in-out infinite 0.5s;
+    }
+    
+    @keyframes sway {
+      0%, 100% { transform: rotate(-3deg); }
+      50% { transform: rotate(3deg); }
+    }
+    
+    .flag {
+      position: absolute;
+      top: -20px;
+      right: -20px;
+      width: 60px;
+      height: 40px;
+      animation: wave 2s ease-in-out infinite;
+    }
+    
+    @keyframes wave {
+      0%, 100% { transform: rotate(-5deg); }
+      50% { transform: rotate(5deg); }
+    }
+    
+    .maracas {
+      position: absolute;
+      font-size: 2rem;
+      animation: shake 0.5s ease-in-out infinite;
+    }
+    
+    .maracas-1 {
+      top: 20px;
+      left: 20px;
+    }
+    
+    .maracas-2 {
+      top: 20px;
+      right: 20px;
+    }
+    
+    @keyframes shake {
+      0%, 100% { transform: rotate(-10deg); }
+      50% { transform: rotate(10deg); }
+    }
+    
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      pointer-events: none;
+    }
+    
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.5rem;
+      }
+      
+      .primary-button {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+      }
+      
+      .secondary-button {
+        padding: 0.6rem 1.2rem;
+        font-size: 0.9rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="confetti"></canvas>
+  
+  <div class="maincontainer">
+    <svg class="cactus cactus-1" viewBox="0 0 100 120">
+      <path d="M50 20 C50 10, 70 10, 70 20 L70 40 C80 40, 80 60, 70 60 L70 100 L30 100 L30 60 C20 60, 20 40, 30 40 L30 20 C30 10, 50 10, 50 20" fill="#6bcf7f" stroke="#4ecdc4" stroke-width="2"/>
+      <circle cx="40" cy="40" r="2" fill="#ff6b6b"/>
+      <circle cx="60" cy="50" r="2" fill="#ff6b6b"/>
+      <circle cx="50" cy="70" r="2" fill="#ff6b6b"/>
+    </svg>
+    
+    <svg class="cactus cactus-2" viewBox="0 0 100 120">
+      <path d="M50 30 C50 20, 60 20, 60 30 L60 100 L40 100 L40 30 C40 20, 50 20, 50 30" fill="#6bcf7f" stroke="#4ecdc4" stroke-width="2"/>
+      <path d="M30 50 C20 50, 20 70, 30 70" fill="#6bcf7f" stroke="#4ecdc4" stroke-width="2"/>
+      <path d="M70 60 C80 60, 80 80, 70 80" fill="#6bcf7f" stroke="#4ecdc4" stroke-width="2"/>
+    </svg>
+    
+    <svg class="flag" viewBox="0 0 90 60">
+      <rect x="0" y="0" width="30" height="60" fill="#006341"/>
+      <rect x="30" y="0" width="30" height="60" fill="white"/>
+      <rect x="60" y="0" width="30" height="60" fill="#ce1126"/>
+    </svg>
+    
+    <div class="maracas maracas-1">🪇</div>
+    <div class="maracas maracas-2">🪇</div>
+    
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>¡Control de Puerta! 🌮</h1>
+      <div class="theme-name">🇲🇽 Bienvenido a México Theme 🇲🇽</div>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button onclick="unlock()" class="primary-button">¡Ándale! 🔓</button>
+      <button onclick="lock()" class="primary-button">¡No Ándale! 🔒</button>
+    </div>
+    <div class="secondary-button-container">
+      <button onclick="stop()" class="secondary-button">¡Alto! 🛑</button>
+      <button onclick="safe()" class="secondary-button">¡Seguro! 🛡️</button>
+    </div>
+  </div>
+
+  <script src="/index.js"></script>
+  <script>
+    // Confetti animation
+    const canvas = document.getElementById('confetti');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    
+    const colors = ['#ff6b6b', '#ffd93d', '#6bcf7f', '#ce1126', '#006341'];
+    const particles = [];
+    
+    class Particle {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height - canvas.height;
+        this.size = Math.random() * 3 + 2;
+        this.speedY = Math.random() * 1 + 0.5;
+        this.speedX = (Math.random() - 0.5) * 0.5;
+        this.color = colors[Math.floor(Math.random() * colors.length)];
+        this.angle = Math.random() * 360;
+        this.spin = (Math.random() - 0.5) * 2;
+      }
+      
+      update() {
+        this.y += this.speedY;
+        this.x += this.speedX;
+        this.angle += this.spin;
+        
+        if (this.y > canvas.height) {
+          this.y = -10;
+          this.x = Math.random() * canvas.width;
+        }
+      }
+      
+      draw() {
+        ctx.save();
+        ctx.translate(this.x, this.y);
+        ctx.rotate(this.angle * Math.PI / 180);
+        ctx.fillStyle = this.color;
+        ctx.fillRect(-this.size/2, -this.size/2, this.size, this.size);
+        ctx.restore();
+      }
+    }
+    
+    for (let i = 0; i < 50; i++) {
+      particles.push(new Particle());
+    }
+    
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      particles.forEach(particle => {
+        particle.update();
+        particle.draw();
+      });
+      
+      requestAnimationFrame(animate);
+    }
+    
+    animate();
+    
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+    
+    // Add festive sounds to buttons (visual feedback)
+    document.querySelectorAll('button').forEach(button => {
+      button.addEventListener('click', function() {
+        this.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+          this.style.transform = '';
+        }, 100);
+      });
+    });
+  </script>
+</body>
+
+</html>

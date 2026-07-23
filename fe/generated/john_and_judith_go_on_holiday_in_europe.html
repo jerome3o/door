@@ -1,0 +1,339 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🇬🇧 Welcome to London, John & Judith! 🇳🇿</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    #canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    .maincontainer {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 20px;
+      padding: 30px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+      z-index: 10;
+      position: relative;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .header {
+      margin-bottom: 20px;
+    }
+
+    .header i {
+      font-size: 48px;
+      color: #764ba2;
+      animation: spin 4s linear infinite;
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    h1 {
+      color: #333;
+      margin: 10px 0;
+      font-size: 28px;
+    }
+
+    .theme-name {
+      font-size: 18px;
+      color: #667eea;
+      margin: 10px 0;
+      font-weight: bold;
+    }
+
+    .welcome-message {
+      font-size: 14px;
+      color: #666;
+      margin: 15px 0;
+      line-height: 1.6;
+      padding: 10px;
+      background: rgba(102, 126, 234, 0.1);
+      border-radius: 10px;
+    }
+
+    #message {
+      margin: 20px 0;
+      font-size: 16px;
+      color: #333;
+      min-height: 20px;
+    }
+
+    .button-container, .secondary-button-container {
+      display: flex;
+      gap: 15px;
+      margin: 15px 0;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .primary-button, .secondary-button {
+      padding: 15px 30px;
+      border: none;
+      border-radius: 30px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .primary-button {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      flex: 1;
+      min-width: 120px;
+    }
+
+    .primary-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(118, 75, 162, 0.4);
+    }
+
+    .secondary-button {
+      background: #f0f0f0;
+      color: #333;
+      flex: 1;
+      min-width: 120px;
+    }
+
+    .secondary-button:hover {
+      background: #e0e0e0;
+      transform: translateY(-2px);
+    }
+
+    .emoji-float {
+      position: absolute;
+      font-size: 24px;
+      animation: floatUp 8s linear infinite;
+      z-index: 5;
+    }
+
+    @keyframes floatUp {
+      from {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 1;
+      }
+      to {
+        transform: translateY(-100px) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    .flag {
+      display: inline-block;
+      font-size: 40px;
+      animation: wave 2s ease-in-out infinite;
+    }
+
+    @keyframes wave {
+      0%, 100% { transform: rotate(-5deg); }
+      50% { transform: rotate(5deg); }
+    }
+
+    @media (max-width: 480px) {
+      .maincontainer {
+        padding: 20px;
+      }
+      h1 {
+        font-size: 24px;
+      }
+      .primary-button, .secondary-button {
+        padding: 12px 20px;
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="canvas"></canvas>
+  
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>🏡 Kiwi-Friendly Door Control 🥝</h1>
+    </div>
+    
+    <div class="theme-name">
+      <span class="flag">🇳🇿</span> Theme: John & Judith's European Holiday! <span class="flag">🇬🇧</span>
+    </div>
+    
+    <div class="welcome-message">
+      🎉 Welcome to London, John & Judith! 🎉<br>
+      <em>No sheep to count here, but plenty of doors to unlock!</em><br>
+      💕 So happy to have Liv's parents staying with us! 💕
+    </div>
+    
+    <p id="message"></p>
+    
+    <div class="button-container">
+      <button onclick="unlock()" class="primary-button">
+        🔓 Unlock for the In-Laws!
+      </button>
+      <button onclick="lock()" class="primary-button">
+        🔒 Lock (Privacy Mode 😉)
+      </button>
+    </div>
+    
+    <div class="secondary-button-container">
+      <button onclick="stop()" class="secondary-button">
+        🛑 Kiwi Emergency Stop
+      </button>
+      <button onclick="safe()" class="secondary-button">
+        🛡️ Safe as Houses
+      </button>
+    </div>
+  </div>
+
+  <script src="/index.js"></script>
+  <script>
+    // Create floating emojis
+    const emojis = ['🥝', '☕', '🫖', '🎭', '🚇', '✈️', '🧳', '💂', '🌉', '🎡'];
+    
+    function createFloatingEmoji() {
+      const emoji = document.createElement('div');
+      emoji.className = 'emoji-float';
+      emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+      emoji.style.left = Math.random() * 100 + 'vw';
+      emoji.style.animationDuration = (Math.random() * 5 + 5) + 's';
+      emoji.style.animationDelay = Math.random() * 5 + 's';
+      document.body.appendChild(emoji);
+      
+      setTimeout(() => {
+        emoji.remove();
+      }, 13000);
+    }
+    
+    setInterval(createFloatingEmoji, 2000);
+    
+    // Canvas animation - London skyline with New Zealand stars
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    
+    const stars = [];
+    for (let i = 0; i < 50; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height * 0.5,
+        size: Math.random() * 2 + 1,
+        twinkle: Math.random() * Math.PI * 2
+      });
+    }
+    
+    function drawSkyline() {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.1)';
+      const buildings = [
+        { x: 0.1, height: 0.3 },
+        { x: 0.2, height: 0.5 },
+        { x: 0.3, height: 0.4 },
+        { x: 0.4, height: 0.6 },
+        { x: 0.5, height: 0.3 },
+        { x: 0.6, height: 0.45 },
+        { x: 0.7, height: 0.35 },
+        { x: 0.8, height: 0.5 },
+        { x: 0.9, height: 0.4 }
+      ];
+      
+      buildings.forEach(building => {
+        const x = building.x * canvas.width;
+        const height = building.height * canvas.height;
+        const width = canvas.width * 0.08;
+        ctx.fillRect(x - width/2, canvas.height - height, width, height);
+      });
+    }
+    
+    function animate() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Draw stars (Southern Cross reference!)
+      stars.forEach(star => {
+        star.twinkle += 0.05;
+        const brightness = Math.sin(star.twinkle) * 0.5 + 0.5;
+        ctx.fillStyle = `rgba(255, 255, 255, ${brightness * 0.3})`;
+        ctx.beginPath();
+        ctx.arc(star.x, star.y, star.size, 0, Math.PI * 2);
+        ctx.fill();
+      });
+      
+      drawSkyline();
+      requestAnimationFrame(animate);
+    }
+    
+    animate();
+    
+    // Add fun messages when buttons are clicked
+    const messages = [
+      "🥝 Door status updated! Hope John & Judith aren't locked out! 🚪",
+      "✨ Magic happening... just like that time in Queenstown! 🏔️",
+      "🫖 Tea time secured! Very British of us! ☕",
+      "🎭 West End worthy door performance! 👏",
+      "🌉 London Bridge isn't falling down, but this door might be opening! 🎵"
+    ];
+    
+    const originalUnlock = window.unlock;
+    const originalLock = window.lock;
+    
+    window.unlock = function() {
+      const msg = document.getElementById('message');
+      msg.textContent = messages[Math.floor(Math.random() * messages.length)];
+      if (originalUnlock) originalUnlock();
+    };
+    
+    window.lock = function() {
+      const msg = document.getElementById('message');
+      msg.textContent = messages[Math.floor(Math.random() * messages.length)];
+      if (originalLock) originalLock();
+    };
+  </script>
+</body>
+
+</html>

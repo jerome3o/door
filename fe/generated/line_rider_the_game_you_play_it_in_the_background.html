@@ -1,0 +1,420 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>🛷 Line Rider Door Control 🚪</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(to bottom, #87CEEB 0%, #E6F3FF 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    #lineCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      cursor: crosshair;
+    }
+
+    .maincontainer {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 2rem;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+      z-index: 10;
+      position: relative;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .header {
+      margin-bottom: 1.5rem;
+    }
+
+    .header i {
+      font-size: 3rem;
+      color: #2196F3;
+      margin-bottom: 0.5rem;
+      display: block;
+      animation: slideDown 2s ease-in-out infinite;
+    }
+
+    @keyframes slideDown {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(5px); }
+    }
+
+    h1 {
+      color: #333;
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .theme-name {
+      color: #666;
+      font-size: 0.9rem;
+      font-style: italic;
+      margin-bottom: 1rem;
+    }
+
+    #message {
+      min-height: 24px;
+      margin-bottom: 1rem;
+      color: #2196F3;
+      font-weight: bold;
+    }
+
+    .button-container, .secondary-button-container {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .primary-button, .secondary-button {
+      padding: 1rem 2rem;
+      border: none;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .primary-button {
+      background: linear-gradient(45deg, #2196F3, #64B5F6);
+      color: white;
+      box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
+    }
+
+    .primary-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
+    }
+
+    .primary-button:active {
+      transform: translateY(0);
+    }
+
+    .secondary-button {
+      background: linear-gradient(45deg, #FF5722, #FF7043);
+      color: white;
+      box-shadow: 0 4px 15px rgba(255, 87, 34, 0.3);
+    }
+
+    .secondary-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(255, 87, 34, 0.4);
+    }
+
+    .instructions {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 15px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      z-index: 5;
+      max-width: 250px;
+    }
+
+    .sledder {
+      position: absolute;
+      font-size: 2rem;
+      z-index: 2;
+      transition: none;
+    }
+
+    @media (max-width: 480px) {
+      .maincontainer {
+        padding: 1.5rem;
+      }
+      
+      h1 {
+        font-size: 1.5rem;
+      }
+      
+      .primary-button, .secondary-button {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+      }
+
+      .instructions {
+        font-size: 0.8rem;
+        max-width: 200px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="lineCanvas"></canvas>
+  
+  <div class="instructions">
+    <h3>🎮 Line Rider Mode!</h3>
+    <p>🖱️ Click and drag to draw lines</p>
+    <p>🛷 Watch the sledder ride!</p>
+    <p>🧹 Double-click to clear</p>
+  </div>
+
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>🛷 Slide to Control 🚪</h1>
+      <div class="theme-name">Theme: Line Rider Door Controller</div>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button onclick="unlock()" class="primary-button">🛷 Ride to Unlock</button>
+      <button onclick="lock()" class="primary-button">🏁 Finish Line Lock</button>
+    </div>
+    <div class="secondary-button-container">
+      <button onclick="stop()" class="secondary-button">🛑 Crash Stop!</button>
+      <button onclick="safe()" class="secondary-button">🏔️ Safe Landing</button>
+    </div>
+  </div>
+
+  <div class="sledder" id="sledder">🛷</div>
+
+  <script src="/index.js"></script>
+  <script>
+    // Line Rider functionality
+    const canvas = document.getElementById('lineCanvas');
+    const ctx = canvas.getContext('2d');
+    const sledder = document.getElementById('sledder');
+    
+    let lines = [];
+    let isDrawing = false;
+    let currentLine = [];
+    let sledderPos = { x: 100, y: 100, vx: 0, vy: 0 };
+    let sledderActive = false;
+    
+    // Set canvas size
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+      redrawLines();
+    }
+    
+    window.addEventListener('resize', resizeCanvas);
+    resizeCanvas();
+    
+    // Drawing functionality
+    canvas.addEventListener('mousedown', startDrawing);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', stopDrawing);
+    canvas.addEventListener('touchstart', handleTouch);
+    canvas.addEventListener('touchmove', handleTouch);
+    canvas.addEventListener('touchend', stopDrawing);
+    canvas.addEventListener('dblclick', clearLines);
+    
+    function handleTouch(e) {
+      e.preventDefault();
+      const touch = e.touches[0];
+      const mouseEvent = new MouseEvent(e.type === 'touchstart' ? 'mousedown' : 'mousemove', {
+        clientX: touch.clientX,
+        clientY: touch.clientY
+      });
+      canvas.dispatchEvent(mouseEvent);
+    }
+    
+    function startDrawing(e) {
+      isDrawing = true;
+      currentLine = [{x: e.clientX, y: e.clientY}];
+    }
+    
+    function draw(e) {
+      if (!isDrawing) return;
+      
+      currentLine.push({x: e.clientX, y: e.clientY});
+      
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      redrawLines();
+      
+      // Draw current line
+      ctx.beginPath();
+      ctx.strokeStyle = '#333';
+      ctx.lineWidth = 3;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      
+      for (let i = 0; i < currentLine.length - 1; i++) {
+        ctx.moveTo(currentLine[i].x, currentLine[i].y);
+        ctx.lineTo(currentLine[i + 1].x, currentLine[i + 1].y);
+      }
+      ctx.stroke();
+    }
+    
+    function stopDrawing() {
+      if (isDrawing && currentLine.length > 1) {
+        lines.push([...currentLine]);
+        if (!sledderActive) startSledder();
+      }
+      isDrawing = false;
+      currentLine = [];
+    }
+    
+    function redrawLines() {
+      ctx.strokeStyle = '#333';
+      ctx.lineWidth = 3;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+      
+      lines.forEach(line => {
+        ctx.beginPath();
+        for (let i = 0; i < line.length - 1; i++) {
+          ctx.moveTo(line[i].x, line[i].y);
+          ctx.lineTo(line[i + 1].x, line[i + 1].y);
+        }
+        ctx.stroke();
+      });
+    }
+    
+    function clearLines() {
+      lines = [];
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      resetSledder();
+    }
+    
+    // Sledder physics
+    function startSledder() {
+      if (lines.length === 0) return;
+      sledderActive = true;
+      sledderPos = { x: lines[0][0].x, y: lines[0][0].y - 30, vx: 2, vy: 0 };
+      animateSledder();
+    }
+    
+    function resetSledder() {
+      sledderActive = false;
+      sledder.style.display = 'none';
+    }
+    
+    function animateSledder() {
+      if (!sledderActive) return;
+      
+      // Apply gravity
+      sledderPos.vy += 0.3;
+      
+      // Update position
+      sledderPos.x += sledderPos.vx;
+      sledderPos.y += sledderPos.vy;
+      
+      // Check collision with lines
+      let onLine = false;
+      lines.forEach(line => {
+        for (let i = 0; i < line.length - 1; i++) {
+          const dist = distanceToLineSegment(sledderPos, line[i], line[i + 1]);
+          if (dist < 20) {
+            onLine = true;
+            // Calculate line angle
+            const dx = line[i + 1].x - line[i].x;
+            const dy = line[i + 1].y - line[i].y;
+            const angle = Math.atan2(dy, dx);
+            
+            // Adjust velocity based on slope
+            sledderPos.vx = Math.cos(angle) * 5;
+            sledderPos.vy = Math.sin(angle) * 5;
+            
+            // Keep sledder on line
+            sledderPos.y = line[i].y + (sledderPos.x - line[i].x) * Math.tan(angle) - 15;
+          }
+        }
+      });
+      
+      // Reset if off screen
+      if (sledderPos.x > canvas.width || sledderPos.y > canvas.height || sledderPos.x < -50) {
+        if (lines.length > 0) {
+          sledderPos = { x: lines[0][0].x, y: lines[0][0].y - 30, vx: 2, vy: 0 };
+        } else {
+          resetSledder();
+          return;
+        }
+      }
+      
+      // Update sledder position
+      sledder.style.display = 'block';
+      sledder.style.left = sledderPos.x - 15 + 'px';
+      sledder.style.top = sledderPos.y - 15 + 'px';
+      sledder.style.transform = `rotate(${Math.atan2(sledderPos.vy, sledderPos.vx) * 180 / Math.PI}deg)`;
+      
+      requestAnimationFrame(animateSledder);
+    }
+    
+    function distanceToLineSegment(point, lineStart, lineEnd) {
+      const A = point.x - lineStart.x;
+      const B = point.y - lineStart.y;
+      const C = lineEnd.x - lineStart.x;
+      const D = lineEnd.y - lineStart.y;
+      
+      const dot = A * C + B * D;
+      const lenSq = C * C + D * D;
+      let param = -1;
+      
+      if (lenSq !== 0) param = dot / lenSq;
+      
+      let xx, yy;
+      
+      if (param < 0) {
+        xx = lineStart.x;
+        yy = lineStart.y;
+      } else if (param > 1) {
+        xx = lineEnd.x;
+        yy = lineEnd.y;
+      } else {
+        xx = lineStart.x + param * C;
+        yy = lineStart.y + param * D;
+      }
+      
+      const dx = point.x - xx;
+      const dy = point.y - yy;
+      
+      return Math.sqrt(dx * dx + dy * dy);
+    }
+    
+    // Start with a sample line
+    setTimeout(() => {
+      lines.push([
+        {x: 100, y: 150},
+        {x: 200, y: 180},
+        {x: 300, y: 220},
+        {x: 400, y: 200},
+        {x: 500, y: 250}
+      ]);
+      redrawLines();
+      startSledder();
+    }, 1000);
+  </script>
+</body>
+
+</html>

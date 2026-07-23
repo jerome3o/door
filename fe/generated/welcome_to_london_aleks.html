@@ -1,0 +1,328 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+  <title>London Calling Door Control 🇬🇧</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Georgia', serif;
+      background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      position: relative;
+    }
+
+    #rainCanvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .maincontainer {
+      background: rgba(255, 255, 255, 0.95);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      max-width: 400px;
+      width: 90%;
+      position: relative;
+      z-index: 10;
+      animation: fadeIn 1s ease-in;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .header {
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .header i {
+      font-size: 48px;
+      color: #c41e3a;
+      animation: swing 2s ease-in-out infinite;
+      display: inline-block;
+    }
+
+    @keyframes swing {
+      0%, 100% { transform: rotate(0deg); }
+      25% { transform: rotate(-10deg); }
+      75% { transform: rotate(10deg); }
+    }
+
+    h1 {
+      color: #1e3c72;
+      margin: 10px 0;
+      font-size: 28px;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .theme-badge {
+      background: #c41e3a;
+      color: white;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-size: 14px;
+      margin: 10px auto;
+      display: inline-block;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    #message {
+      min-height: 30px;
+      margin: 20px 0;
+      font-size: 16px;
+      color: #2a5298;
+      font-weight: bold;
+    }
+
+    .button-container {
+      display: flex;
+      gap: 15px;
+      margin-bottom: 20px;
+      justify-content: center;
+    }
+
+    .primary-button {
+      flex: 1;
+      padding: 20px 30px;
+      font-size: 18px;
+      font-weight: bold;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .primary-button:nth-child(1) {
+      background: #2ecc71;
+      box-shadow: 0 5px 15px rgba(46, 204, 113, 0.3);
+    }
+
+    .primary-button:nth-child(2) {
+      background: #c41e3a;
+      box-shadow: 0 5px 15px rgba(196, 30, 58, 0.3);
+    }
+
+    .primary-button::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .primary-button:active::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .primary-button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .secondary-button-container {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .secondary-button {
+      padding: 12px 20px;
+      font-size: 14px;
+      background: #95a5a6;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: bold;
+    }
+
+    .secondary-button:hover {
+      background: #7f8c8d;
+      transform: translateY(-2px);
+    }
+
+    .london-icons {
+      position: absolute;
+      font-size: 30px;
+      opacity: 0.1;
+      animation: float 10s infinite ease-in-out;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      50% { transform: translateY(-20px) rotate(10deg); }
+    }
+
+    .icon-1 { top: 10%; left: 10%; animation-delay: 0s; }
+    .icon-2 { top: 10%; right: 10%; animation-delay: 2s; }
+    .icon-3 { bottom: 10%; left: 10%; animation-delay: 4s; }
+    .icon-4 { bottom: 10%; right: 10%; animation-delay: 6s; }
+
+    @media (max-width: 480px) {
+      .maincontainer {
+        padding: 20px;
+      }
+      
+      h1 {
+        font-size: 24px;
+      }
+      
+      .primary-button {
+        padding: 15px 20px;
+        font-size: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="rainCanvas"></canvas>
+  
+  <div class="london-icons icon-1">☂️</div>
+  <div class="london-icons icon-2">🎩</div>
+  <div class="london-icons icon-3">☕</div>
+  <div class="london-icons icon-4">🏰</div>
+
+  <div class="maincontainer">
+    <div class="header">
+      <i class="fas fa-lock"></i>
+      <h1>🇬🇧 Welcome to London, Aleks! 🇬🇧</h1>
+      <div class="theme-badge">London Calling Theme</div>
+    </div>
+    <p id="message"></p>
+    <div class="button-container">
+      <button onclick="unlock()" class="primary-button">
+        🔓 Open Sesame, Mate!
+      </button>
+      <button onclick="lock()" class="primary-button">
+        🔒 Keep Calm & Lock On
+      </button>
+    </div>
+    <div class="secondary-button-container">
+      <button onclick="stop()" class="secondary-button">🛑 Mind the Gap!</button>
+      <button onclick="safe()" class="secondary-button">🛡️ God Save the Door</button>
+    </div>
+  </div>
+
+  <script src="/index.js"></script>
+  <script>
+    // Rain animation
+    const canvas = document.getElementById('rainCanvas');
+    const ctx = canvas.getContext('2d');
+    
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    
+    const raindrops = [];
+    const maxRaindrops = 100;
+    
+    class Raindrop {
+      constructor() {
+        this.x = Math.random() * canvas.width;
+        this.y = Math.random() * canvas.height - canvas.height;
+        this.length = Math.random() * 20 + 10;
+        this.speed = Math.random() * 3 + 2;
+        this.opacity = Math.random() * 0.5 + 0.1;
+      }
+      
+      update() {
+        this.y += this.speed;
+        if (this.y > canvas.height) {
+          this.y = -this.length;
+          this.x = Math.random() * canvas.width;
+        }
+      }
+      
+      draw() {
+        ctx.strokeStyle = `rgba(255, 255, 255, ${this.opacity})`;
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(this.x, this.y);
+        ctx.lineTo(this.x, this.y + this.length);
+        ctx.stroke();
+      }
+    }
+    
+    // Initialize raindrops
+    for (let i = 0; i < maxRaindrops; i++) {
+      raindrops.push(new Raindrop());
+    }
+    
+    function animateRain() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      raindrops.forEach(drop => {
+        drop.update();
+        drop.draw();
+      });
+      
+      requestAnimationFrame(animateRain);
+    }
+    
+    animateRain();
+    
+    // Add button click animations
+    document.querySelectorAll('button').forEach(button => {
+      button.addEventListener('click', function() {
+        this.style.animation = 'none';
+        setTimeout(() => {
+          this.style.animation = '';
+        }, 10);
+      });
+    });
+  </script>
+</body>
+
+</html>
