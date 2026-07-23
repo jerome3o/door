@@ -97,6 +97,64 @@
       font-size: 0.8em;
       color: #0a0;
     }
+
+    .maint-panel {
+      border: 1px solid #0f0;
+      border-radius: 8px;
+      padding: 20px;
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .maint-status {
+      font-size: 1.3em;
+      font-weight: bold;
+      margin: 10px 0 18px;
+      letter-spacing: 1px;
+    }
+
+    .maint-status.on {
+      color: #ff5555;
+      text-shadow: 0 0 10px #ff0000;
+      animation: blink 1s infinite;
+    }
+
+    .maint-status.off {
+      color: #0f0;
+      text-shadow: 0 0 10px #0f0;
+    }
+
+    .maint-btn {
+      font-family: 'Courier New', monospace;
+      font-size: 1em;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 12px 22px;
+      cursor: pointer;
+      background-color: #000;
+      color: #0f0;
+      border: 2px solid #0f0;
+      border-radius: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .maint-btn:hover {
+      background-color: #0f0;
+      color: #000;
+      box-shadow: 0 0 15px #0f0;
+    }
+
+    .maint-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .maint-hint {
+      font-size: 0.8em;
+      color: #0a0;
+      margin-top: 14px;
+    }
   </style>
 </head>
 
@@ -112,6 +170,16 @@
       <li>🔒 <a href="/">Lock/Unlock Gateway</a> - Control the Seal</li>
       <li>📢 <a href="/announce.html">Voice Announcement System</a> - Proclaim Throughout the Realm</li>
     </ul>
+
+    <h2>🚧 Maintenance Mode</h2>
+    <div class="maint-panel">
+      <p>When ON, the door page serves an "Under Maintenance" letter from Building Management
+        instead of the control panel. Use this when The Property Manager cometh. 👀</p>
+      <div id="maintStatus" class="maint-status off">STATUS: LOADING…</div>
+      <button id="maintToggle" class="maint-btn" onclick="toggleMaintenance()" disabled>…</button>
+      <div class="maint-hint">👁️ <a href="/maintenance.html" target="_blank">Preview the maintenance page</a></div>
+    </div>
+
     <h2>Security Briefing</h2>
     <p>Greetings, esteemed flatmate and guardian of the Tower House. Your presence here signifies your unwavering
       commitment to the safety and sanctity of our domicile. Remember, with great power comes great responsibility.</p>
@@ -122,6 +190,56 @@
       <p>"Keeping Jacksons Out Since 2024"</p>
     </div>
   </div>
+
+  <script>
+    let maintEnabled = false;
+
+    function renderMaint() {
+      const status = document.getElementById('maintStatus');
+      const btn = document.getElementById('maintToggle');
+      btn.disabled = false;
+      if (maintEnabled) {
+        status.textContent = 'STATUS: MAINTENANCE MODE ON';
+        status.className = 'maint-status on';
+        btn.textContent = '🔓 Turn OFF (restore door control)';
+      } else {
+        status.textContent = 'STATUS: DOOR CONTROL LIVE';
+        status.className = 'maint-status off';
+        btn.textContent = '🚧 Turn ON (hide the door tech)';
+      }
+    }
+
+    async function loadMaintenance() {
+      try {
+        const res = await fetch('/api/maintenance');
+        const data = await res.json();
+        maintEnabled = !!data.enabled;
+        renderMaint();
+      } catch (e) {
+        document.getElementById('maintStatus').textContent = 'STATUS: UNKNOWN (are you a flatmate?)';
+      }
+    }
+
+    async function toggleMaintenance() {
+      const btn = document.getElementById('maintToggle');
+      btn.disabled = true;
+      try {
+        const res = await fetch('/api/maintenance', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ enabled: !maintEnabled })
+        });
+        const data = await res.json();
+        maintEnabled = !!data.enabled;
+        renderMaint();
+      } catch (e) {
+        alert('Failed to toggle maintenance mode');
+        btn.disabled = false;
+      }
+    }
+
+    loadMaintenance();
+  </script>
 </body>
 
 </html>

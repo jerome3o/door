@@ -27,6 +27,11 @@ from server.auth import (
 )
 from server.themes import router as theme_generation_router, get_random_frontend
 from server.announcements import router as announcements_router
+from server.maintenance import (
+    router as maintenance_router,
+    is_maintenance_mode,
+    get_maintenance_page,
+)
 
 
 # Logging setup
@@ -48,6 +53,7 @@ app.add_middleware(AuthMiddleware)
 app.include_router(auth_router)
 app.include_router(theme_generation_router)
 app.include_router(announcements_router)
+app.include_router(maintenance_router)
 
 
 # Login page route
@@ -109,6 +115,8 @@ async def stop(user: User):
 
 @app.get("/")
 async def index():
+    if is_maintenance_mode():
+        return HTMLResponse(content=get_maintenance_page())
     return HTMLResponse(content=get_random_frontend())
 
 

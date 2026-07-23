@@ -5,5 +5,6 @@ __pycache__/
 .keys.db.json
 door_access.log
 .prompts.json
+.maintenance.json
 fe/staging/
 network_log/

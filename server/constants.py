@@ -10,6 +10,7 @@ NTFY_TOPIC = os.getenv("NTFY_TOPIC")
 SEED_KEY_FILE = ".keys.json"
 KEY_FILE = ".keys.db.json"
 PROMPTS_FILE = ".prompts.json"
+MAINTENANCE_FILE = ".maintenance.json"
 
 # GPIO Pin Configurations
 OPEN_ACTUATOR_PIN1 = 23
@@ -39,6 +40,7 @@ LOG_FILE = "door_access.log"
 # HTML Templates
 EXAMPLE_HTML_FILE = "example_html.html"
 LOGIN_HTML_FILE = "fe/login.html"
+MAINTENANCE_HTML_FILE = "fe/maintenance.html"
 
 # API Key Header Names
 API_KEY_HEADER_NAME = "X-API-Key"
